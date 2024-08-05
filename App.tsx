@@ -1,20 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect } from 'react'
+import { supabase } from './src/lib/supabase'
+import Auth from './src/screens/Auth'
+import { View } from 'react-native'
+import { Session } from '@supabase/supabase-js'
+import { StatusBar } from 'expo-status-bar'
+import Colours from './src/config/Colours'
+import NotImplemented from './src/screens/NotImplemented'
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [session, setSession] = useState<Session | null>(null)
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [])
+
+  return (
+    <View style={{ flex: 1 }}>
+      <StatusBar style={Colours.theme ? "light" : "dark"} backgroundColor={Colours.background[Colours.theme]} />
+      {session && session.user ? <NotImplemented /> : <Auth />}
+    </View>
+  )
+}
