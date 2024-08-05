@@ -5,7 +5,7 @@ import { View } from 'react-native'
 import { Session } from '@supabase/supabase-js'
 import { StatusBar } from 'expo-status-bar'
 import Colours from './src/config/Colours'
-import NotImplemented from './src/screens/NotImplemented'
+import PromptDetails from './src/screens/PromptDetails'
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -23,7 +23,7 @@ export default function App() {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar style={Colours.theme ? "light" : "dark"} backgroundColor={Colours.background[Colours.theme]} />
-      {session && session.user ? <NotImplemented /> : <Auth />}
+      {session && session.user ? <PromptDetails /> : <Auth />}
     </View>
   )
 }
