@@ -24,7 +24,7 @@ export default function HomeScreen({ session }: { session: Session }) {
 
     useEffect(() => {
         if (session) {
-            getUser(session, setShopName, setLocation, undefined, setDisplayPrompt)
+            getUser(session, setShopName, setLocation, setDisplayPrompt)
         }
     }, [session])
 

@@ -13,7 +13,7 @@ export default function Account({ session }: { session: Session }) {
   const [location, setLocation] = useState('')
 
   useEffect(() => {
-    if (session) getUser(session, setName, setLocation, setLoading, undefined)
+    if (session) getUser(session, setName, setLocation)
   }, [session])
 
   return (

@@ -9,7 +9,6 @@ export async function getUser(
     session: Session,
     setShopName: (name: string) => void,
     setLocation: (location: string) => void,
-    setLoading?: (loading: boolean) => void,
     setDisplayPrompt?: (displayPrompt: boolean) => void
 ) {
     try {
