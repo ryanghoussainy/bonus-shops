@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import colours from '../config/Colours';
 import { Session } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
@@ -6,6 +6,9 @@ import { getUser, updateUser } from '../operations/User';
 import { Button, Input } from '@rneui/themed';
 import Colours from '../config/Colours';
 import Fonts from '../config/Fonts';
+import { getShopDeals, ShopDeal_t } from '../operations/ShopDeal';
+import NotImplemented from './NotImplemented';
+import Deal from '../components/Deal';
 
 
 export default function HomeScreen({ session }: { session: Session }) {
@@ -13,6 +16,12 @@ export default function HomeScreen({ session }: { session: Session }) {
     const [location, setLocation] = useState<string>("")
     const [description, setDescription] = useState<string>("")
     const [displayPrompt, setDisplayPrompt] = useState<boolean>(false)
+
+    const [deals, setDeals] = useState<ShopDeal_t[]>([])
+
+    useEffect(() => {
+        getShopDeals(session, setDeals)
+    }, [deals])
 
     useEffect(() => {
         if (session) {
@@ -28,10 +37,12 @@ export default function HomeScreen({ session }: { session: Session }) {
     }
 
     return (
-    <View style={{ flex: 1 }}>
-        <View style={styles.container}>
-            <Text style={styles.text}>Your Deals</Text>
-        </View>
+    <View>
+        <FlatList
+            data={deals}
+            renderItem={({ item }) => <Deal deal={item}/>}
+            style={{ backgroundColor: Colours.background[Colours.theme] }}
+        />
 
         {
             displayPrompt && (
