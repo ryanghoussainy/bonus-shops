@@ -20,12 +20,6 @@ export default function HomeScreen({ session }: { session: Session }) {
         }
     }, [session])
 
-    // useEffect(() => {
-    //     if (!shopName || !location) {
-    //         setDisplayPrompt(true)
-    //     }
-    // }, [shopName, location])
-
     const handleSubmit = () => {
         if (shopName && location) {
             updateUser(session, shopName, location, description)
@@ -36,8 +30,9 @@ export default function HomeScreen({ session }: { session: Session }) {
     return (
     <View style={{ flex: 1 }}>
         <View style={styles.container}>
-            <Text style={styles.text}>Not Implemented!</Text>
+            <Text style={styles.text}>Your Deals</Text>
         </View>
+
         {
             displayPrompt && (
                 <View style={styles.promptDetailsView}>

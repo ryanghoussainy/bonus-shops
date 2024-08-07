@@ -5,6 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import Colours from "../config/Colours";
 import { Session } from "@supabase/supabase-js";
 import Account from "../screens/Account";
+import CreateDealScreen from "../screens/CreateDealScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,6 +23,20 @@ export default function MainTabNavigator({ session }: { session: Session }) {
           tabBarActiveTintColor: Colours.green[Colours.theme],
         })}>
         {() => <HomeScreen session={session} />}
+      </Tab.Screen>
+
+      <Tab.Screen
+        name="Create Deal"
+        options={() => ({
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="add-circle" size={30} color={color} />
+          ),
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: Colours.green[Colours.theme],
+        })}
+      >
+        {() => <CreateDealScreen session={session} />}
       </Tab.Screen>
 
       <Tab.Screen
