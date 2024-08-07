@@ -9,7 +9,8 @@ export async function getUser(
     session: Session,
     setShopName: (name: string) => void,
     setLocation: (location: string) => void,
-    setDisplayPrompt: (displayPrompt: boolean) => void
+    setLoading?: (loading: boolean) => void,
+    setDisplayPrompt?: (displayPrompt: boolean) => void
 ) {
     try {
       if (!session?.user) throw new Error('No user on the session!')
@@ -26,13 +27,15 @@ export async function getUser(
       if (data) {
         setShopName(data.name)
         setLocation(data.location)
-        if (!data.name || !data.location) {
-            setDisplayPrompt(true)
-        } else {
-            setDisplayPrompt(false)
+        if (setDisplayPrompt) {
+            if (!data.name || !data.location) {
+                setDisplayPrompt(true)
+            } else {
+                setDisplayPrompt(false)
+            }
         }
       } else {
-        setDisplayPrompt(true)
+        if (setDisplayPrompt) setDisplayPrompt(true)
       }
     } catch (error) {
       if (error instanceof Error) {

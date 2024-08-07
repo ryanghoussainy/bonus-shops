@@ -7,7 +7,6 @@ import { Button, Input } from '@rneui/themed';
 import Colours from '../config/Colours';
 import Fonts from '../config/Fonts';
 import { getShopDeals, ShopDeal_t } from '../operations/ShopDeal';
-import NotImplemented from './NotImplemented';
 import Deal from '../components/Deal';
 
 
@@ -25,7 +24,7 @@ export default function HomeScreen({ session }: { session: Session }) {
 
     useEffect(() => {
         if (session) {
-            getUser(session, setShopName, setLocation, setDisplayPrompt)
+            getUser(session, setShopName, setLocation, undefined, setDisplayPrompt)
         }
     }, [session])
 
@@ -37,7 +36,7 @@ export default function HomeScreen({ session }: { session: Session }) {
     }
 
     return (
-    <View>
+    <View style={{ flex: 1 }}>
         <FlatList
             data={deals}
             renderItem={({ item }) => <Deal deal={item}/>}
