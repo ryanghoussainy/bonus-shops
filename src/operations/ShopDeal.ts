@@ -16,7 +16,7 @@ export type ShopDeal_t = {
     user_deal_id: string;
 }
 
-export async function getUserDeals(session: Session, setDeals: (deals: ShopDeal_t[]) => void) {
+export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_t[]) => void) {
     try {
         // Get user_id
         const user_id = session.user?.id;

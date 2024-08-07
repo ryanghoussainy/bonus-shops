@@ -5,7 +5,7 @@ import { Session } from '@supabase/supabase-js';
 export default function Account({ session }: { session: Session }) {
  return (
    <View style={styles.container}>
-     <Text style={styles.text}>Not Implemented!</Text>
+     <Text style={styles.text}>Your account</Text>
    </View>
  )
 }
