@@ -28,7 +28,10 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
             .select('id, user_id, deal_id, points')
             .eq('user_id', user_id);
 
-        if (error) throw error;
+        if (error) {
+            Alert.alert(error.message);
+            return;
+        };
 
         // Get deals from these user_deals
         const deals: ShopDeal_t[] = [];
@@ -39,7 +42,10 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
                 .eq('id', user_deal.deal_id)
                 .single();
 
-            if (error) throw error;
+            if (error) {
+                Alert.alert(error.message);
+                return;
+            }
 
             if (deal) {
                 deals.push({ ...deal, user_deal_id: user_deal.id });

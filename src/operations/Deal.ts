@@ -39,7 +39,11 @@ export async function createDeal(
         ])
         .select('id');
 
-    if (error) throw error;
+    if (error) {
+        Alert.alert(error.message);
+        setLoading(false);
+        return;
+    }
 
     // Create user_deals
     // Get new deal id
@@ -51,7 +55,11 @@ export async function createDeal(
         .from('profiles')
         .select('id');
     
-    if (users_error) throw users_error;
+    if (users_error) {
+        Alert.alert(users_error.message);
+        setLoading(false);
+        return
+    }
 
     // For each user, create a user_deal with the new deal
     for (const user of users) {
@@ -67,7 +75,10 @@ export async function createDeal(
                 }
             ]);
 
-        if (error) throw error;
+        if (error) {
+            Alert.alert(error.message);
+            setLoading(false);
+        }
     }
 
     setLoading(false);
