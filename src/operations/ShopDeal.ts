@@ -19,36 +19,41 @@ export type ShopDeal_t = {
 export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_t[]) => void) {
     try {
         // Get user_id
-        const user_id = session.user?.id;
-        if (!user_id) throw new Error('No user on the session!');
-        
-        // Get user_deals for this user
-        const { data: user_deals, error } = await supabase
-            .from('user_deals')
-            .select('id, user_id, deal_id, points')
-            .eq('user_id', user_id);
+        const shop_user_id = session.user?.id;
+        if (!shop_user_id) throw new Error('No user on the session!');
+
+        // Get deals for this user
+        const deals: ShopDeal_t[] = [];
+        const { data: shop_deals, error } = await supabase
+            .from('deals')
+            .select('description, type, percentage, start_time, end_time, end_date, days, max_pts, id')
+            .eq('shop_user_id', shop_user_id);
 
         if (error) {
             Alert.alert(error.message);
             return;
-        };
+        }
 
-        // Get deals from these user_deals
-        const deals: ShopDeal_t[] = [];
-        for (const user_deal of user_deals) {
-            const { data: deal, error } = await supabase
-                .from('deals')
-                .select('name, description, location, type, percentage, start_time, end_time, end_date, days, max_pts')
-                .eq('id', user_deal.deal_id)
-                .single();
+        // Get shop name and location
+        const { data: shop_data, error: shop_error } = await supabase
+            .from('shop_profiles')
+            .select('name, location')
+            .eq('id', shop_user_id)
+            .single();
 
-            if (error) {
-                Alert.alert(error.message);
-                return;
-            }
+        if (shop_error) {
+            Alert.alert(shop_error.message);
+            return;
+        }
 
+        for (const deal of shop_deals) {
             if (deal) {
-                deals.push({ ...deal, user_deal_id: user_deal.id });
+                deals.push({
+                    ...deal,
+                    user_deal_id: deal.id,
+                    name: shop_data.name,
+                    location: shop_data.location,
+                });
             }
         }
 
