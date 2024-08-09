@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import colours from '../config/Colours';
 import { Session } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
@@ -15,12 +15,20 @@ export default function HomeScreen({ session }: { session: Session }) {
     const [location, setLocation] = useState<string>("")
     const [description, setDescription] = useState<string>("")
     const [displayPrompt, setDisplayPrompt] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const [deals, setDeals] = useState<ShopDeal_t[]>([])
 
+    const fetchDeals = async () => {
+        setLoading(true);
+        await getShopDeals(session, setDeals);
+
+        setLoading(false);
+    };
+
     useEffect(() => {
-        getShopDeals(session, setDeals)
-    }, [deals])
+        fetchDeals();
+    }, [session])
 
     useEffect(() => {
         if (session) {
@@ -41,6 +49,26 @@ export default function HomeScreen({ session }: { session: Session }) {
             data={deals}
             renderItem={({ item }) => <Deal deal={item}/>}
             style={{ backgroundColor: Colours.background[Colours.theme] }}
+            ListEmptyComponent={() => {
+                if (loading) {
+                    return (
+                    <View style={styles.container}>
+                      <ActivityIndicator size="large" color={Colours.green[Colours.theme]} />
+                    </View>
+                  ) 
+                } else {
+                  return (
+                    <View style={styles.container}>
+                      <Text style={styles.text}>No deals found.</Text>
+                      <Button
+                        title="Refresh"
+                        onPress={fetchDeals}
+                        color={Colours.green[Colours.theme]}
+                      />
+                    </View>
+                  )
+                }
+            }}
         />
 
         {
@@ -99,6 +127,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "500",
         color: colours.text[colours.theme],
+        textAlign: "center",
     },
     promptDetailsView: {
         position: "absolute",
