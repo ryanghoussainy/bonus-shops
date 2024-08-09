@@ -107,3 +107,21 @@ export async function updateUser(
       }
     }
 }
+
+export async function checkValidUser(
+    user_id: string,
+) {
+    // Get user
+    const { data: user, error } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user_id)
+        .single();
+
+    if (error) {
+        Alert.alert("Invalid user ID", error.message);
+        return false;
+    }
+
+    return true;
+}

@@ -13,7 +13,6 @@ export type ShopDeal_t = {
     end_date: string;
     days: string;
     max_pts?: number;
-    user_deal_id: string;
 }
 
 export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_t[]) => void) {
@@ -50,7 +49,6 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
             if (deal) {
                 deals.push({
                     ...deal,
-                    user_deal_id: deal.id,
                     name: shop_data.name,
                     location: shop_data.location,
                 });
