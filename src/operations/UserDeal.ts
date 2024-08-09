@@ -15,8 +15,6 @@ export async function getUserDeal(
             .eq('id', user_deal_id)
             .single();
 
-        console.log(user_deal)
-
         if (error) {
             Alert.alert(error.message);
             return;
