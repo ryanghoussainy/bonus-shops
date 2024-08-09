@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 import Colours from '../config/Colours'
@@ -24,7 +24,7 @@ const DealScreen = () => {
     
     const deal = route.params.deal
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         navigation.setOptions({ title: deal.name })
 
         const requestCameraPermission = async () => {
