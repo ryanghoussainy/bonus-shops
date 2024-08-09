@@ -26,7 +26,9 @@ const DealScreen = () => {
 
     useLayoutEffect(() => {
         navigation.setOptions({ title: deal.name })
+    }, [])
 
+    useEffect(() => {
         const requestCameraPermission = async () => {
             const { status } = await Camera.requestCameraPermissionsAsync()
             setHasPermission(status === "granted")
@@ -35,7 +37,7 @@ const DealScreen = () => {
             }
         }
         requestCameraPermission();
-    }, [])
+    })
 
     useEffect(() => {
         if (userID === null || userDealID === null) return;
