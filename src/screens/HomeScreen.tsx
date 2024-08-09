@@ -15,14 +15,13 @@ export default function HomeScreen({ session }: { session: Session }) {
     const [location, setLocation] = useState<string>("")
     const [description, setDescription] = useState<string>("")
     const [displayPrompt, setDisplayPrompt] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
 
     const [deals, setDeals] = useState<ShopDeal_t[]>([])
 
     const fetchDeals = async () => {
         setLoading(true);
         await getShopDeals(session, setDeals);
-
         setLoading(false);
     };
 
@@ -45,6 +44,11 @@ export default function HomeScreen({ session }: { session: Session }) {
 
     return (
     <View style={{ flex: 1 }}>
+        <Button
+            title="Refresh"
+            onPress={fetchDeals}
+            color={Colours.green[Colours.theme]}
+        />
         <FlatList
             data={deals}
             renderItem={({ item }) => <Deal deal={item}/>}
