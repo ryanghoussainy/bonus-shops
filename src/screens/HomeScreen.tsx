@@ -38,6 +38,7 @@ export default function HomeScreen({ session }: { session: Session }) {
     }, [session])
 
     useEffect(() => {
+        // Make the tab bar disappear when the prompt details are displayed
         if (displayPromptDetails) {
             navigation.setOptions({
                 tabBarStyle: { display: "none" }

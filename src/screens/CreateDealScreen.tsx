@@ -16,6 +16,17 @@ export default function CreateDealScreen({ session }: { session: any }) {
     const [endDate, setEndDate] = useState<string>("")
     const [daysOfWeek, setDaysOfWeek] = useState<string>("")
     const [maxPoints, setMaxPoints] = useState<number>(-1)
+
+    const resetFields = () => {
+        setDealDescription("")
+        setDealType(-1)
+        setPercentageOff(-1)
+        setStartTime("")
+        setEndTime("")
+        setEndDate("")
+        setDaysOfWeek("")
+        setMaxPoints(-1)
+    }
     
     return (
     <View style={styles.container}>
@@ -23,58 +34,79 @@ export default function CreateDealScreen({ session }: { session: any }) {
             <Input
                 label="Deal Description"
                 style={styles.input}
+                value={dealDescription}
                 onChangeText={(text) => setDealDescription(text)}
+                disabled={loading}
             />
             <Input
                 label="Deal type"
                 style={styles.input}
+                value={dealType == -1 ? "" : dealType.toString()}
                 onChangeText={(text) => setDealType(parseInt(text))}
+                disabled={loading}
             />
             <Input
                 label="Percentage off"
                 style={styles.input}
+                value={percentageOff == -1 ? "" : percentageOff.toString()}
                 onChangeText={(text) => setPercentageOff(parseInt(text))}
+                disabled={loading}
             />
             <Input
                 label="Start time"
                 style={styles.input}
+                value={startTime}
                 onChangeText={(text) => setStartTime(text)}
+                disabled={loading}
             />
             <Input
                 label="End time"
                 style={styles.input}
+                value={endTime}
                 onChangeText={(text) => setEndTime(text)}
+                disabled={loading}
             />
             <Input
                 label="End date"
                 style={styles.input}
+                value={endDate}
                 onChangeText={(text) => setEndDate(text)}
+                disabled={loading}
             />
             <Input
                 label="Days of the week"
                 style={styles.input}
+                value={daysOfWeek}
                 onChangeText={(text) => setDaysOfWeek(text)}
+                disabled={loading}
             />
             <Input
                 label="Max points"
                 style={styles.input}
+                value={maxPoints == -1 ? "" : maxPoints.toString()}
                 onChangeText={(text) => setMaxPoints(parseInt(text))}
+                disabled={loading}
             />
             <Button
-                title="Create Deal"
-                onPress={() => createDeal(
-                    session,
-                    dealDescription,
-                    dealType,
-                    percentageOff,
-                    startTime,
-                    endTime,
-                    endDate,
-                    daysOfWeek,
-                    setLoading,
-                    maxPoints
-                )}
+                title={loading ? "Creating deal..." : "Create Deal"}
+                onPress={async () => {
+                    await createDeal(
+                        session,
+                        dealDescription,
+                        dealType,
+                        percentageOff,
+                        startTime,
+                        endTime,
+                        endDate,
+                        daysOfWeek,
+                        setLoading,
+                        maxPoints
+                    );
+                    resetFields();
+                    setLoading(false);
+                }}
                 buttonStyle={styles.createDealButton}
+                disabled={loading}
             />
         </ScrollView>
     </View>
