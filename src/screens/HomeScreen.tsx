@@ -14,7 +14,7 @@ export default function HomeScreen({ session }: { session: Session }) {
     const [shopName, setShopName] = useState<string>("")
     const [location, setLocation] = useState<string>("")
     const [description, setDescription] = useState<string>("")
-    const [displayPrompt, setDisplayPrompt] = useState<boolean>(false)
+    const [displayPromptDetails, setDisplayPromptDetails] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
 
     const [deals, setDeals] = useState<ShopDeal_t[]>([])
@@ -33,12 +33,12 @@ export default function HomeScreen({ session }: { session: Session }) {
 
     useEffect(() => {
         if (session) {
-            getUser(session, setShopName, setLocation, setDisplayPrompt)
+            getUser(session, setShopName, setLocation, setDisplayPromptDetails)
         }
     }, [session])
 
     useEffect(() => {
-        if (displayPrompt) {
+        if (displayPromptDetails) {
             navigation.setOptions({
                 tabBarStyle: { display: "none" }
             })
@@ -49,7 +49,7 @@ export default function HomeScreen({ session }: { session: Session }) {
                 },
             })
         }
-    }, [displayPrompt])
+    }, [displayPromptDetails])
 
     return (
     <View style={{ flex: 1 }}>
@@ -79,9 +79,9 @@ export default function HomeScreen({ session }: { session: Session }) {
             }}
         />
 
-        {displayPrompt && promptDetails(
+        {displayPromptDetails && promptDetails(
             session,
-            setDisplayPrompt,
+            setDisplayPromptDetails,
             shopName,
             setShopName,
             location,

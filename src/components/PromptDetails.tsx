@@ -9,7 +9,7 @@ import { Session } from "@supabase/supabase-js";
 
 export default function promptDetails(
     session: Session,
-    setDisplayPrompt: (display: boolean) => void,
+    setDisplayPromptDetails: (display: boolean) => void,
     shopName: string,
     setShopName: (shopName: string) => void,
     location: string,
@@ -20,7 +20,7 @@ export default function promptDetails(
     const handleSubmit = () => {
         if (shopName && location) {
             updateUser(session, shopName, location, description)
-            setDisplayPrompt(false)
+            setDisplayPromptDetails(false)
         }
     }
 
