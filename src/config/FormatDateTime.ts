@@ -13,7 +13,7 @@ export function formatDate(dateStr: string) {
 
     if (day[1] === "1") {
         day += "st";
-    } else if (day[1] === "2") {
+    } else if (day[1] === "2" && day !== "12") {
         day += "nd";
     } else if (day[1] === "3") {
         day += "rd";
