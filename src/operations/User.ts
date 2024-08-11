@@ -9,6 +9,7 @@ export async function getUser(
     session: Session,
     setShopName: (name: string) => void,
     setLocation: (location: string) => void,
+    setLogoUrl: (logoUrl: string) => void,
     setDisplayPrompt?: (displayPrompt: boolean) => void
 ) {
     try {
@@ -16,7 +17,7 @@ export async function getUser(
   
       const { data, error, status } = await supabase
         .from('shop_profiles')
-        .select(`name, location`)
+        .select(`name, location, logo_url`)
         .eq('id', session?.user.id)
         .single()
       if (error && status !== 406) {
@@ -26,8 +27,9 @@ export async function getUser(
       if (data) {
         setShopName(data.name)
         setLocation(data.location)
+        setLogoUrl(data.logo_url)
         if (setDisplayPrompt) {
-            if (!data.name || !data.location) {
+            if (!data.name || !data.location || !data.logo_url) {
                 setDisplayPrompt(true)
             } else {
                 setDisplayPrompt(false)
@@ -83,7 +85,8 @@ export async function updateUser(
     session: Session,
     shopName: string,
     location: string,
-    description: string
+    description: string,
+    logoUrl: string
 ) {
     try {
       if (!session?.user) throw new Error('No user on the session!')
@@ -93,6 +96,7 @@ export async function updateUser(
         name: shopName,
         location,
         description,
+        logo_url: logoUrl,
         updated_at: new Date(),
       }
   
