@@ -11,9 +11,10 @@ export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState('')
   const [location, setLocation] = useState('')
+  const [logoUrl, setLogoUrl] = useState('')
 
   useEffect(() => {
-    if (session) getUser(session, setName, setLocation)
+    if (session) getUser(session, setName, setLocation, setLogoUrl)
   }, [session])
 
   return (

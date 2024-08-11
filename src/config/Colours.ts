@@ -9,6 +9,8 @@ export default {
   green: ["#0a0", "#0a0"],
   red: ["#b00", "#b00"],
   grey: ["#888", "#888"],
+  bluegrey: ["#86939e", "#86939e"],
+
   
   theme,
 };

@@ -21,8 +21,8 @@ export async function getUserDeal(
         }
 
         if (user_deal) {
-            await setRedeemedDays(user_deal.redeemed_days);
-            await setUserID(user_deal.user_id);
+            setRedeemedDays(user_deal.redeemed_days);
+            setUserID(user_deal.user_id);
         } else {
             Alert.alert("User Deal Not Found");
         }

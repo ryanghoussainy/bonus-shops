@@ -14,6 +14,8 @@ export default function HomeScreen({ session }: { session: Session }) {
     const [shopName, setShopName] = useState<string>("")
     const [location, setLocation] = useState<string>("")
     const [description, setDescription] = useState<string>("")
+    const [logoUrl, setLogoUrl] = useState<string>("")
+
     const [displayPromptDetails, setDisplayPromptDetails] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -33,7 +35,7 @@ export default function HomeScreen({ session }: { session: Session }) {
 
     useEffect(() => {
         if (session) {
-            getUser(session, setShopName, setLocation, setDisplayPromptDetails)
+            getUser(session, setShopName, setLocation, setLogoUrl, setDisplayPromptDetails)
         }
     }, [session])
 
@@ -88,7 +90,9 @@ export default function HomeScreen({ session }: { session: Session }) {
             location,
             setLocation,
             description,
-            setDescription
+            setDescription,
+            logoUrl,
+            setLogoUrl
         )}
     </View>
     )
