@@ -58,7 +58,7 @@ export default function HomeScreen({ session }: { session: Session }) {
     <View style={{ flex: 1 }}>
         <FlatList
             data={deals}
-            renderItem={({ item }) => <Deal deal={item}/>}
+            renderItem={({ item }) => <Deal session={session} deal={item}/>}
             style={{ backgroundColor: Colours.background[Colours.theme] }}
             ListEmptyComponent={() => {
                 if (loading) {

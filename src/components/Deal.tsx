@@ -6,21 +6,51 @@ import { ShopDeal_t } from "../operations/ShopDeal";
 import getDiscountDescription from "./DiscountDescription";
 import { RootStackParamList } from "../navigation/StackNavigator";
 import Fonts from "../config/Fonts";
+import { Session } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+import { Image } from "@rneui/themed";
+import { getLogo, getLogoPath } from "../operations/Logo";
 
 type DealScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Deal">;
 
-const Deal = ({ deal }: { deal: ShopDeal_t }) => {
-  const navigation = useNavigation<DealScreenNavigationProp>(); // Navigation prop
+const Deal = ({ session, deal }: { session: Session, deal: ShopDeal_t }) => {
+    const [url, setUrl] = useState<string>("");
+    const [logoUrl, setLogoUrl] = useState<string>("");
 
-  return (
-    <Pressable onPress={() => navigation.navigate("Deal", { deal: deal })} style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.name}>{deal.name}</Text>
+    const navigation = useNavigation<DealScreenNavigationProp>(); // Navigation prop
 
-        <View style={styles.discount}>{getDiscountDescription(deal)}</View>
-      </View>
-    </Pressable>
-  )
+    useEffect(() => {
+        if (url) getLogo(url, setLogoUrl);
+    }, [url])
+
+    useEffect(() => {
+        getLogoPath(session, setUrl);
+    }, [session])
+
+    return (
+        <Pressable onPress={() => navigation.navigate("Deal", { deal: deal })} style={styles.container}>
+        <View style={styles.content}>
+            <View style={styles.dealHeader}>
+                {/* Shop Name*/}
+                <Text style={styles.name} numberOfLines={2} ellipsizeMode="tail">
+                    {deal.name}
+                </Text>
+                
+                {/* get logo from supabase storage */}
+                {logoUrl && 
+                    <Image
+                        source={{ uri: logoUrl }}
+                        accessibilityLabel="Logo"
+                        style={styles.logo}
+                        resizeMode="cover"
+                    />
+                }
+            </View>
+
+            <View style={styles.discount}>{getDiscountDescription(deal)}</View>
+        </View>
+        </Pressable>
+    )
 }
 
 export default Deal;
@@ -45,6 +75,11 @@ const styles = StyleSheet.create({
 
     elevation: 1.5,
   },
+  dealHeader: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   content: {
     flex: 1,
   },
@@ -54,12 +89,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 70,
-    height: 70,
-    alignSelf: "center",
-    borderRadius: 35,
-    borderWidth: 1,
-    borderColor: "black",
+    top: 0,
+    right: 0,
+    width: 100,
+    height: 100,
+    borderRadius: 25,
   },
   name: {
     alignSelf: "center",
@@ -70,5 +104,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: Colours.text[Colours.theme],
     fontFamily: Fonts.condensed,
+    width: "50%",
   },
 })
