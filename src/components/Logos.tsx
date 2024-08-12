@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { StyleSheet, View, Alert, Image, Button } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
+import { getLogo } from '../operations/Logo'
 
 interface Props {
   size: number
@@ -15,28 +16,8 @@ export default function Logo({ url, size = 150, onUpload }: Props) {
   const logoSize = { height: size, width: size }
 
   useEffect(() => {
-    if (url) downloadImage(url)
+    if (url) getLogo(url, setLogoUrl)
   }, [url])
-
-  async function downloadImage(path: string) {
-    try {
-      const { data, error } = await supabase.storage.from('logos').download(path)
-
-      if (error) {
-        throw error
-      }
-
-      const fr = new FileReader()
-      fr.readAsDataURL(data)
-      fr.onload = () => {
-        setLogoUrl(fr.result as string)
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log('Error downloading image: ', error.message)
-      }
-    }
-  }
 
   async function uploadLogo() {
     try {
