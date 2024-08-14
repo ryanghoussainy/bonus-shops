@@ -2,23 +2,20 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
 import Colours from '../config/Colours'
-import getDiscountDescription from '../components/DiscountDescription';
+import { getDiscountDescription, getDiscountTimes } from '../components/DiscountDescription';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import Fonts from '../config/Fonts';
 import { Camera, CameraView } from 'expo-camera';
-import { Button } from '@rneui/themed';
+import { Button, Image } from '@rneui/themed';
 import { addPoint, getUserDeal } from '../operations/UserDeal';
 import { checkValidUser } from '../operations/User';
+import { getLogo, getLogoPath } from '../operations/Logo';
+import { Session } from '@supabase/supabase-js';
 
 type DealScreenRouteProp = RouteProp<RootStackParamList, "Deal">;
 
-const DealScreen = () => {
-    const [hasPermission, setHasPermission] = useState<boolean | null>(null)
-    const [scanned, setScanned] = useState(false)
-    const [redeemedDays, setRedeemedDays] = useState<string[]>([]);
-    const [userID, setUserID] = useState<string | null>(null);
-    const [userDealID, setUserDealID] = useState<string | null>(null);
-
+const DealScreen = ({ session }: { session: Session }) => {
+    // Update the title of the screen
     const route = useRoute<DealScreenRouteProp>()
     const navigation = useNavigation()
     
@@ -28,6 +25,13 @@ const DealScreen = () => {
         navigation.setOptions({ title: deal.name })
     }, [])
 
+    // Camera Permissions and QR Code Scanning
+    const [hasPermission, setHasPermission] = useState<boolean | null>(null)
+    const [scanned, setScanned] = useState(false)
+    const [redeemedDays, setRedeemedDays] = useState<string[]>([]);
+    const [userID, setUserID] = useState<string | null>(null);
+    const [userDealID, setUserDealID] = useState<string | null>(null);
+    
     useEffect(() => {
         const requestCameraPermission = async () => {
             const { status } = await Camera.requestCameraPermissionsAsync()
@@ -85,7 +89,20 @@ const DealScreen = () => {
             checkQRCode(data);
         }
     }
+    
+    // Get logo
+    const [url, setUrl] = useState<string>("");
+    const [logoUrl, setLogoUrl] = useState<string>("");
+    
+    useEffect(() => {
+        if (url) getLogo(url, setLogoUrl);
+    }, [url])
 
+    useEffect(() => {
+        getLogoPath(session, setUrl);
+    }, [session])
+
+    // Check camera permissions
     if (hasPermission === null) {
         return <Text>Requesting for camera permission</Text>
     }
@@ -96,17 +113,29 @@ const DealScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.dealContainer}>
+                {/* Logo */}
+                {logoUrl && 
+                    <Image
+                        source={{ uri: logoUrl }}
+                        accessibilityLabel="Logo"
+                        style={styles.logo}
+                        resizeMode="cover"
+                    />
+                }
+
                 {/* Discount */}
                 <View>{getDiscountDescription(deal)}</View>
+                
+                {/* Discount Times */}
+                <View>{getDiscountTimes(deal)}</View>
 
                 {/* QR Code Scanner */}
-                <View style={styles.redeem}>
-                    <CameraView
-                        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-                        style={styles.qrcode}
-                    />
-                    {scanned && <Button onPress={() => setScanned(false)}>Tap to Scan Again</Button>}
-                </View>
+                <CameraView
+                    onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={styles.qrcode}
+                />
+                {scanned && <Button onPress={() => setScanned(false)}>Tap to Scan Again</Button>}
+
 
                 {/* Description */}
                 <Text style={[styles.description, { textDecorationLine: "underline" }]}>
@@ -133,6 +162,7 @@ const styles = StyleSheet.create({
         borderRadius: 35,
         borderColor: Colours.green[Colours.theme],
         borderWidth: 1,
+        alignItems: "center",
     },
     description: {
         paddingHorizontal: 15,
@@ -141,14 +171,14 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.condensed,
         fontSize: 15,
     },
-    redeem: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
     qrcode: {
         width: "90%",
-        height: "70%",
+        height: "40%",
+    },
+    logo: {
+        width: 100,
+        height: 100,
+        borderRadius: 25,
     },
 })
 

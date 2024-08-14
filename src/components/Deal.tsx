@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import Colours from "../config/Colours"
 import { ShopDeal_t } from "../operations/ShopDeal";
-import getDiscountDescription from "./DiscountDescription";
+import { getDiscountDescription, getDiscountTimes } from "./DiscountDescription";
 import { RootStackParamList } from "../navigation/StackNavigator";
 import Fonts from "../config/Fonts";
 import { Session } from "@supabase/supabase-js";
@@ -47,7 +47,10 @@ const Deal = ({ session, deal }: { session: Session, deal: ShopDeal_t }) => {
                 }
             </View>
 
-            <View style={styles.discount}>{getDiscountDescription(deal)}</View>
+            <View style={styles.discount}>
+                {getDiscountDescription(deal)}
+                {getDiscountTimes(deal)}
+            </View>
         </View>
         </Pressable>
     )
