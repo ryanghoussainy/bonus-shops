@@ -5,7 +5,7 @@ import { Alert } from 'react-native';
 
 export async function getLogoPath(
     session: Session,
-    setLogoUrl: (logoUrl: string) => void,
+    setUrl: (logoUrl: string) => void,
 ) {
     try {
         if (!session?.user) throw new Error('No user on the session!')
@@ -20,7 +20,7 @@ export async function getLogoPath(
         }
 
         if (data) {
-            setLogoUrl(data.logo_url)
+            setUrl(data.logo_url)
         }
     } catch (error) {
         if (error instanceof Error) {
