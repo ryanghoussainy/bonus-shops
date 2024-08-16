@@ -1,10 +1,11 @@
-import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from "react-native";
 import Colours from "../config/Colours";
 import Fonts from "../config/Fonts";
 import { Button, Input } from "@rneui/themed";
 import { updateUser } from "../operations/User";
 import { Session } from "@supabase/supabase-js";
 import Logo from "./Logos";
+import { getShopNames } from "../operations/Shop";
 
 
 export default function promptDetails(
@@ -19,7 +20,17 @@ export default function promptDetails(
     logoUrl: string,
     setLogoUrl: (url: string) => void
 ) {
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        // Check that shop name is unique
+        const shops = await getShopNames();
+
+        if (shops.map(shop => shop.name).includes(shopName)) {
+            // Alert user that the shop name is already taken
+            Alert.alert("Shop name already taken", "Please choose a different name.")
+            return
+        }
+
+        // Check that all mandatory fields are filled in
         if (shopName && location && logoUrl) {
             updateUser(session, shopName, location, description, logoUrl)
             setDisplayPromptDetails(false)
