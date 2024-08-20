@@ -75,7 +75,7 @@ const Navigator = ({ session }: { session: Session }) => {
           headerTintColor: Colours.text[Colours.theme],
         }}
       >
-        <Stack.Screen name="Your Deals">
+        <Stack.Screen name="Your Deals" options={{ headerShown: false }}>
           {() => <MainTabNavigator key={session.user.id} session={session} />}
         </Stack.Screen>
         <Stack.Screen name="Deal">

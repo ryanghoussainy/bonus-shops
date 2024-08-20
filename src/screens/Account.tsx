@@ -67,7 +67,7 @@ export default function Account({ session }: { session: Session }) {
               supabase.auth.signOut()
               setLoading(false)
             }}
-            color={Colours.red[Colours.theme]}
+            color={Colours.primary[Colours.theme]}
             disabled={loading}
           />
         </View>
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: Colours.background[Colours.theme],
     flex: 1,
+    marginTop: 30,
   },
   signOutSection: {
     borderTopWidth: 1,
