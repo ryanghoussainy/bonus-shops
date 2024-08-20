@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { Session } from '@supabase/supabase-js';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Button } from '@rneui/themed';
 import Colours from '../config/Colours';
 import { getShopDeals, ShopDeal_t } from '../operations/ShopDeal';
@@ -8,6 +8,7 @@ import Deal from '../components/Deal';
 import { getUser } from '../operations/User';
 import promptDetails from '../components/PromptDetails';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import Fonts from '../config/Fonts';
 
 export default function HomeScreen({ session }: { session: Session }) {
     const [shopName, setShopName] = useState<string>("")
@@ -56,10 +57,13 @@ export default function HomeScreen({ session }: { session: Session }) {
 
     return (
         <View style={{ flex: 1 }}>
+            <View style={styles.headerContainer}>
+                <Text style={styles.header}>Your Deals</Text>
+            </View>
             <FlatList
                 data={deals}
                 renderItem={({ item }) => <Deal session={session} deal={item} />}
-                style={{ backgroundColor: Colours.background[Colours.theme] }}
+                style={styles.dealsList}
                 ListEmptyComponent={() => {
                     if (loading) {
                         return (
@@ -110,5 +114,20 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: Colours.text[Colours.theme],
         textAlign: "center",
+    },
+    dealsList: {
+        backgroundColor: Colours.background[Colours.theme],
+    },
+    headerContainer: {
+        backgroundColor: Colours.background[Colours.theme],
+        marginTop: 20,
+        padding: 15,
+    },
+    header: {
+        fontSize: 28,
+        fontWeight: "bold",
+        fontFamily: Fonts.condensed,
+        color: Colours.text[Colours.theme],
+        marginLeft: 10,
     },
 })

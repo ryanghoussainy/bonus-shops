@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, Modal, View, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
@@ -54,7 +54,7 @@ export default function CreateDealScreen({ session }: { session: Session }) {
 
             <Modal
                 visible={modalVisible}
-                transparent={true}
+                transparent
                 animationType="fade"
                 onRequestClose={handleCloseModal}
             >
