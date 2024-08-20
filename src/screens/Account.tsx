@@ -6,6 +6,7 @@ import { Session } from '@supabase/supabase-js'
 import { getUser } from '../operations/User'
 import Colours from "../config/Colours"
 import Fonts from '../config/Fonts'
+import { LinearGradient } from 'expo-linear-gradient'
 
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(false)
@@ -18,7 +19,7 @@ export default function Account({ session }: { session: Session }) {
   }, [session])
 
   return (
-    <View style={styles.container}>
+    <LinearGradient style={styles.container} colors={[Colours.background[Colours.theme], Colours.dealItem[Colours.theme]]}>
       <Text style={styles.h2}>
         Account
       </Text>
@@ -72,7 +73,7 @@ export default function Account({ session }: { session: Session }) {
           />
         </View>
       </View>
-    </View>
+    </LinearGradient>
   )
 }
 
