@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { Session } from '@supabase/supabase-js';
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '@rneui/themed';
 import Colours from '../config/Colours';
 import { getShopDeals, ShopDeal_t } from '../operations/ShopDeal';
@@ -30,7 +30,7 @@ export default function HomeScreen({ session }: { session: Session }) {
     };
 
     // Focus Effect to fetch deals when the screen is focused
-    useFocusEffect(React.useCallback(() => {
+    useFocusEffect(useCallback(() => {
         fetchDeals()
     }, [session]))
 
