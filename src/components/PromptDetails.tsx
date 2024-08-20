@@ -38,59 +38,59 @@ export default function promptDetails(
     }
 
     return (
-    <KeyboardAvoidingView
-        style={styles.promptDetailsView}
-        behavior="height"
-    >
-        <ScrollView>
-            <Text style={styles.text}>Please enter the following:</Text>
-            <View style={styles.inputView}>
-                <Input
-                    label="Shop Name"
-                    labelStyle={styles.label}
-                    style={styles.input}
-                    onChangeText={(text) => setShopName(text)}
-                />
-            </View>
-            <View style={styles.inputView}>
-                <Input
-                    label="Location on campus (be brief but specific)"
-                    labelStyle={styles.label}
-                    placeholder="e.g. Senior Common Room"
-                    style={styles.input}
-                    onChangeText={(text) => setLocation(text)}
-                />
-            </View>
-            <View style={styles.inputView}>
-                <Input
-                    label="Description of the shop (optional but recommended)"
-                    labelStyle={styles.label}
-                    placeholder="e.g. We sell snacks and drinks."
-                    style={styles.input}
-                    onChangeText={(text) => setDescription(text)}
-                />
-            </View>
-            <View style={styles.alignLeft}>
-                <Text style={styles.label}>Your logo:</Text>
-                <Logo
-                    size={200}
-                    url={logoUrl}
-                    onUpload={(url: string) => setLogoUrl(url)}
-                />
-            </View>
+        <KeyboardAvoidingView
+            style={styles.promptDetailsView}
+            behavior="height"
+        >
+            <ScrollView>
+                <Text style={styles.text}>Please enter the following:</Text>
+                <View style={styles.inputView}>
+                    <Input
+                        label="Shop Name"
+                        labelStyle={styles.label}
+                        style={styles.input}
+                        onChangeText={(text) => setShopName(text)}
+                    />
+                </View>
+                <View style={styles.inputView}>
+                    <Input
+                        label="Location on campus (be brief but specific)"
+                        labelStyle={styles.label}
+                        placeholder="e.g. Senior Common Room"
+                        style={styles.input}
+                        onChangeText={(text) => setLocation(text)}
+                    />
+                </View>
+                <View style={styles.inputView}>
+                    <Input
+                        label="Description of the shop (optional but recommended)"
+                        labelStyle={styles.label}
+                        placeholder="e.g. We sell snacks and drinks."
+                        style={styles.input}
+                        onChangeText={(text) => setDescription(text)}
+                    />
+                </View>
+                <View style={styles.alignLeft}>
+                    <Text style={styles.label}>Your logo:</Text>
+                    <Logo
+                        size={200}
+                        url={logoUrl}
+                        onUpload={(url: string) => setLogoUrl(url)}
+                    />
+                </View>
 
-            <View style={styles.alignRight}>
-                <Button
-                    buttonStyle={styles.submitButton}
-                    title="Submit"
-                    disabled={!shopName || !location || !logoUrl}
-                    disabledStyle={{ backgroundColor: Colours.background[Colours.theme] }}
-                    disabledTitleStyle={{ color: Colours.background[Colours.theme] }}
-                    onPress={handleSubmit}
-                />
-            </View>
-        </ScrollView>
-    </KeyboardAvoidingView>
+                <View style={styles.alignRight}>
+                    <Button
+                        buttonStyle={styles.submitButton}
+                        title="Submit"
+                        disabled={!shopName || !location || !logoUrl}
+                        disabledStyle={{ backgroundColor: Colours.background[Colours.theme] }}
+                        disabledTitleStyle={{ color: Colours.background[Colours.theme] }}
+                        onPress={handleSubmit}
+                    />
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
     },
     submitButton: {
-        backgroundColor: Colours.green[Colours.theme],
+        backgroundColor: Colours.primary[Colours.theme],
         marginTop: 40,
     },
     alignRight: {

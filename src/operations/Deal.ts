@@ -6,35 +6,60 @@ import { Alert } from 'react-native';
 export async function createDeal(
     session: Session,
     description: string,
-    type: number,
-    percentage: number,
-    start_time: string,
-    end_time: string,
-    end_date: string,
-    days: string,
+    endDate: string | null,
+    discountTimes: { [key: string]: string | null },
+    discount: number,
+    discountType: number,
+    maxPoints: number,
     setLoading: (loading: boolean) => void,
-    max_pts?: number,
 ) {
     // Get user_id
     const shop_user_id = session.user?.id;
     if (!shop_user_id) throw new Error('No user on the session!');
+    
+    setLoading(true);
+    // Create deal times
+    const { data: deal_times, error: deal_times_error } = await supabase
+        .from('deal_times')
+        .insert([
+            {
+                mon_start: discountTimes.mon_start,
+                mon_end: discountTimes.mon_end,
+                tue_start: discountTimes.tue_start,
+                tue_end: discountTimes.tue_end,
+                wed_start: discountTimes.wed_start,
+                wed_end: discountTimes.wed_end,
+                thu_start: discountTimes.thu_start,
+                thu_end: discountTimes.thu_end,
+                fri_start: discountTimes.fri_start,
+                fri_end: discountTimes.fri_end,
+                sat_start: discountTimes.sat_start,
+                sat_end: discountTimes.sat_end,
+                sun_start: discountTimes.sun_start,
+                sun_end: discountTimes.sun_end,
+            }
+        ])
+        .select('id');
+
+    if (deal_times_error) {
+        Alert.alert(deal_times_error.message);
+        setLoading(false);
+        return;
+    }
 
     // Insert deal
-    setLoading(true);
     const { data, error } = await supabase
         .from('deals')
         .insert([
             {
-                description: description,
-                type: type,
-                percentage: percentage,
-                start_time: start_time,
-                end_time: end_time,
-                end_date: end_date,
-                days: days,
-                max_pts: max_pts,
                 updated_at: new Date(),
+                description,
+                type: discountType,
+                percentage: discount,
+                end_date: endDate,
+                max_pts: maxPoints,
                 shop_user_id,
+                deal_times_id: deal_times[0].id,
             }
         ])
         .select('id');

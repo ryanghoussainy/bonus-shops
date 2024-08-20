@@ -1,14 +1,13 @@
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { Session } from '@supabase/supabase-js';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@rneui/themed';
 import Colours from '../config/Colours';
 import { getShopDeals, ShopDeal_t } from '../operations/ShopDeal';
 import Deal from '../components/Deal';
 import { getUser } from '../operations/User';
 import promptDetails from '../components/PromptDetails';
-import { useNavigation } from '@react-navigation/native';
-
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 export default function HomeScreen({ session }: { session: Session }) {
     const [shopName, setShopName] = useState<string>("")
@@ -29,9 +28,10 @@ export default function HomeScreen({ session }: { session: Session }) {
         setLoading(false);
     };
 
-    useEffect(() => {
-        fetchDeals();
-    }, [session])
+    // Focus Effect to fetch deals when the screen is focused
+    useFocusEffect(React.useCallback(() => {
+        fetchDeals()
+    }, [session]))
 
     useEffect(() => {
         if (session) {
@@ -55,46 +55,46 @@ export default function HomeScreen({ session }: { session: Session }) {
     }, [displayPromptDetails])
 
     return (
-    <View style={{ flex: 1 }}>
-        <FlatList
-            data={deals}
-            renderItem={({ item }) => <Deal session={session} deal={item}/>}
-            style={{ backgroundColor: Colours.background[Colours.theme] }}
-            ListEmptyComponent={() => {
-                if (loading) {
-                    return (
-                    <View style={styles.container}>
-                      <ActivityIndicator size="large" color={Colours.green[Colours.theme]} />
-                    </View>
-                  ) 
-                } else {
-                  return (
-                    <View style={styles.container}>
-                      <Text style={styles.text}>No deals found.</Text>
-                      <Button
-                        title="Refresh"
-                        onPress={fetchDeals}
-                        color={Colours.green[Colours.theme]}
-                      />
-                    </View>
-                  )
-                }
-            }}
-        />
+        <View style={{ flex: 1 }}>
+            <FlatList
+                data={deals}
+                renderItem={({ item }) => <Deal session={session} deal={item} />}
+                style={{ backgroundColor: Colours.background[Colours.theme] }}
+                ListEmptyComponent={() => {
+                    if (loading) {
+                        return (
+                            <View style={styles.container}>
+                                <ActivityIndicator size="large" color={Colours.primary[Colours.theme]} />
+                            </View>
+                        )
+                    } else {
+                        return (
+                            <View style={styles.container}>
+                                <Text style={styles.text}>No deals found.</Text>
+                                <Button
+                                    title="Refresh"
+                                    onPress={fetchDeals}
+                                    color={Colours.primary[Colours.theme]}
+                                />
+                            </View>
+                        )
+                    }
+                }}
+            />
 
-        {displayPromptDetails && promptDetails(
-            session,
-            setDisplayPromptDetails,
-            shopName,
-            setShopName,
-            location,
-            setLocation,
-            description,
-            setDescription,
-            logoUrl,
-            setLogoUrl
-        )}
-    </View>
+            {displayPromptDetails && promptDetails(
+                session,
+                setDisplayPromptDetails,
+                shopName,
+                setShopName,
+                location,
+                setLocation,
+                description,
+                setDescription,
+                logoUrl,
+                setLogoUrl
+            )}
+        </View>
     )
 }
 

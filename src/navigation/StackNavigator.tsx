@@ -8,10 +8,22 @@ import { ShopDeal_t } from "../operations/ShopDeal";
 import DealScreen from "../screens/DealScreen";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
+import Screen1 from "../screens/createDealScreens/Screen1";
+import Screen2 from "../screens/createDealScreens/Screen2";
+import Screen3 from "../screens/createDealScreens/Screen3";
+import Screen4 from "../screens/createDealScreens/Screen4";
+import Screen5 from "../screens/createDealScreens/Screen5";
+import Screen6 from "../screens/createDealScreens/Screen6";
 
 export type RootStackParamList = {
   "Your Deals": { session: Session };
   "Deal": { deal: ShopDeal_t };
+  "Screen1": { previousDeal: ShopDeal_t | null };
+  "Screen2": { previousDeal: ShopDeal_t | null, discountType: number, maxPoints: number | null };
+  "Screen3": { previousDeal: ShopDeal_t | null, discount: number, discountType: number, maxPoints: number | null };
+  "Screen4": { previousDeal: ShopDeal_t | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
+  "Screen5": { previousDeal: ShopDeal_t | null, endDate: string | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
+  "Screen6": { description: string; endDate: string | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -22,26 +34,26 @@ const Navigator = ({ session }: { session: Session }) => {
 
   useEffect(() => {
     const checkUserRole = async () => {
-        const { data: user, error } = await supabase.auth.getUser();
+      const { data: user, error } = await supabase.auth.getUser();
 
-        if (error) {
-            Alert.alert(error.message);
-            setLoading(false);
-            return;
+      if (error) {
+        Alert.alert(error.message);
+        setLoading(false);
+        return;
+      }
+
+      if (user) {
+        const role = user.user.user_metadata.role;
+
+        if (role !== '1') {
+          // Sign out and alert the user
+          await supabase.auth.signOut();
+          Alert.alert('The login details you entered are not for this app.', 'Please sign in with the correct details.')
+        } else {
+          // User is authorised
+          setLoading(false);
         }
-
-        if (user) {
-            const role = user.user.user_metadata.role;
-
-            if (role !== '1') {
-              // Sign out and alert the user
-              await supabase.auth.signOut();
-              Alert.alert('The login details you entered are not for this app.', 'Please sign in with the correct details.')
-            } else {
-              // User is authorised
-              setLoading(false);
-            }
-        }
+      }
     }
     checkUserRole();
   }, [])
@@ -49,7 +61,7 @@ const Navigator = ({ session }: { session: Session }) => {
   if (loading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" color={Colours.green[Colours.theme]} />
+        <ActivityIndicator size="large" color={Colours.primary[Colours.theme]} />
       </View>
     )
   }
@@ -69,6 +81,27 @@ const Navigator = ({ session }: { session: Session }) => {
         <Stack.Screen name="Deal">
           {() => <DealScreen session={session} />}
         </Stack.Screen>
+
+        {/* Screens for creating deal */}
+        <Stack.Screen name="Screen1" options={{ headerShown: false }}>
+          {() => <Screen1 />}
+        </Stack.Screen>
+        <Stack.Screen name="Screen2" options={{ headerShown: false }}>
+          {() => <Screen2 />}
+        </Stack.Screen>
+        <Stack.Screen name="Screen3" options={{ headerShown: false }}>
+          {() => <Screen3 />}
+        </Stack.Screen>
+        <Stack.Screen name="Screen4" options={{ headerShown: false }}>
+          {() => <Screen4 />}
+        </Stack.Screen>
+        <Stack.Screen name="Screen5" options={{ headerShown: false }}>
+          {() => <Screen5 />}
+        </Stack.Screen>
+        <Stack.Screen name="Screen6" options={{ headerShown: false }}>
+          {() => <Screen6 session={session} />}
+        </Stack.Screen>
+
       </Stack.Navigator>
     </NavigationContainer>
   );

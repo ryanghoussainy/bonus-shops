@@ -18,71 +18,71 @@ AppState.addEventListener('change', (state) => {
 })
 
 export default function Auth() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
-    async function signInWithEmail() {
-        setLoading(true)
-        const { error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-        })
+  async function signInWithEmail() {
+    setLoading(true)
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    })
 
-        if (error) Alert.alert(error.message)
-        setLoading(false)
-    }
+    if (error) Alert.alert(error.message)
+    setLoading(false)
+  }
 
-    return (
-        <View style={styles.container}>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-            <Input
-            label="Email"
-            leftIcon={{ type: 'font-awesome', name: 'envelope', color: Colours.text[Colours.theme] }}
-            onChangeText={(text) => setEmail(text)}
-            value={email}
-            placeholder="email@address.com"
-            autoCapitalize={'none'}
-            style={styles.input}
-            disabled={loading}
-            />
-        </View>
-        <View style={styles.verticallySpaced}>
-            <Input
-            label="Password"
-            leftIcon={{ type: 'font-awesome', name: 'lock', color: Colours.text[Colours.theme], size: 30 }}
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-            secureTextEntry={true}
-            placeholder="Password"
-            autoCapitalize={'none'}
-            style={styles.input}
-            disabled={loading}
-            />
-        </View>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-            <Button 
-            title="Log in" 
-            disabled={loading} 
-            onPress={() => signInWithEmail()} 
-            buttonStyle={styles.button}
-            />
-        </View>
-        <View style={styles.verticallySpaced}>
-            <Button 
-            title="Sign up" 
-            disabled={loading} 
-            onPress={() => createUser(email, password, setLoading)} 
-            buttonStyle={styles.button}
-            />
-        </View>
-        </View>
-    )
+  return (
+    <View style={styles.container}>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
+        <Input
+          label="Email"
+          leftIcon={{ type: 'font-awesome', name: 'envelope', color: Colours.text[Colours.theme] }}
+          onChangeText={(text) => setEmail(text)}
+          value={email}
+          placeholder="email@address.com"
+          autoCapitalize={'none'}
+          style={styles.input}
+          disabled={loading}
+        />
+      </View>
+      <View style={styles.verticallySpaced}>
+        <Input
+          label="Password"
+          leftIcon={{ type: 'font-awesome', name: 'lock', color: Colours.text[Colours.theme], size: 30 }}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+          secureTextEntry={true}
+          placeholder="Password"
+          autoCapitalize={'none'}
+          style={styles.input}
+          disabled={loading}
+        />
+      </View>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
+        <Button
+          title="Log in"
+          disabled={loading}
+          onPress={() => signInWithEmail()}
+          buttonStyle={styles.button}
+        />
+      </View>
+      <View style={styles.verticallySpaced}>
+        <Button
+          title="Sign up"
+          disabled={loading}
+          onPress={() => createUser(email, password, setLoading)}
+          buttonStyle={styles.button}
+        />
+      </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: Colours.green[Colours.theme],
+    backgroundColor: Colours.primary[Colours.theme],
   },
   container: {
     marginTop: 30,

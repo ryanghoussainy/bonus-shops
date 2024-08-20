@@ -7,15 +7,15 @@ import Fonts from "../config/Fonts";
 
 
 export function getDiscountDescription(deal: ShopDeal_t) {
-  switch (deal.type) {
+  switch (deal.discountType) {
     case 0: // Classic bonus point type discount
       return (
         <View style={styles.container}>
           <View style={styles.discountView}>
             <Text style={styles.discountText}>
-              <Text style={styles.discountAmount}>{deal.percentage}%</Text>
+              <Text style={styles.discountAmount}>{deal.discount}%</Text>
               {" off\nwhen you come "}
-              <Text style={styles.discountTime}>{deal.max_pts} times</Text>
+              <Text style={styles.discountTime}>{deal.maxPoints} times</Text>
             </Text>
           </View>
         </View>
@@ -25,7 +25,7 @@ export function getDiscountDescription(deal: ShopDeal_t) {
         <View style={styles.container}>
           <View style={styles.discountView}>
             <Text style={styles.discountText}>
-              <Text style={styles.discountAmount}>{deal.percentage}%</Text>
+              <Text style={styles.discountAmount}>{deal.discount}%</Text>
               {" off"}
             </Text>
           </View>
@@ -35,32 +35,33 @@ export function getDiscountDescription(deal: ShopDeal_t) {
 }
 
 export function getDiscountTimes(deal: ShopDeal_t) {
-  switch (deal.type) {
-    case 0: // Classic bonus point type discount
-      return (
-        <View style={styles.container}>
-          <View style={styles.discountDetailsView}>
-              <Text style={[styles.discountText, styles.left]}>
-                - {getWeekdays(deal.days) + "\n"}
-                - {formatTime(deal.start_time) + " to " + formatTime(deal.end_time)}
-                {deal.end_date == null ? "" : `\n- valid until ${formatDate(deal.end_date)}`}
-              </Text>
-          </View>
-        </View>
-      )
-    case 1: // Limited-time discount
-      return (
-        <View style={styles.container}>
-          <View style={styles.discountDetailsView}>
-              <Text style={[styles.discountText, styles.left]}>
-                - {getWeekdays(deal.days) + "\n"}
-                - {formatTime(deal.start_time) + " to " + formatTime(deal.end_time)}
-                {deal.end_date == null ? "" : `\n- valid until ${formatDate(deal.end_date)}`}
-              </Text>
-          </View>
-        </View>
-      )
-  }
+  return null
+  // switch (deal.type) {
+  //   case 0: // Classic bonus point type discount
+  //     return (
+  //       <View style={styles.container}>
+  //         <View style={styles.discountDetailsView}>
+  //             <Text style={[styles.discountText, styles.left]}>
+  //               - {getWeekdays(deal.days) + "\n"}
+  //               - {formatTime(deal.start_time) + " to " + formatTime(deal.end_time)}
+  //               {deal.end_date == null ? "" : `\n- valid until ${formatDate(deal.end_date)}`}
+  //             </Text>
+  //         </View>
+  //       </View>
+  //     )
+  //   case 1: // Limited-time discount
+  //     return (
+  //       <View style={styles.container}>
+  //         <View style={styles.discountDetailsView}>
+  //             <Text style={[styles.discountText, styles.left]}>
+  //               - {getWeekdays(deal.days) + "\n"}
+  //               - {formatTime(deal.start_time) + " to " + formatTime(deal.end_time)}
+  //               {deal.end_date == null ? "" : `\n- valid until ${formatDate(deal.end_date)}`}
+  //             </Text>
+  //         </View>
+  //       </View>
+  //     )
+  // }
 }
 
 const styles = StyleSheet.create({
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.condensed,
   },
   discountTime: {
-    color: Colours.green[Colours.theme],
+    color: Colours.primary[Colours.theme],
     fontSize: 30,
   },
   discountView: {
