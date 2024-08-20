@@ -2,17 +2,34 @@ import { Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { Alert } from 'react-native';
 
+/*
+Represents the deals that a shop user has created.
+*/
 export type ShopDeal_t = {
+    id: string;
     name: string;
-    description: string;
     location: string;
-    type: number;
-    percentage: number;
-    start_time: string;
-    end_time: string;
-    end_date: string;
-    days: string;
-    max_pts?: number;
+    description: string;
+    discountType: number;
+    discount: number;
+    endDate: string | null;
+    maxPoints: number | null;
+    discountTimes: {
+        mon_start: string;
+        mon_end: string;
+        tue_start: string;
+        tue_end: string;
+        wed_start: string;
+        wed_end: string;
+        thu_start: string;
+        thu_end: string;
+        fri_start: string;
+        fri_end: string;
+        sat_start: string;
+        sat_end: string;
+        sun_start: string;
+        sun_end: string;
+    };
 }
 
 export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_t[]) => void) {
@@ -25,7 +42,7 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
         const deals: ShopDeal_t[] = [];
         const { data: shop_deals, error } = await supabase
             .from('deals')
-            .select('description, type, percentage, start_time, end_time, end_date, days, max_pts, id')
+            .select('description, type, percentage, end_date, max_pts, id, deal_times_id')
             .eq('shop_user_id', shop_user_id);
 
         if (error) {
@@ -47,10 +64,35 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
 
         for (const deal of shop_deals) {
             if (deal) {
+                // Get times for this deal
+                const { data: times, error: times_error } = await supabase
+                    .from('deal_times')
+                    .select(
+                        "mon_start, mon_end, \
+                        tue_start, tue_end, \
+                        wed_start, wed_end, \
+                        thu_start, thu_end, \
+                        fri_start, fri_end, \
+                        sat_start, sat_end, \
+                        sun_start, sun_end"
+                    )
+                    .eq('id', deal.deal_times_id);
+                
+                if (times_error) {
+                    Alert.alert(times_error.message);
+                    return;
+                }
+
                 deals.push({
-                    ...deal,
+                    id: deal.id,
                     name: shop_data.name,
                     location: shop_data.location,
+                    description: deal.description,
+                    discountType: deal.type,
+                    discount: deal.percentage,
+                    endDate: deal.end_date,
+                    maxPoints: deal.max_pts,
+                    discountTimes: times[0],
                 });
             }
         }

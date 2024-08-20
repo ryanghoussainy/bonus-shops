@@ -26,15 +26,15 @@ export default function Account({ session }: { session: Session }) {
       <View style={styles.miniDivider} />
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Input 
-          label="Email" 
-          value={session?.user?.email} 
+        <Input
+          label="Email"
+          value={session?.user?.email}
           style={styles.input}
           disabled
         />
       </View>
       <View style={styles.verticallySpaced}>
-        <Input 
+        <Input
           label="Name"
           value={name}
           style={styles.input}
@@ -42,7 +42,7 @@ export default function Account({ session }: { session: Session }) {
         />
       </View>
       <View style={styles.verticallySpaced}>
-        <Input 
+        <Input
           label="Location"
           value={location}
           style={styles.input}
@@ -60,13 +60,13 @@ export default function Account({ session }: { session: Session }) {
         <View style={styles.miniDivider} />
 
         <View style={styles.verticallySpaced}>
-          <Button 
-            title="Sign Out" 
+          <Button
+            title="Sign Out"
             onPress={async () => {
-                setLoading(true)
-                supabase.auth.signOut()
-                setLoading(false)
-            }} 
+              setLoading(true)
+              supabase.auth.signOut()
+              setLoading(false)
+            }}
             color={Colours.red[Colours.theme]}
             disabled={loading}
           />
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   miniDivider: {
     borderBottomWidth: 1,
-    borderBottomColor: Colours.green[Colours.theme],
+    borderBottomColor: Colours.primary[Colours.theme],
     width: "20%",
     alignSelf: "center",
     marginBottom: 20,

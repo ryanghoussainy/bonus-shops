@@ -16,15 +16,18 @@
     "@supabase/supabase-js": "^2.45.0",
     "expo": "~51.0.28",
     "expo-camera": "~15.0.14",
+    "expo-image-picker": "~15.0.7",
+    "expo-linear-gradient": "~13.0.2",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
     "react-native": "^0.74.5",
-    "expo-image-picker": "~15.0.7"
+    "react-native-picker-select": "^9.3.1",
+    "@react-native-community/datetimepicker": "8.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.45",
-    "typescript": "^5.3.3"
+    "typescript": "~5.3.3"
   },
   "private": true
 }

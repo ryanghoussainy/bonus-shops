@@ -18,7 +18,7 @@ const DealScreen = ({ session }: { session: Session }) => {
     // Update the title of the screen
     const route = useRoute<DealScreenRouteProp>()
     const navigation = useNavigation()
-    
+
     const deal = route.params.deal
 
     useLayoutEffect(() => {
@@ -31,7 +31,7 @@ const DealScreen = ({ session }: { session: Session }) => {
     const [redeemedDays, setRedeemedDays] = useState<string[]>([]);
     const [userID, setUserID] = useState<string | null>(null);
     const [userDealID, setUserDealID] = useState<string | null>(null);
-    
+
     useEffect(() => {
         const requestCameraPermission = async () => {
             const { status } = await Camera.requestCameraPermissionsAsync()
@@ -58,17 +58,19 @@ const DealScreen = ({ session }: { session: Session }) => {
             return;
         }
 
-        // Check if day is within deal days
-        const day = new Date().getDay();
-        if (!(deal.days.toString().includes(day.toString()))) {
-            Alert.alert("Outside Deal Days", "This deal is only valid on the following days: " + deal.days);
+        // Check if the day of the week is valid in london time
+        let shortToday = new Date().toLocaleString("en-GB", { timeZone: "Europe/London", weekday: "short" }).toLowerCase();
+        if (!deal.discountTimes[shortToday + "_start" as keyof typeof deal.discountTimes] || !deal.discountTimes[shortToday + "_end" as keyof typeof deal.discountTimes]) {
+            Alert.alert("Outside Deal Time", "This deal is not valid today.");
             return;
         }
 
         // Check if time is within deal time
         const time = new Date().toISOString().split("T")[1];
-        if (time < deal.start_time || time > deal.end_time) {
-            Alert.alert("Outside Deal Time", "This deal is only valid between " + deal.start_time + " and " + deal.end_time);
+        const startTime = deal.discountTimes[shortToday + "_start" as keyof typeof deal.discountTimes] as string;
+        const endTime = deal.discountTimes[shortToday + "_end" as keyof typeof deal.discountTimes] as string;
+        if (time < startTime || time > endTime) {
+            Alert.alert("Outside Deal Time", "This deal is not valid right now.");
             return;
         }
 
@@ -89,11 +91,11 @@ const DealScreen = ({ session }: { session: Session }) => {
             checkQRCode(data);
         }
     }
-    
+
     // Get logo
     const [url, setUrl] = useState<string>("");
     const [logoUrl, setLogoUrl] = useState<string>("");
-    
+
     useEffect(() => {
         if (url) getLogo(url, setLogoUrl);
     }, [url])
@@ -109,12 +111,12 @@ const DealScreen = ({ session }: { session: Session }) => {
     if (hasPermission === false) {
         return <Text>No access to camera</Text>
     }
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.dealContainer}>
                 {/* Logo */}
-                {logoUrl && 
+                {logoUrl &&
                     <Image
                         source={{ uri: logoUrl }}
                         accessibilityLabel="Logo"
@@ -125,7 +127,7 @@ const DealScreen = ({ session }: { session: Session }) => {
 
                 {/* Discount */}
                 <View>{getDiscountDescription(deal)}</View>
-                
+
                 {/* Discount Times */}
                 <View>{getDiscountTimes(deal)}</View>
 
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
         marginVertical: 40,
         marginHorizontal: 30,
         borderRadius: 35,
-        borderColor: Colours.green[Colours.theme],
+        borderColor: Colours.primary[Colours.theme],
         borderWidth: 1,
         alignItems: "center",
     },
