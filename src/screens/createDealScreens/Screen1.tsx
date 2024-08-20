@@ -92,7 +92,7 @@ export default function Screen1() {
     const [showNext, setShowNext] = useState(false);
 
     useEffect(() => {
-        setShowNext(selectedType == "date" || (selectedType == "points" && parseMaxPoints()! > 0));
+        setShowNext(selectedType == "date" || (selectedType == "points" && parseMaxPoints()! > 1));
     }, [selectedType, maxPoints]);
 
     return (
