@@ -9,6 +9,7 @@ import { getUser } from '../operations/User';
 import promptDetails from '../components/PromptDetails';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Fonts from '../config/Fonts';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeScreen({ session }: { session: Session }) {
     const [shopName, setShopName] = useState<string>("")
@@ -56,14 +57,13 @@ export default function HomeScreen({ session }: { session: Session }) {
     }, [displayPromptDetails])
 
     return (
-        <View style={{ flex: 1 }}>
+        <LinearGradient style={{ flex: 1 }} colors={[Colours.background[Colours.theme], Colours.dealItem[Colours.theme]]}>
             <View style={styles.headerContainer}>
                 <Text style={styles.header}>Your Deals</Text>
             </View>
             <FlatList
                 data={deals}
                 renderItem={({ item }) => <Deal session={session} deal={item} />}
-                style={styles.dealsList}
                 keyExtractor={(item) => item.id}
                 ListEmptyComponent={() => {
                     if (loading) {
@@ -99,7 +99,7 @@ export default function HomeScreen({ session }: { session: Session }) {
                 logoUrl,
                 setLogoUrl
             )}
-        </View>
+        </LinearGradient>
     )
 }
 
@@ -115,9 +115,6 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: Colours.text[Colours.theme],
         textAlign: "center",
-    },
-    dealsList: {
-        backgroundColor: Colours.background[Colours.theme],
     },
     headerContainer: {
         backgroundColor: Colours.background[Colours.theme],
