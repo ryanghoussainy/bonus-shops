@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { Session } from '@supabase/supabase-js';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@rneui/themed';
 import Colours from '../config/Colours';
 import { getShopDeals, ShopDeal_t } from '../operations/ShopDeal';
@@ -64,6 +64,7 @@ export default function HomeScreen({ session }: { session: Session }) {
                 data={deals}
                 renderItem={({ item }) => <Deal session={session} deal={item} />}
                 style={styles.dealsList}
+                keyExtractor={(item) => item.id}
                 ListEmptyComponent={() => {
                     if (loading) {
                         return (
