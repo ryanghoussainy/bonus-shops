@@ -16,7 +16,7 @@ import Screen5 from "../screens/createDealScreens/Screen5";
 import Screen6 from "../screens/createDealScreens/Screen6";
 
 export type RootStackParamList = {
-  "Your Deals": { session: Session };
+  "Main": { session: Session };
   "Deal": { deal: ShopDeal_t };
   "Screen1": { previousDeal: ShopDeal_t | null };
   "Screen2": { previousDeal: ShopDeal_t | null, discountType: number, maxPoints: number | null };
@@ -75,7 +75,7 @@ const Navigator = ({ session }: { session: Session }) => {
           headerTintColor: Colours.text[Colours.theme],
         }}
       >
-        <Stack.Screen name="Your Deals" options={{ headerShown: false }}>
+        <Stack.Screen name="Main" options={{ headerShown: false }}>
           {() => <MainTabNavigator key={session.user.id} session={session} />}
         </Stack.Screen>
         <Stack.Screen name="Deal">
