@@ -87,7 +87,7 @@ export default function Screen6({ session }: { session: Session }) {
         setLoading(false);
         // Show "Deal created!" message
         setTimeout(() => {
-            navigation.navigate("Your Deals", { session });
+            navigation.navigate("Main", { session });
         }, 500); // 0.5 second delay before navigating
     };
 
