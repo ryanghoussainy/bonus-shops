@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { Button, Input } from '@rneui/themed'
 import Colours from '../config/Colours'
 import { createUser } from '../operations/User'
+import { useTheme } from '../contexts/ThemeContext'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -18,6 +19,9 @@ AppState.addEventListener('change', (state) => {
 })
 
 export default function Auth() {
+  // Get theme
+  const { theme } = useTheme();
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -34,29 +38,29 @@ export default function Auth() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           label="Email"
-          leftIcon={{ type: 'font-awesome', name: 'envelope', color: Colours.text[Colours.theme] }}
+          leftIcon={{ type: 'font-awesome', name: 'envelope', color: Colours.text[theme] }}
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
           autoCapitalize={'none'}
-          style={styles.input}
+          style={{ color: Colours.text[theme] }}
           disabled={loading}
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
           label="Password"
-          leftIcon={{ type: 'font-awesome', name: 'lock', color: Colours.text[Colours.theme], size: 30 }}
+          leftIcon={{ type: 'font-awesome', name: 'lock', color: Colours.text[theme], size: 30 }}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={'none'}
-          style={styles.input}
+          style={{ color: Colours.text[theme] }}
           disabled={loading}
         />
       </View>
@@ -82,16 +86,12 @@ export default function Auth() {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: Colours.primary[Colours.theme],
+    backgroundColor: Colours.primary,
   },
   container: {
     marginTop: 30,
     padding: 12,
-    backgroundColor: Colours.background[Colours.theme],
     flex: 1,
-  },
-  input: {
-    color: Colours.text[Colours.theme],
   },
   verticallySpaced: {
     paddingTop: 4,
