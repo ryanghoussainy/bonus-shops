@@ -10,6 +10,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { useRoute } from '@react-navigation/native';
 import Checkbox from '../../components/Checkbox';
 import { ShopDeal_t } from '../../operations/ShopDeal';
+import { useTheme } from '../../contexts/ThemeContext';
 
 type Screen3NavigationProp = NativeStackNavigationProp<RootStackParamList, "Screen3">;
 
@@ -20,6 +21,9 @@ const hours = Array.from({ length: 24 }, (_, i) => ({ label: i.toString().padSta
 const minutes = ['00', '15', '30', '45'].map(min => ({ label: min, value: min }));
 
 export default function Screen3() {
+    // Get theme
+    const { theme } = useTheme();
+
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const [timeRanges, setTimeRanges] = useState<{ [key: string]: { startHour: string, startMinute: string, endHour: string, endMinute: string } }>({});
     const [sameTimeEveryDay, setSameTimeEveryDay] = useState<boolean>(false);
@@ -237,6 +241,29 @@ export default function Screen3() {
     };
 
     // Render the time pickers for each selected day
+    const pickerSelectStyles = StyleSheet.create({
+        inputIOS: {
+            fontSize: 16,
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderWidth: 1,
+            borderColor: Colours.outline[theme],
+            borderRadius: 4,
+            color: Colours.text[theme],
+            width: 55,
+        },
+        inputAndroid: {
+            fontSize: 16,
+            paddingHorizontal: 10,
+            paddingVertical: 8,
+            borderWidth: 1,
+            borderColor: Colours.outline[theme],
+            borderRadius: 4,
+            color: Colours.text[theme],
+            width: 55,
+        },
+    });
+    
     const renderTimePickers = () => {
         if (sameTimeEveryDay) {
             const groupedDays = selectedDays.filter(day => day !== 'Mon-Fri' && day !== 'Mon-Sun');
@@ -245,7 +272,7 @@ export default function Screen3() {
 
             return (
                 <View style={styles.timePickerContainer}>
-                    <Text style={styles.timePickerLabel}>{displayTitle}</Text>
+                    <Text style={[styles.timePickerLabel, { color: Colours.text[theme] }]}>{displayTitle}</Text>
                     <View style={styles.timePickerRow}>
                         <RNPickerSelect
                             onValueChange={(value) => handleTimeChange('all', 'startHour', value)}
@@ -255,7 +282,7 @@ export default function Screen3() {
                             useNativeAndroidPickerStyle={false}
                             fixAndroidTouchableBug={true}
                         />
-                        <Text style={styles.timePickerColon}>:</Text>
+                        <Text style={[styles.timePickerColon, { color: Colours.text[theme] }]}>:</Text>
                         <RNPickerSelect
                             onValueChange={(value) => handleTimeChange('all', 'startMinute', value)}
                             items={minutes}
@@ -264,7 +291,7 @@ export default function Screen3() {
                             useNativeAndroidPickerStyle={false}
                             fixAndroidTouchableBug={true}
                         />
-                        <Text style={styles.timePickerTo}>to</Text>
+                        <Text style={[styles.timePickerTo, { color: Colours.text[theme] }]}>to</Text>
                         <RNPickerSelect
                             onValueChange={(value) => handleTimeChange('all', 'endHour', value)}
                             items={hours}
@@ -273,7 +300,7 @@ export default function Screen3() {
                             useNativeAndroidPickerStyle={false}
                             fixAndroidTouchableBug={true}
                         />
-                        <Text style={styles.timePickerColon}>:</Text>
+                        <Text style={[styles.timePickerColon, { color: Colours.text[theme] }]}>:</Text>
                         <RNPickerSelect
                             onValueChange={(value) => handleTimeChange('all', 'endMinute', value)}
                             items={minutes}
@@ -288,7 +315,7 @@ export default function Screen3() {
         } else {
             return selectedDays.map(day => (
                 <View key={day} style={styles.timePickerContainer}>
-                    <Text style={styles.timePickerLabel}>{day}</Text>
+                    <Text style={[styles.timePickerLabel, { color: Colours.text[theme] }]}>{day}</Text>
                     <View style={styles.timePickerRow}>
                         <RNPickerSelect
                             onValueChange={(value) => handleTimeChange(day, 'startHour', value)}
@@ -298,7 +325,7 @@ export default function Screen3() {
                             useNativeAndroidPickerStyle={false}
                             fixAndroidTouchableBug={true}
                         />
-                        <Text style={styles.timePickerColon}>:</Text>
+                        <Text style={[styles.timePickerColon, { color: Colours.text[theme] }]}>:</Text>
                         <RNPickerSelect
                             onValueChange={(value) => handleTimeChange(day, 'startMinute', value)}
                             items={minutes}
@@ -307,7 +334,7 @@ export default function Screen3() {
                             useNativeAndroidPickerStyle={false}
                             fixAndroidTouchableBug={true}
                         />
-                        <Text style={styles.timePickerTo}>to</Text>
+                        <Text style={[styles.timePickerTo, { color: Colours.text[theme] }]}>to</Text>
                         <RNPickerSelect
                             onValueChange={(value) => handleTimeChange(day, 'endHour', value)}
                             items={hours}
@@ -316,7 +343,7 @@ export default function Screen3() {
                             useNativeAndroidPickerStyle={false}
                             fixAndroidTouchableBug={true}
                         />
-                        <Text style={styles.timePickerColon}>:</Text>
+                        <Text style={[styles.timePickerColon, { color: Colours.text[theme] }]}>:</Text>
                         <RNPickerSelect
                             onValueChange={(value) => handleTimeChange(day, 'endMinute', value)}
                             items={minutes}
@@ -405,9 +432,9 @@ export default function Screen3() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             <View style={styles.contentContainer}>
-                <Text style={styles.title}>Step 3: Select Availability Times</Text>
+                <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 3: Select Availability Times</Text>
                 <Text style={styles.description}>Choose the days and times the deal will be available.</Text>
 
                 <View style={styles.daysContainer}>
@@ -477,7 +504,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 15,
         justifyContent: 'center',
-        backgroundColor: Colours.background[Colours.theme],
     },
     contentContainer: {
         flex: 1,
@@ -488,12 +514,11 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10,
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
     },
     description: {
         fontSize: 18,
-        color: Colours.bluegrey[Colours.theme],
+        color: Colours.bluegrey,
         marginBottom: 20,
     },
     daysContainer: {
@@ -505,7 +530,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: Colours.lightgrey[Colours.theme],
+        backgroundColor: Colours.lightgrey,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -513,27 +538,26 @@ const styles = StyleSheet.create({
         width: 140,
         height: 40,
         borderRadius: 20,
-        backgroundColor: Colours.lightgrey[Colours.theme],
+        backgroundColor: Colours.lightgrey,
         justifyContent: 'center',
         alignItems: 'center',
     },
     selectedDayBox: {
-        backgroundColor: Colours.primary[Colours.theme],
+        backgroundColor: Colours.primary,
     },
     dayText: {
-        color: Colours.darkgrey[Colours.theme],
+        color: Colours.darkgrey,
         fontSize: 16,
         fontFamily: Fonts.condensed,
     },
     selectedDayText: {
-        color: Colours.darkgrey[Colours.theme],
+        color: Colours.darkgrey,
     },
     timePickerContainer: {
         marginBottom: 15,
     },
     timePickerLabel: {
         fontSize: 18,
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
         marginBottom: 5,
     },
@@ -543,12 +567,10 @@ const styles = StyleSheet.create({
     },
     timePickerColon: {
         fontSize: 18,
-        color: Colours.text[Colours.theme],
         paddingHorizontal: 5,
     },
     timePickerTo: {
         fontSize: 16,
-        color: Colours.text[Colours.theme],
         paddingHorizontal: 10,
     },
     buttonContainer: {
@@ -566,45 +588,16 @@ const styles = StyleSheet.create({
         height: 24,
         borderWidth: 2,
         borderRadius: 4,
-        borderColor: Colours.primary[Colours.theme],
+        borderColor: Colours.primary,
         alignItems: 'center',
         justifyContent: 'center',
     },
     checkedCheckbox: {
-        backgroundColor: Colours.primary[Colours.theme],
+        backgroundColor: Colours.primary,
     },
     checkboxInner: {
         width: 12,
         height: 12,
         backgroundColor: 'white',
-    },
-    checkboxLabel: {
-        marginLeft: 8,
-        fontSize: 16,
-        color: Colours.text[Colours.theme],
-        fontFamily: Fonts.condensed,
-    },
-});
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: Colours.lightgrey[Colours.theme],
-        borderRadius: 4,
-        color: Colours.text[Colours.theme],
-        width: 55,
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 1,
-        borderColor: Colours.lightgrey[Colours.theme],
-        borderRadius: 4,
-        color: Colours.text[Colours.theme],
-        width: 55,
     },
 });

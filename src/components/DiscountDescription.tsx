@@ -4,16 +4,20 @@ import Colours from "../config/Colours";
 import { getWeekdays } from "../config/Weekdays";
 import { formatTime, formatDate } from "../config/FormatDateTime";
 import Fonts from "../config/Fonts";
+import { useTheme } from "../contexts/ThemeContext";
 
 
 export function getDiscountDescription(deal: ShopDeal_t) {
+  // Get theme
+  const { theme } = useTheme();
+
   switch (deal.discountType) {
     case 0: // Classic bonus point type discount
       return (
         <View style={styles.container}>
           <View style={styles.discountView}>
-            <Text style={styles.discountText}>
-              <Text style={styles.discountAmount}>{deal.discount}%</Text>
+            <Text style={[styles.discountText, { color: Colours.text[theme] }]}>
+              <Text style={[styles.discountAmount, { color: Colours.gold[theme] }]}>{deal.discount}%</Text>
               {" off\nwhen you come "}
               <Text style={styles.discountTime}>{deal.maxPoints} times</Text>
             </Text>
@@ -24,8 +28,8 @@ export function getDiscountDescription(deal: ShopDeal_t) {
       return (
         <View style={styles.container}>
           <View style={styles.discountView}>
-            <Text style={styles.discountText}>
-              <Text style={styles.discountAmount}>{deal.discount}%</Text>
+            <Text style={[styles.discountText, { color: Colours.text[theme] }]}>
+              <Text style={[styles.discountAmount, { color: Colours.gold[theme] }]}>{deal.discount}%</Text>
               {" off"}
             </Text>
           </View>
@@ -69,18 +73,16 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   discountAmount: {
-    color: Colours.gold[Colours.theme],
     fontSize: 40,
   },
   discountText: {
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
-    color: Colours.text[Colours.theme],
     fontFamily: Fonts.condensed,
   },
   discountTime: {
-    color: Colours.primary[Colours.theme],
+    color: Colours.primary,
     fontSize: 30,
   },
   discountView: {

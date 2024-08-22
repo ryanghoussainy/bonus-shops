@@ -8,10 +8,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/StackNavigator';
 import { useRoute } from '@react-navigation/native';
 import { ShopDeal_t } from '../../operations/ShopDeal';
+import { useTheme } from '../../contexts/ThemeContext';
 
 type Screen2NavigationProp = NativeStackNavigationProp<RootStackParamList, "Screen2">;
 
 export default function Screen2() {
+    // Get theme
+    const { theme } = useTheme();
+
     const [discount, setDiscount] = useState('');
     const [cursorPos, setCursorPos] = useState(0);
     const navigation = useNavigation<Screen2NavigationProp>();
@@ -110,12 +114,12 @@ export default function Screen2() {
     }, [discount])
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             <View style={styles.contentContainer}>
-                <Text style={styles.title}>Step 2: Set Discount Amount</Text>
+                <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 2: Set Discount Amount</Text>
                 <TextInput
-                    style={styles.input}
-                    placeholderTextColor={Colours.bluegrey[Colours.theme]}
+                    style={[styles.input, { color: Colours.text[theme] }]}
+                    placeholderTextColor={Colours.bluegrey}
                     keyboardType="numeric"
                     placeholder="Enter Discount %"
                     value={discount}
@@ -154,7 +158,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
-        backgroundColor: Colours.background[Colours.theme],
     },
     contentContainer: {
         flex: 1,
@@ -165,10 +168,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         fontFamily: Fonts.condensed,
-        color: Colours.text[Colours.theme],
     },
     button: {
-        backgroundColor: Colours.primary[Colours.theme],
+        backgroundColor: Colours.primary,
     },
     input: {
         borderWidth: 1,
@@ -177,7 +179,6 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize: 18,
         marginBottom: 20,
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
     },
     buttonContainer: {

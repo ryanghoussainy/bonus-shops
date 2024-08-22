@@ -10,10 +10,14 @@ import { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { Image } from "@rneui/themed";
 import { getLogo, getLogoPath } from "../operations/Logo";
+import { useTheme } from "../contexts/ThemeContext";
 
 type DealScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Deal">;
 
 const Deal = ({ session, deal }: { session: Session, deal: ShopDeal_t }) => {
+    // Get theme
+    const { theme } = useTheme();
+
     const [url, setUrl] = useState<string>("");
     const [logoUrl, setLogoUrl] = useState<string>("");
 
@@ -28,11 +32,14 @@ const Deal = ({ session, deal }: { session: Session, deal: ShopDeal_t }) => {
     }, [session])
 
     return (
-        <Pressable onPress={() => navigation.navigate("Deal", { deal: deal })} style={styles.container}>
+        <Pressable
+          onPress={() => navigation.navigate("Deal", { deal: deal })}
+          style={[styles.container, { backgroundColor: Colours.dealItem[theme], shadowColor: Colours.text[theme] }]}
+        >
         <View style={styles.content}>
             <View style={styles.dealHeader}>
                 {/* Shop Name*/}
-                <Text style={styles.name} numberOfLines={2} ellipsizeMode="tail">
+                <Text style={[styles.name, { color: Colours.text[theme] }]} numberOfLines={2} ellipsizeMode="tail">
                     {deal.name}
                 </Text>
                 
@@ -64,11 +71,9 @@ const styles = StyleSheet.create({
     height: "auto",
     marginHorizontal: 30,
     marginVertical: 10,
-    backgroundColor: Colours.dealItem[Colours.theme],
     borderRadius: 20,
 
     // Shadow
-    shadowColor: Colours.text[Colours.theme],
     shadowOffset: {
       width: 0,
       height: 1,
@@ -105,7 +110,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 15,
     textAlign: "center",
-    color: Colours.text[Colours.theme],
     fontFamily: Fonts.condensed,
     width: "50%",
   },
