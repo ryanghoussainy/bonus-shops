@@ -110,7 +110,7 @@ export default function Screen1() {
                     onPress={() => handleSelection('points')}
                 >
                     <Text style={[styles.cardTitle, { color: Colours.text[theme] }]}>Point-Based Discount</Text>
-                    <Text style={styles.cardDescription}>For example: 10% off when you come 5 times (collect 5 points)</Text>
+                    <Text style={[styles.cardDescription, { color: Colours.outline[theme] }]}>For example: 10% off when you come 5 times (collect 5 points)</Text>
 
                     {/* Animated container for max points input */}
                     {selectedType === 'points' && (
@@ -133,7 +133,7 @@ export default function Screen1() {
                     onPress={() => handleSelection('date')}
                 >
                     <Text style={[styles.cardTitle, { color: Colours.text[theme] }]}>Regular Discount</Text>
-                    <Text style={styles.cardDescription}>For example: 10% off</Text>
+                    <Text style={[styles.cardDescription, { color: Colours.outline[theme] }]}>For example: 10% off</Text>
                 </TouchableOpacity>
             </View>
 
@@ -196,7 +196,6 @@ const styles = StyleSheet.create({
     },
     cardDescription: {
         fontSize: 16,
-        color: Colours.darkgrey,
         fontWeight: "bold",
     },
     dynamicInputContainer: {
