@@ -86,35 +86,35 @@ const Navigator = ({ session }: { session: Session }) => {
         <Stack.Screen name="Main" options={{ headerShown: false }}>
           {() => <MainTabNavigator key={session.user.id} session={session} />}
         </Stack.Screen>
-        <Stack.Screen name="Deal">
+        <Stack.Screen name="Deal" options={{ animation: 'fade_from_bottom' }}>
           {() => <DealScreen session={session} />}
         </Stack.Screen>
 
         {/* Screens for creating deal */}
-        <Stack.Screen name="Screen1" options={{ headerShown: false }}>
+        <Stack.Screen name="Screen1" options={{ headerShown: false, animation: 'fade_from_bottom' }}>
           {() => <Screen1 />}
         </Stack.Screen>
-        <Stack.Screen name="Screen2" options={{ headerShown: false }}>
+        <Stack.Screen name="Screen2" options={{ headerShown: false, animation: 'slide_from_right' }}>
           {() => <Screen2 />}
         </Stack.Screen>
-        <Stack.Screen name="Screen3" options={{ headerShown: false }}>
+        <Stack.Screen name="Screen3" options={{ headerShown: false, animation: 'slide_from_right' }}>
           {() => <Screen3 />}
         </Stack.Screen>
-        <Stack.Screen name="Screen4" options={{ headerShown: false }}>
+        <Stack.Screen name="Screen4" options={{ headerShown: false, animation: 'slide_from_right' }}>
           {() => <Screen4 />}
         </Stack.Screen>
-        <Stack.Screen name="Screen5" options={{ headerShown: false }}>
+        <Stack.Screen name="Screen5" options={{ headerShown: false, animation: 'slide_from_right' }}>
           {() => <Screen5 />}
         </Stack.Screen>
-        <Stack.Screen name="Screen6" options={{ headerShown: false }}>
+        <Stack.Screen name="Screen6" options={{ headerShown: false, animation: 'slide_from_right' }}>
           {() => <Screen6 session={session} />}
         </Stack.Screen>
 
         {/* Settings Screens */}
-        <Stack.Screen name="Account" options={{ headerShown: false }}>
+        <Stack.Screen name="Account" options={{ headerShown: false, animation: 'slide_from_right' }}>
           {() => <Account session={session} />}
         </Stack.Screen>
-        <Stack.Screen name="General" options={{ headerShown: false }}>
+        <Stack.Screen name="General" options={{ headerShown: false, animation: 'slide_from_right' }}>
           {() => <General session={session} />}
         </Stack.Screen>
 
