@@ -6,8 +6,12 @@ import { Session } from '@supabase/supabase-js'
 import { StatusBar } from 'expo-status-bar'
 import Colours from './src/config/Colours'
 import Navigator from './src/navigation/StackNavigator'
+import { ThemeProvider, useTheme } from './src/contexts/ThemeContext'
 
 export default function App() {
+  // Get theme
+  const { theme } = useTheme();
+
   const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
@@ -21,9 +25,11 @@ export default function App() {
   }, [])
 
   return (
-    <View style={{ flex: 1 }}>
-      <StatusBar style={Colours.theme ? "light" : "dark"} backgroundColor={Colours.background[Colours.theme]} />
-      {session && session.user ? <Navigator session={session} /> : <Auth />}
-    </View>
+    <ThemeProvider session={session}>
+      <View style={{ flex: 1 }}>
+        <StatusBar style={theme === "dark" ? "light" : "dark"} backgroundColor={Colours.background[theme]} />
+        {session && session.user ? <Navigator session={session} /> : <Auth />}
+      </View>
+    </ThemeProvider>
   )
 }

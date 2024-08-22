@@ -1,18 +1,27 @@
-let theme = 1;
-
 export default {
-  background: ["white", "#111"],
-  dealItem: ["whitesmoke", "#353535"],
-  text: ["black", "white"],
-
-  gold: ["#daa520", "#f3b731"],
-  primary: ["#00b894", "#00b894"],
-  red: ["#b00", "#b00"],
-  grey: ["#888", "#888"],
-  lightgrey: ["#ccc", "#ccc"],
-  darkgrey: ["#444", "#444"],
-  bluegrey: ["#86939e", "#86939e"],
-
-  
-  theme,
+  background: {
+    light: "white",
+    dark: "#111",
+  },
+  dealItem: {
+    light: "#ccc",
+    dark: "#353535",
+  },
+  text: {
+    light: "black",
+    dark: "white",
+  },
+  gold: {
+    light: "#daa520",
+    dark: "#f3b731",
+  },
+  outline: {
+    light: "#444",
+    dark: "#ccc",
+  },
+  primary: "#00b894",
+  grey: "#888",
+  lightgrey: "#ccc",
+  darkgrey: "#444",
+  bluegrey: "#86939e",
 };

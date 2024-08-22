@@ -8,6 +8,7 @@ import { createDeal } from '../../operations/Deal';
 import { Session } from '@supabase/supabase-js';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/StackNavigator';
+import { useTheme } from '../../contexts/ThemeContext';
 
 // Time formatting functions
 const formatTime = (time: string | null) => {
@@ -36,6 +37,9 @@ const formatDiscountTimes = (discountTimes: { [key: string]: string | null }) =>
 type Screen6NavigationProp = NativeStackNavigationProp<RootStackParamList, "Screen6">;
 
 export default function Screen6({ session }: { session: Session }) {
+    // Get theme
+    const { theme } = useTheme();
+
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const route = useRoute();
@@ -92,48 +96,48 @@ export default function Screen6({ session }: { session: Session }) {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Summary</Text>
+        <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
+            <Text style={[styles.title, { color: Colours.text[theme] }]}>Summary</Text>
             <Text style={[styles.sectionContent, { fontWeight: "bold" }]}>
                 Please check that your promotion details are correct. You can change them at any time.
             </Text>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Promotion Type:</Text>
+                    <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Promotion Type:</Text>
                     <View style={styles.miniDivider} />
                     <Text style={styles.sectionContent}>{discountTypeText}</Text>
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Discount Amount:</Text>
+                    <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Discount Amount:</Text>
                     <View style={styles.miniDivider} />
                     <Text style={styles.sectionContent}>{discount}%</Text>
                 </View>
 
                 {discountType === 0 && (
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Maximum Points to Redeem:</Text>
+                        <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Maximum Points to Redeem:</Text>
                         <View style={styles.miniDivider} />
                         <Text style={styles.sectionContent}>{maxPoints}</Text>
                     </View>
                 )}
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Availability Times:</Text>
+                    <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Availability Times:</Text>
                     <View style={styles.miniDivider} />
                     <Text style={styles.sectionContent}>{discountTimesText}</Text>
                 </View>
 
                 {endDate && (
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>End Date:</Text>
+                        <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>End Date:</Text>
                         <View style={styles.miniDivider} />
                         <Text style={styles.sectionContent}>{new Date(endDate).toDateString()}</Text>
                     </View>
                 )}
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Description:</Text>
+                    <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Description:</Text>
                     <View style={styles.miniDivider} />
                     <Text style={styles.sectionContent}>{description}</Text>
                 </View>
@@ -163,15 +167,15 @@ export default function Screen6({ session }: { session: Session }) {
                 onRequestClose={() => setModalVisible(false)}
             >
                 <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
+                    <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
                         {loading ? (
                             <>
-                                <ActivityIndicator size="large" color={Colours.primary[Colours.theme]} />
-                                <Text style={styles.modalText}>Creating deal...</Text>
+                                <ActivityIndicator size="large" color={Colours.primary} />
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Creating deal...</Text>
                             </>
                         ) : (
                             <>
-                                <Text style={styles.modalText}>Deal created!</Text>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Deal created!</Text>
                                 <Text style={styles.checkmark}>✓</Text>
                             </>
                         )}
@@ -186,12 +190,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: Colours.background[Colours.theme],
     },
     title: {
         fontSize: 30,
         fontWeight: 'bold',
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
         marginTop: 40,
     },
@@ -205,12 +207,11 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
     },
     sectionContent: {
         fontSize: 18,
-        color: Colours.bluegrey[Colours.theme],
+        color: Colours.bluegrey,
         marginTop: 5,
         fontFamily: Fonts.condensed,
     },
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
     },
     miniDivider: {
         borderBottomWidth: 1,
-        borderBottomColor: Colours.primary[Colours.theme],
+        borderBottomColor: Colours.primary,
         width: "20%",
         marginTop: 2,
     },
@@ -234,20 +235,18 @@ const styles = StyleSheet.create({
     modalContent: {
         width: 300,
         padding: 20,
-        backgroundColor: Colours.background[Colours.theme],
         borderRadius: 10,
         alignItems: 'center',
     },
     modalText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
         marginTop: 10,
     },
     checkmark: {
         fontSize: 50,
-        color: Colours.primary[Colours.theme],
+        color: Colours.primary,
         marginTop: 10,
     },
 });

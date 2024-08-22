@@ -8,10 +8,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/StackNavigator';
 import { useRoute } from '@react-navigation/native';
 import { ShopDeal_t } from '../../operations/ShopDeal';
+import { useTheme } from '../../contexts/ThemeContext';
 
 type Screen5NavigationProp = NativeStackNavigationProp<RootStackParamList, "Screen5">;
 
 export default function Screen5() {
+    // Get theme
+    const { theme } = useTheme();
+
     const [description, setDescription] = useState('');
     const navigation = useNavigation<Screen5NavigationProp>();
 
@@ -64,30 +68,30 @@ export default function Screen5() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             <View style={styles.contentContainer}>
-                <Text style={styles.title}>Step 5: Promotion Description</Text>
+                <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 5: Promotion Description</Text>
                 <Text style={styles.description}>Add a description or any extra information about the promotion.</Text>
                 
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput, { color: Colours.text[theme] }]}
                     placeholder="Write your description here..."
-                    placeholderTextColor={Colours.lightgrey[Colours.theme]}
+                    placeholderTextColor={Colours.lightgrey}
                     value={description}
                     onChangeText={setDescription}
                     multiline
                 />
 
-                <Text style={styles.presetTitle}>Use a preset description:</Text>
+                <Text style={[styles.presetTitle, { color: Colours.text[theme] }]}>Use a preset description:</Text>
 
                 <View style={styles.presetContainer}>
                     {presetDescriptions.map((preset, index) => (
                         <TouchableOpacity
                             key={index}
-                            style={styles.presetButton}
+                            style={[styles.presetButton, { backgroundColor: Colours.dealItem[theme] }]}
                             onPress={() => handlePresetClick(preset)}
                         >
-                            <Text style={styles.presetText}>{preset}</Text>
+                            <Text style={[styles.presetText, { color: Colours.text[theme] }]}>{preset}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -116,7 +120,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: Colours.background[Colours.theme],
         justifyContent: 'center',
     },
     contentContainer: {
@@ -127,22 +130,20 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10,
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
     },
     description: {
         fontSize: 18,
-        color: Colours.bluegrey[Colours.theme],
+        color: Colours.bluegrey,
         marginBottom: 20,
     },
     textInput: {
         height: 150,
-        borderColor: Colours.lightgrey[Colours.theme],
+        borderColor: Colours.lightgrey,
         borderWidth: 1,
         borderRadius: 10,
         padding: 15,
         fontSize: 16,
-        color: Colours.text[Colours.theme],
         marginBottom: 30,
         textAlignVertical: 'top',
         fontFamily: Fonts.condensed,
@@ -150,7 +151,6 @@ const styles = StyleSheet.create({
     presetTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
         marginBottom: 10,
     },
@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     presetButton: {
-        backgroundColor: Colours.dealItem[Colours.theme],
         padding: 15,
         borderRadius: 10,
         marginBottom: 10,
@@ -170,7 +169,6 @@ const styles = StyleSheet.create({
     },
     presetText: {
         fontSize: 16,
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
     },
     buttonContainer: {

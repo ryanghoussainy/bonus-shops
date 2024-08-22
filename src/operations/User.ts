@@ -9,39 +9,37 @@ export async function getUser(
     session: Session,
     setShopName: (name: string) => void,
     setLocation: (location: string) => void,
-    setLogoUrl: (logoUrl: string) => void,
-    setDisplayPrompt?: (displayPrompt: boolean) => void
+    setDescription: (description: string) => void,
+    setMobileNumber: (mobileNumber: string) => void,
+    setLoading: (loading: boolean) => void
 ) {
     try {
-      if (!session?.user) throw new Error('No user on the session!')
-  
-      const { data, error, status } = await supabase
-        .from('shop_profiles')
-        .select(`name, location, logo_url`)
-        .eq('id', session?.user.id)
-        .single()
-      if (error && status !== 406) {
-        throw error
-      }
-  
-      if (data) {
-        setShopName(data.name)
-        setLocation(data.location)
-        setLogoUrl(data.logo_url)
-        if (setDisplayPrompt) {
-            if (!data.name || !data.location || !data.logo_url) {
-                setDisplayPrompt(true)
-            } else {
-                setDisplayPrompt(false)
-            }
+        if (!session?.user) throw new Error('No user on the session!')
+
+        setLoading(true)
+        const { data, error } = await supabase
+            .from('shop_profiles')
+            .select('name, location, description, mobile_number')
+            .eq('id', session.user.id)
+            .single()
+
+        if (error) {
+            Alert.alert(error.message)
+            return;
         }
-      } else {
-        if (setDisplayPrompt) setDisplayPrompt(true)
-      }
+
+        if (data) {
+            setShopName(data.name)
+            setLocation(data.location)
+            setDescription(data.description)
+            setMobileNumber(data.mobile_number)
+        }
     } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message)
-      }
+        if (error instanceof Error) {
+            Alert.alert(error.message)
+        }
+    } finally {
+        setLoading(false)
     }
 }
 
@@ -86,29 +84,28 @@ export async function updateUser(
     shopName: string,
     location: string,
     description: string,
-    logoUrl: string
+    mobileNumber: string,
+    setLoading: (loading: boolean) => void
 ) {
     try {
-      if (!session?.user) throw new Error('No user on the session!')
-  
-      const updates = {
-        id: session?.user.id,
-        name: shopName,
-        location,
-        description,
-        logo_url: logoUrl,
-        updated_at: new Date(),
-      }
-  
-      const { error } = await supabase.from('shop_profiles').upsert(updates)
-  
-      if (error) {
-        throw error
-      }
+        if (!session?.user) throw new Error('No user on the session!')
+
+        setLoading(true)
+        const { error } = await supabase
+            .from('shop_profiles')
+            .update({ name: shopName, location, description, mobile_number: mobileNumber })
+            .eq('id', session.user.id)
+
+        if (error) {
+            Alert.alert(error.message)
+            return;
+        }
     } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message)
-      }
+        if (error instanceof Error) {
+            Alert.alert(error.message)
+        }
+    } finally {
+        setLoading(false)
     }
 }
 

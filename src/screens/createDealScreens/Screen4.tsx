@@ -10,10 +10,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/StackNavigator';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ShopDeal_t } from '../../operations/ShopDeal';
+import { useTheme } from '../../contexts/ThemeContext';
 
 type Screen4NavigationProp = NativeStackNavigationProp<RootStackParamList, "Screen4">;
 
 export default function Screen4() {
+    // Get theme
+    const { theme } = useTheme();
+
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const navigation = useNavigation<Screen4NavigationProp>();
@@ -67,9 +71,9 @@ export default function Screen4() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             <View style={styles.contentContainer}>
-                <Text style={styles.title}>Step 4: End Date (Optional)</Text>
+                <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 4: End Date (Optional)</Text>
                 <Text style={styles.description}>
                     If applicable, please set your offer end date.
                 </Text>
@@ -131,7 +135,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
-        backgroundColor: Colours.background[Colours.theme],
     },
     contentContainer: {
         flex: 1,
@@ -141,26 +144,25 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10,
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
     },
     description: {
         fontSize: 18,
-        color: Colours.bluegrey[Colours.theme],
+        color: Colours.bluegrey,
         marginBottom: 20,
     },
     dateInput: {
         padding: 15,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: Colours.lightgrey[Colours.theme],
-        backgroundColor: Colours.lightgrey[Colours.theme],
+        borderColor: Colours.lightgrey,
+        backgroundColor: Colours.lightgrey,
         alignItems: 'center',
         justifyContent: 'center',
     },
     dateText: {
         fontSize: 18,
-        color: Colours.darkgrey[Colours.theme],
+        color: Colours.darkgrey,
         fontFamily: Fonts.condensed,
     },
     buttonContainer: {

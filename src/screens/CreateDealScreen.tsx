@@ -9,10 +9,14 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import { getShopDeals, ShopDeal_t } from '../operations/ShopDeal';
 import { Session } from '@supabase/supabase-js';
+import { useTheme } from '../contexts/ThemeContext';
 
 type CreateDealScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Screen1">;
 
 export default function CreateDealScreen({ session }: { session: Session }) {
+    // Get theme
+    const { theme } = useTheme();
+
     const [modalVisible, setModalVisible] = useState(false);
     const [loadingDeals, setLoadingDeals] = useState(false);
     const [deals, setDeals] = useState<ShopDeal_t[]>([]);
@@ -43,11 +47,11 @@ export default function CreateDealScreen({ session }: { session: Session }) {
     };
 
     return (
-        <LinearGradient colors={[Colours.background[Colours.theme], Colours.dealItem[Colours.theme]]} style={styles.container}>
-            <Text style={styles.header}>Create a New Deal</Text>
+        <LinearGradient colors={[Colours.background[theme], Colours.dealItem[theme]]} style={styles.container}>
+            <Text style={[styles.header, { color: Colours.text[theme] }]}>Create a New Deal</Text>
 
             <TouchableOpacity style={styles.button} onPress={handleOpenModal}>
-                <LinearGradient colors={[Colours.primary[Colours.theme], "#90EE90"]} style={styles.buttonBackground}>
+                <LinearGradient colors={[Colours.primary, "#90EE90"]} style={styles.buttonBackground}>
                     <FontAwesome name="plus" size={50} color="white" />
                 </LinearGradient>
             </TouchableOpacity>
@@ -61,26 +65,26 @@ export default function CreateDealScreen({ session }: { session: Session }) {
                 <TouchableWithoutFeedback onPress={handleCloseModal}>
                     <View style={styles.modalContainer}>
                         <TouchableWithoutFeedback onPress={() => {}}>
-                            <View style={styles.modalContent}>
+                            <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
                                 {/* Cancel button (X) in the top right corner */}
                                 <TouchableOpacity
                                     style={styles.closeButton}
                                     onPress={handleCloseModal}
                                 >
-                                    <FontAwesome name="times" size={24} color={Colours.text[Colours.theme]} />
+                                    <FontAwesome name="times" size={24} color={Colours.text[theme]} />
                                 </TouchableOpacity>
 
-                                <Text style={styles.modalText}>Would you like to load one of your previous promotions?</Text>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Would you like to load one of your previous promotions?</Text>
 
                                 <View style={styles.modalButtons}>
                                     <TouchableOpacity
-                                        style={[styles.modalButton, { backgroundColor: Colours.primary[Colours.theme] }]}
+                                        style={[styles.modalButton, { backgroundColor: Colours.primary }]}
                                         onPress={handleLoadPreviousPromotion}
                                     >
                                         <Text style={styles.modalButtonText}>Yes</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                        style={[styles.modalButton, { backgroundColor: Colours.dealItem[Colours.theme] }]}
+                                        style={[styles.modalButton, { backgroundColor: Colours.dealItem[theme] }]}
                                         onPress={() => {
                                             setModalVisible(false);
                                             navigation.navigate("Screen1", { previousDeal: null }); // Navigate to the next screen without loading previous deals
@@ -91,7 +95,7 @@ export default function CreateDealScreen({ session }: { session: Session }) {
                                 </View>
 
                                 {loadingDeals ? (
-                                    <Text style={styles.loadingText}>Loading deals...</Text>
+                                    <Text style={[styles.loadingText, { color: Colours.text[theme] }]}>Loading deals...</Text>
                                 ) : (
                                     deals.length > 0 && (
                                         <FlatList
@@ -99,10 +103,10 @@ export default function CreateDealScreen({ session }: { session: Session }) {
                                             keyExtractor={(item) => item.id}
                                             renderItem={({ item }) => (
                                                 <TouchableOpacity
-                                                    style={styles.dealItem}
+                                                    style={[styles.dealItem, { borderBottomColor: Colours.dealItem[theme] }]}
                                                     onPress={() => handleDealSelection(item)}
                                                 >
-                                                    <Text style={styles.dealText}>
+                                                    <Text style={[styles.dealText, { color: Colours.text[theme] }]}>
                                                         <Text style={styles.dealBigText}>
                                                             {item.discount}%
                                                         </Text> off
@@ -137,7 +141,6 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 32,
-        color: Colours.text[Colours.theme],
         fontWeight: 'bold',
         marginBottom: 40,
         fontFamily: Fonts.condensed,
@@ -168,7 +171,6 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '80%',
-        backgroundColor: Colours.background[Colours.theme],
         padding: 20,
         borderRadius: 10,
         alignItems: 'center',
@@ -181,7 +183,6 @@ const styles = StyleSheet.create({
     modalText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: Colours.text[Colours.theme],
         marginBottom: 20,
         fontFamily: Fonts.condensed,
         textAlign: 'center',
@@ -206,7 +207,6 @@ const styles = StyleSheet.create({
     loadingText: {
         marginTop: 20,
         fontSize: 18,
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
     },
     dealList: {
@@ -220,11 +220,9 @@ const styles = StyleSheet.create({
     dealItem: {
         padding: 15,
         borderBottomWidth: 1,
-        borderBottomColor: Colours.dealItem[Colours.theme],
     },
     dealText: {
         fontSize: 18,
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
     },
     dealBigText: {

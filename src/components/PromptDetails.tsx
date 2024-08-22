@@ -6,6 +6,7 @@ import { updateUser } from "../operations/User";
 import { Session } from "@supabase/supabase-js";
 import Logo from "./Logos";
 import { getShopNames } from "../operations/Shop";
+import { useTheme } from "../contexts/ThemeContext";
 
 
 export default function promptDetails(
@@ -20,6 +21,9 @@ export default function promptDetails(
     logoUrl: string,
     setLogoUrl: (url: string) => void
 ) {
+    // Get theme
+    const { theme } = useTheme();
+
     const handleSubmit = async () => {
         // Check that shop name is unique
         const shops = await getShopNames();
@@ -39,16 +43,16 @@ export default function promptDetails(
 
     return (
         <KeyboardAvoidingView
-            style={styles.promptDetailsView}
+            style={[styles.promptDetailsView, { backgroundColor: Colours.background[theme] }]}
             behavior="height"
         >
             <ScrollView>
-                <Text style={styles.text}>Please enter the following:</Text>
+                <Text style={[styles.text, { color: Colours.text[theme] }]}>Please enter the following:</Text>
                 <View style={styles.inputView}>
                     <Input
                         label="Shop Name"
                         labelStyle={styles.label}
-                        style={styles.input}
+                        style={[styles.input, { color: Colours.text[theme] }]}
                         onChangeText={(text) => setShopName(text)}
                     />
                 </View>
@@ -57,7 +61,7 @@ export default function promptDetails(
                         label="Location on campus (be brief but specific)"
                         labelStyle={styles.label}
                         placeholder="e.g. Senior Common Room"
-                        style={styles.input}
+                        style={[styles.input, { color: Colours.text[theme] }]}
                         onChangeText={(text) => setLocation(text)}
                     />
                 </View>
@@ -66,7 +70,7 @@ export default function promptDetails(
                         label="Description of the shop (optional but recommended)"
                         labelStyle={styles.label}
                         placeholder="e.g. We sell snacks and drinks."
-                        style={styles.input}
+                        style={[styles.input, { color: Colours.text[theme] }]}
                         onChangeText={(text) => setDescription(text)}
                     />
                 </View>
@@ -84,8 +88,8 @@ export default function promptDetails(
                         buttonStyle={styles.submitButton}
                         title="Submit"
                         disabled={!shopName || !location || !logoUrl}
-                        disabledStyle={{ backgroundColor: Colours.background[Colours.theme] }}
-                        disabledTitleStyle={{ color: Colours.background[Colours.theme] }}
+                        disabledStyle={{ backgroundColor: Colours.background[theme] }}
+                        disabledTitleStyle={{ color: Colours.background[theme] }}
                         onPress={handleSubmit}
                     />
                 </View>
@@ -98,13 +102,12 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 18,
         fontWeight: "500",
-        color: Colours.text[Colours.theme],
         textAlign: "center",
     },
     label: {
         fontSize: 16,
         fontWeight: "800",
-        color: Colours.bluegrey[Colours.theme],
+        color: Colours.bluegrey,
         marginBottom: 10,
     },
     promptDetailsView: {
@@ -112,12 +115,10 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: Colours.background[Colours.theme],
         width: "100%",
         height: "100%",
     },
     input: {
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
     },
     inputView: {
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
     },
     submitButton: {
-        backgroundColor: Colours.primary[Colours.theme],
+        backgroundColor: Colours.primary,
         marginTop: 40,
     },
     alignRight: {

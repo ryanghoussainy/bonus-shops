@@ -11,10 +11,14 @@ import { addPoint, getUserDeal } from '../operations/UserDeal';
 import { checkValidUser } from '../operations/User';
 import { getLogo, getLogoPath } from '../operations/Logo';
 import { Session } from '@supabase/supabase-js';
+import { useTheme } from '../contexts/ThemeContext';
 
 type DealScreenRouteProp = RouteProp<RootStackParamList, "Deal">;
 
 const DealScreen = ({ session }: { session: Session }) => {
+    // Get theme
+    const { theme } = useTheme();
+
     // Update the title of the screen
     const route = useRoute<DealScreenRouteProp>()
     const navigation = useNavigation()
@@ -113,8 +117,8 @@ const DealScreen = ({ session }: { session: Session }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.dealContainer}>
+        <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
+            <View style={[styles.dealContainer, { backgroundColor: Colours.dealItem[theme] }]}>
                 {/* Logo */}
                 {logoUrl &&
                     <Image
@@ -140,10 +144,10 @@ const DealScreen = ({ session }: { session: Session }) => {
 
 
                 {/* Description */}
-                <Text style={[styles.description, { textDecorationLine: "underline" }]}>
+                <Text style={[styles.description, { textDecorationLine: "underline", color: Colours.text[theme] }]}>
                     DETAILS
                 </Text>
-                <Text style={[styles.description, { paddingBottom: 15 }]}>
+                <Text style={[styles.description, { paddingBottom: 15, color: Colours.text[theme] }]}>
                     {deal.description}
                 </Text>
             </View>
@@ -153,23 +157,20 @@ const DealScreen = ({ session }: { session: Session }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: Colours.background[Colours.theme],
         flex: 1,
     },
     dealContainer: {
-        backgroundColor: Colours.dealItem[Colours.theme],
         flex: 1,
         marginVertical: 40,
         marginHorizontal: 30,
         borderRadius: 35,
-        borderColor: Colours.primary[Colours.theme],
+        borderColor: Colours.primary,
         borderWidth: 1,
         alignItems: "center",
     },
     description: {
         paddingHorizontal: 15,
         paddingVertical: 5,
-        color: Colours.text[Colours.theme],
         fontFamily: Fonts.condensed,
         fontSize: 15,
     },

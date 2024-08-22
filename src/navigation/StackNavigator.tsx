@@ -14,6 +14,9 @@ import Screen3 from "../screens/createDealScreens/Screen3";
 import Screen4 from "../screens/createDealScreens/Screen4";
 import Screen5 from "../screens/createDealScreens/Screen5";
 import Screen6 from "../screens/createDealScreens/Screen6";
+import { useTheme } from "../contexts/ThemeContext";
+import Account from "../screens/settingsScreens/Account";
+import General from "../screens/settingsScreens/General";
 
 export type RootStackParamList = {
   "Main": { session: Session };
@@ -24,11 +27,16 @@ export type RootStackParamList = {
   "Screen4": { previousDeal: ShopDeal_t | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
   "Screen5": { previousDeal: ShopDeal_t | null, endDate: string | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
   "Screen6": { description: string; endDate: string | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
+  "Account": undefined;
+  "General": undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigator = ({ session }: { session: Session }) => {
+  // Get theme
+  const { theme } = useTheme();
+
   // Check that the user is signed it to the right app
   const [loading, setLoading] = useState(true);
 
@@ -60,8 +68,8 @@ const Navigator = ({ session }: { session: Session }) => {
 
   if (loading) {
     return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="large" color={Colours.primary[Colours.theme]} />
+      <View style={[styles.loading, { backgroundColor: Colours.background[theme] }]}>
+        <ActivityIndicator size="large" color={Colours.primary} />
       </View>
     )
   }
@@ -70,9 +78,9 @@ const Navigator = ({ session }: { session: Session }) => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerStyle: styles.navigation,
-          headerTitleStyle: styles.title,
-          headerTintColor: Colours.text[Colours.theme],
+          headerStyle: { backgroundColor: Colours.background[theme] },
+          headerTitleStyle: [styles.title, { color: Colours.text[theme] }],
+          headerTintColor: Colours.text[theme],
         }}
       >
         <Stack.Screen name="Main" options={{ headerShown: false }}>
@@ -102,17 +110,21 @@ const Navigator = ({ session }: { session: Session }) => {
           {() => <Screen6 session={session} />}
         </Stack.Screen>
 
+        {/* Settings Screens */}
+        <Stack.Screen name="Account" options={{ headerShown: false }}>
+          {() => <Account session={session} />}
+        </Stack.Screen>
+        <Stack.Screen name="General" options={{ headerShown: false }}>
+          {() => <General session={session} />}
+        </Stack.Screen>
+
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  navigation: {
-    backgroundColor: Colours.background[Colours.theme],
-  },
   title: {
-    color: Colours.text[Colours.theme],
     fontWeight: "bold",
     fontSize: 25,
   },
@@ -120,7 +132,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colours.background[Colours.theme],
   },
 });
 
