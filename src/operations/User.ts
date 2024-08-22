@@ -46,19 +46,25 @@ export async function getUser(
 export async function createUser(
     email: string,
     password: string,
+    mobileNumber: string,
+    shopName: string,
+    location: string,
+    description: string,
+    logoUrl: string,
+    preferredTheme: string,
     setLoading: (loading: boolean) => void
 ) {
     // Sign up with email and password
     setLoading(true)
-        const {
-        data: { session },
-        error,
+    const {
+      data: { session },
+      error,
     } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-            data: { role: '1' }
-        }
+      email: email,
+      password: password,
+      options: {
+        data: { role: '1' }
+      }
     })
 
     if (error) {
@@ -73,6 +79,44 @@ export async function createUser(
     }
 
     // A profile is automatically created for the user via a trigger in the backend
+    // Wait for the profile to be created, and update the user's details
+    let profileCreated = false
+    while (!profileCreated) {
+        const { data: profile, error: profileError } = await supabase
+            .from('shop_profiles')
+            .select('id')
+            .eq('id', session.user.id)
+            .single()
+
+        if (profileError) {
+            Alert.alert(profileError.message)
+            setLoading(false)
+            return
+        }
+
+        if (profile) {
+            profileCreated = true
+        }
+    }
+
+    // Update the user's details
+    const { error: updateError } = await supabase.from('shop_profiles').upsert({
+        id: session.user.id,
+        updated_at: new Date(),
+        name: shopName,
+        location: location,
+        description: description,
+        mobile_number: mobileNumber,
+        logo_url: logoUrl,
+        theme: preferredTheme,
+    })
+
+    if (updateError) {
+        Alert.alert(updateError.message)
+        setLoading(false)
+        return
+    }
+
     setLoading(false)
 }
 
