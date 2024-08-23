@@ -73,7 +73,6 @@ export default function HomeScreen({ session }: { session: Session }) {
 
   const getAvailabilityStatus = (deal: ShopDeal_t): AvailabilityStatus => {
     const now = new Date();
-    const todayDate = format(now, 'yyyy-MM-dd', { locale: enGB });
     const todayDay = format(now, 'EEE', { locale: enGB }).toLowerCase(); // e.g., 'mon', 'tue'
 
     // Get today's start and end times
