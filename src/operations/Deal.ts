@@ -13,13 +13,13 @@ export async function createDeal(
     maxPoints: number,
     setLoading: (loading: boolean) => void,
 ) {
-    // Get user_id
-    const shop_user_id = session.user?.id;
-    if (!shop_user_id) throw new Error('No user on the session!');
+    // Get user id
+    const shopUserID = session.user?.id;
+    if (!shopUserID) throw new Error('No user on the session!');
     
     setLoading(true);
     // Create deal times
-    const { data: deal_times, error: deal_times_error } = await supabase
+    const { data: dealTimes, error: dealTimesError } = await supabase
         .from('deal_times')
         .insert([
             {
@@ -41,8 +41,8 @@ export async function createDeal(
         ])
         .select('id');
 
-    if (deal_times_error) {
-        Alert.alert(deal_times_error.message);
+    if (dealTimesError) {
+        Alert.alert(dealTimesError.message);
         setLoading(false);
         return;
     }
@@ -58,8 +58,8 @@ export async function createDeal(
                 percentage: discount,
                 end_date: endDate,
                 max_pts: maxPoints,
-                shop_user_id,
-                deal_times_id: deal_times[0].id,
+                shop_user_id: shopUserID,
+                deal_times_id: dealTimes[0].id,
             }
         ])
         .select('id');
@@ -70,30 +70,30 @@ export async function createDeal(
         return;
     }
 
-    // Create user_deals
+    // Create user deals
     // Get new deal id
     if (!data) throw new Error('No deal created!');
-    const deal_id = data[0].id;
+    const dealID = data[0].id;
 
     // Fetch all users
-    const { data: users, error: users_error } = await supabase
+    const { data: users, error: usersError } = await supabase
         .from('profiles')
         .select('id');
     
-    if (users_error) {
-        Alert.alert(users_error.message);
+    if (usersError) {
+        Alert.alert(usersError.message);
         setLoading(false);
         return
     }
 
-    // For each user, create a user_deal with the new deal
+    // For each user, create a user deal with the new deal
     for (const user of users) {
         const { error } = await supabase
             .from('user_deals')
             .insert([
                 {
                     user_id: user.id,
-                    deal_id: deal_id,
+                    deal_id: dealID,
                     points: 0,
                     updated_at: new Date(),
                     redeemed_days: [],

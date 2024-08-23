@@ -33,7 +33,7 @@ export default function Screen3() {
 
     // Show 'next' button logic
     const [showNext, setShowNext] = useState(false);
-    
+
     const navigation = useNavigation<Screen3NavigationProp>();
 
     // Get previous parameters
@@ -418,10 +418,10 @@ export default function Screen3() {
         }
 
         // Change the time format to timetstamptz format
-        const fixed_date = "1970-01-01T";
+        const fixedDate = "1970-01-01T";
         discountTimes = Object.keys(discountTimes).reduce((acc, key) => {
             if (discountTimes[key]) {
-                acc[key] = (new Date(fixed_date + discountTimes[key] + ':00')).toISOString();
+                acc[key] = (new Date(fixedDate + discountTimes[key] + ':00')).toISOString();
             } else {
                 acc[key] = null;
             }

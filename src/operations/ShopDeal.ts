@@ -35,16 +35,16 @@ export type ShopDeal_t = {
 
 export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_t[]) => void) {
     try {
-        // Get user_id
-        const shop_user_id = session.user?.id;
-        if (!shop_user_id) throw new Error('No user on the session!');
+        // Get user id
+        const shopUserID = session.user?.id;
+        if (!shopUserID) throw new Error('No user on the session!');
 
         // Get deals for this user
         const deals: ShopDeal_t[] = [];
-        const { data: shop_deals, error } = await supabase
+        const { data: shopDeals, error } = await supabase
             .from('deals')
             .select('description, type, percentage, end_date, max_pts, id, deal_times_id')
-            .eq('shop_user_id', shop_user_id);
+            .eq('shop_user_id', shopUserID);
 
         if (error) {
             Alert.alert(error.message);
@@ -52,21 +52,21 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
         }
 
         // Get shop name and location
-        const { data: shop_data, error: shop_error } = await supabase
+        const { data: shopData, error: shopError } = await supabase
             .from('shop_profiles')
             .select('name, location, logo_url')
-            .eq('id', shop_user_id)
+            .eq('id', shopUserID)
             .single();
 
-        if (shop_error) {
-            Alert.alert(shop_error.message);
+        if (shopError) {
+            Alert.alert(shopError.message);
             return;
         }
 
-        for (const deal of shop_deals) {
+        for (const deal of shopDeals) {
             if (deal) {
                 // Get times for this deal
-                const { data: times, error: times_error } = await supabase
+                const { data: times, error: timesError } = await supabase
                     .from('deal_times')
                     .select(
                         "mon_start, mon_end, \
@@ -79,16 +79,16 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
                     )
                     .eq('id', deal.deal_times_id);
                 
-                if (times_error) {
-                    Alert.alert(times_error.message);
+                if (timesError) {
+                    Alert.alert(timesError.message);
                     return;
                 }
 
                 deals.push({
                     id: deal.id,
-                    name: shop_data.name,
-                    logoUrl: shop_data.logo_url,
-                    location: shop_data.location,
+                    name: shopData.name,
+                    logoUrl: shopData.logo_url,
+                    location: shopData.location,
                     description: deal.description,
                     discountType: deal.type,
                     discount: deal.percentage,

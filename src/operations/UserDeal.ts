@@ -8,8 +8,8 @@ export async function getUserDeal(
     setUserID: (userID: string) => void,
 ) {
     try {
-        // Get user_deal
-        const { data: user_deal, error } = await supabase
+        // Get user deal
+        const { data: userDeal, error } = await supabase
             .from('user_deals')
             .select('redeemed_days, user_id')
             .eq('id', user_deal_id)
@@ -20,9 +20,9 @@ export async function getUserDeal(
             return;
         }
 
-        if (user_deal) {
-            setRedeemedDays(user_deal.redeemed_days);
-            setUserID(user_deal.user_id);
+        if (userDeal) {
+            setRedeemedDays(userDeal.redeemed_days);
+            setUserID(userDeal.user_id);
         } else {
             Alert.alert("User Deal Not Found");
         }
@@ -34,13 +34,13 @@ export async function getUserDeal(
     }
 }
 
-export async function addPoint(user_deal_id: string) {
+export async function addPoint(userDealID: string) {
     try {
-        // Get user_deal
-        const { data: user_deal, error } = await supabase
+        // Get user deal
+        const { data: userDeal, error } = await supabase
             .from('user_deals')
             .select('points, redeemed_days')
-            .eq('id', user_deal_id)
+            .eq('id', userDealID)
             .single();
 
         if (error) {
@@ -48,18 +48,18 @@ export async function addPoint(user_deal_id: string) {
             return;
         }
 
-        if (user_deal) {
+        if (userDeal) {
             const today = new Date().toISOString().split("T")[0];
-            const redeemed_days = user_deal.redeemed_days;
+            const redeemedDays = userDeal.redeemed_days;
 
-            // Add today to redeemed_days
-            redeemed_days.push(today);
+            // Add today to redeemed days
+            redeemedDays.push(today);
 
-            // Update user_deal
+            // Update user deal
             const { error } = await supabase
                 .from('user_deals')
-                .update({ points: user_deal.points + 1, redeemed_days })
-                .eq('id', user_deal_id);
+                .update({ points: userDeal.points + 1, redeemed_days: redeemedDays })
+                .eq('id', userDealID);
 
             if (error) {
                 Alert.alert(error.message);
