@@ -71,30 +71,62 @@ export default function Account({ session }: { session: Session }) {
 
                     <View style={styles.fieldContainer}>
                         <Text style={[styles.label, { color: Colours.text[theme] }]}>Name *</Text>
-                        <View style={[styles.readOnlyField, { backgroundColor: Colours.dealItem[theme] }]}>
-                            <Text style={[styles.readOnlyText, { color: Colours.text[theme] }]}>{shopName}</Text>
-                        </View>
+                        <TextInput
+                            style={[styles.inputField, {
+                                backgroundColor: Colours.background[theme],
+                                color: Colours.text[theme],
+                                borderColor: Colours.dealItem[theme]
+                            }]}
+                            value={shopName}
+                            onChangeText={setShopName}
+                            placeholder="Enter the Shop Name"
+                            placeholderTextColor="#888"
+                        />
                     </View>
 
                     <View style={styles.fieldContainer}>
                         <Text style={[styles.label, { color: Colours.text[theme] }]}>Location *</Text>
-                        <View style={[styles.readOnlyField, { backgroundColor: Colours.dealItem[theme] }]}>
-                            <Text style={[styles.readOnlyText, { color: Colours.text[theme] }]}>{location}</Text>
-                        </View>
+                        <TextInput
+                            style={[styles.inputField, {
+                                backgroundColor: Colours.background[theme],
+                                color: Colours.text[theme],
+                                borderColor: Colours.dealItem[theme]
+                            }]}
+                            value={location}
+                            onChangeText={setLocation}
+                            placeholder="Enter your location"
+                            placeholderTextColor="#888"
+                        />
                     </View>
 
                     <View style={styles.fieldContainer}>
                         <Text style={[styles.label, { color: Colours.text[theme] }]}>Description *</Text>
-                        <View style={[styles.readOnlyField, { backgroundColor: Colours.dealItem[theme] }]}>
-                            <Text style={[styles.readOnlyText, { color: Colours.text[theme] }]}>{description}</Text>
-                        </View>
+                        <TextInput
+                            style={[styles.inputField, {
+                                backgroundColor: Colours.background[theme],
+                                color: Colours.text[theme],
+                                borderColor: Colours.dealItem[theme]
+                            }]}
+                            value={description}
+                            onChangeText={setDescription}
+                            placeholder="Enter your description"
+                            placeholderTextColor="#888"
+                        />
                     </View>
 
                     <View style={styles.fieldContainer}>
                         <Text style={[styles.label, { color: Colours.text[theme] }]}>Mobile Number *</Text>
-                        <View style={[styles.readOnlyField, { backgroundColor: Colours.dealItem[theme] }]}>
-                            <Text style={[styles.readOnlyText, { color: Colours.text[theme] }]}>{mobileNumber}</Text>
-                        </View>
+                        <TextInput
+                            style={[styles.inputField, {
+                                backgroundColor: Colours.background[theme],
+                                color: Colours.text[theme],
+                                borderColor: Colours.dealItem[theme]
+                            }]}
+                            value={mobileNumber}
+                            onChangeText={setMobileNumber}
+                            placeholder="Enter your mobile number"
+                            placeholderTextColor="#888"
+                        />
                     </View>
 
                     <TouchableOpacity style={styles.saveButton} onPress={handleSave} disabled={loadingSave}>
