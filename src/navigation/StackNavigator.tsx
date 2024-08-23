@@ -69,7 +69,7 @@ const Navigator = ({ session }: { session: Session }) => {
   if (loading) {
     return (
       <View style={[styles.loading, { backgroundColor: Colours.background[theme] }]}>
-        <ActivityIndicator size="large" color={Colours.primary} />
+        <ActivityIndicator size="large" color={Colours.primary[theme]} />
       </View>
     )
   }

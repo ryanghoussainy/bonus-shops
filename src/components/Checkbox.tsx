@@ -21,7 +21,7 @@ export default function Checkbox(
     return (
         <View style={styles.checkboxContainer}>
             <TouchableOpacity
-                style={[styles.checkbox, state && styles.checkedCheckbox]}
+                style={[styles.checkbox, { borderColor: Colours.primary[theme] }, state && { backgroundColor: Colours.primary[theme] }]}
                 onPress={() => setState(!state)}
             >
                 {state && <View style={[styles.checkboxInner, { backgroundColor: Colours.text[theme] }]} />}
@@ -42,12 +42,8 @@ const styles = StyleSheet.create({
         height: 24,
         borderWidth: 2,
         borderRadius: 4,
-        borderColor: Colours.primary,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    checkedCheckbox: {
-        backgroundColor: Colours.primary,
     },
     checkboxInner: {
         width: 12,

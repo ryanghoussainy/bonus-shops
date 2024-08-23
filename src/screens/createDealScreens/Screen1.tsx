@@ -106,7 +106,7 @@ export default function Screen1() {
                 <Text style={styles.description}>Choose the type of offer you would like to create.</Text>
 
                 <TouchableOpacity
-                    style={[styles.card, { backgroundColor: Colours.dealItem[theme] }, selectedType === 'points' && styles.selectedCard]}
+                    style={[styles.card, { backgroundColor: Colours.dealItem[theme] }, selectedType === 'points' && { borderColor: Colours.primary[theme], backgroundColor: Colours.primary[theme] }]}
                     onPress={() => handleSelection('points')}
                 >
                     <Text style={[styles.cardTitle, { color: Colours.text[theme] }]}>Point-Based Discount</Text>
@@ -114,7 +114,7 @@ export default function Screen1() {
 
                     {/* Animated container for max points input */}
                     {selectedType === 'points' && (
-                        <Animated.View style={[styles.dynamicInputContainer, { height: animatedHeight }]}>
+                        <Animated.View style={[styles.dynamicInputContainer, { height: animatedHeight, backgroundColor: Colours.primary[theme] }]}>
                             <Text style={[styles.dynamicInputLabel, { color: Colours.text[theme] }]}>Number of points required:</Text>
                             <TextInput
                                 style={styles.input}
@@ -129,7 +129,7 @@ export default function Screen1() {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.card, { backgroundColor: Colours.dealItem[theme] }, selectedType === 'date' && styles.selectedCard]}
+                    style={[styles.card, { backgroundColor: Colours.dealItem[theme] }, selectedType === 'date' && { borderColor: Colours.primary[theme], backgroundColor: Colours.primary[theme] }]}
                     onPress={() => handleSelection('date')}
                 >
                     <Text style={[styles.cardTitle, { color: Colours.text[theme] }]}>Regular Discount</Text>
@@ -184,10 +184,6 @@ const styles = StyleSheet.create({
         borderColor: Colours.lightgrey,
         marginBottom: 20,
     },
-    selectedCard: {
-        borderColor: Colours.primary,
-        backgroundColor: Colours.primary,
-    },
     cardTitle: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -201,7 +197,6 @@ const styles = StyleSheet.create({
     dynamicInputContainer: {
         marginTop: 20,
         padding: 10,
-        backgroundColor: Colours.primary,
         borderRadius: 10,
     },
     dynamicInputLabel: {

@@ -2,6 +2,8 @@ import { TouchableOpacity, View } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet } from "react-native";
 import { Text } from "react-native";
+import Colours from "../config/Colours";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function BackNextButton(
     {
@@ -17,6 +19,8 @@ export default function BackNextButton(
         direction: 'back' | 'next',
         disabled?: boolean
     }) {
+    // Get theme
+    const { theme } = useTheme();
 
     // Check if the button is disabled
     if (disabled && direction === 'next') {
@@ -24,7 +28,7 @@ export default function BackNextButton(
     }
 
     return (
-        <TouchableOpacity style={styles.button} onPress={onPress}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: Colours.primary[theme] }]} onPress={onPress}>
             <View style={styles.iconContainer}>
                 {direction === 'back' && <Ionicons name={icon} size={24} color="white" />}
                 <Text style={styles.text}>{title}</Text>
@@ -39,7 +43,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#00b894',
         paddingVertical: 12,
         paddingHorizontal: 20,
         borderRadius: 30,

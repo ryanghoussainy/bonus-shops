@@ -439,13 +439,13 @@ export default function Screen3() {
 
                 <View style={styles.daysContainer}>
                     <TouchableOpacity
-                        style={[styles.multiDayBox, selectedDays.includes('Mon-Fri') && styles.selectedDayBox]}
+                        style={[styles.multiDayBox, selectedDays.includes('Mon-Fri') && { backgroundColor: Colours.primary[theme] }]}
                         onPress={handleEveryWorkingDayPress}
                     >
                         <Text style={styles.dayText}>Mon-Fri</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[styles.multiDayBox, selectedDays.includes('Mon-Sun') && styles.selectedDayBox]}
+                        style={[styles.multiDayBox, selectedDays.includes('Mon-Sun') && { backgroundColor: Colours.primary[theme] }]}
                         onPress={handleEverydayPress}
                     >
                         <Text style={styles.dayText}>Mon-Sun</Text>
@@ -456,7 +456,7 @@ export default function Screen3() {
                     {daysOfWeek.map(day => (
                         <TouchableOpacity
                             key={day}
-                            style={[styles.dayBox, selectedDays.includes(day) && !selectedDays.includes('Mon-Fri') && !selectedDays.includes('Mon-Sun') && styles.selectedDayBox]}
+                            style={[styles.dayBox, selectedDays.includes(day) && !selectedDays.includes('Mon-Fri') && !selectedDays.includes('Mon-Sun') && { backgroundColor: Colours.primary[theme] }]}
                             onPress={() => toggleDaySelection(day)}
                         >
                             <Text style={[styles.dayText, selectedDays.includes(day) && !selectedDays.includes('Mon-Fri') && !selectedDays.includes('Mon-Sun') && styles.selectedDayText]}>{day}</Text>
@@ -542,9 +542,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    selectedDayBox: {
-        backgroundColor: Colours.primary,
-    },
     dayText: {
         color: Colours.darkgrey,
         fontSize: 16,
@@ -582,18 +579,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
-    },
-    checkbox: {
-        width: 24,
-        height: 24,
-        borderWidth: 2,
-        borderRadius: 4,
-        borderColor: Colours.primary,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    checkedCheckbox: {
-        backgroundColor: Colours.primary,
     },
     checkboxInner: {
         width: 12,

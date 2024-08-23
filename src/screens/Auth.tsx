@@ -75,7 +75,7 @@ export default function ShopAuth() {
 
   return (
     <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
-      <Text style={styles.title}>Welcome to the Shop Portal!</Text>
+      <Text style={[styles.title, { color: Colours.primary[theme] }]}>Welcome to the Shop Portal!</Text>
       <Text style={[styles.subtitle, { color: Colours.text[theme] }]}>Log in to your shop account</Text>
 
       <Input
@@ -116,13 +116,13 @@ export default function ShopAuth() {
         title={loading ? <ActivityIndicator color="#fff" /> : "Log in"}
         onPress={signInWithEmail}
         disabled={loading}
-        buttonStyle={styles.loginButton}
+        buttonStyle={[styles.loginButton, { backgroundColor: Colours.primary[theme] }]}
         containerStyle={styles.buttonContainer}
         titleStyle={styles.loginTitle}
       />
 
       <TouchableOpacity onPress={handleOpenModal}>
-        <Text style={styles.signupText}>Don't have an account? Sign up</Text>
+        <Text style={[styles.signupText, { color: Colours.primary[theme] }]}>Don't have an account? Sign up</Text>
       </TouchableOpacity>
 
       {/* Sign Up Modal */}
@@ -135,7 +135,7 @@ export default function ShopAuth() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContainer, { backgroundColor: Colours.background[theme] }]}>
             <ScrollView contentContainerStyle={styles.modalContent}>
-              <Text style={styles.modalTitle}>Create Shop Account</Text>
+              <Text style={[styles.modalTitle, { color: Colours.primary[theme] }]}>Create Shop Account</Text>
 
               <View style={styles.themeToggleContainer}>
                 <Text style={[styles.themeToggleText, { color: Colours.text[theme] }]}>Preferred Theme:</Text>
@@ -145,7 +145,7 @@ export default function ShopAuth() {
                     setPreferredTheme(value);
                     toggleTheme();
                   }}
-                  color={Colours.primary}
+                  color={Colours.primary[theme]}
                 />
               </View>
 
@@ -242,13 +242,13 @@ export default function ShopAuth() {
                 title={loading ? <ActivityIndicator color="#fff" /> : "Sign up"}
                 onPress={signUpWithEmail}
                 disabled={loading}
-                buttonStyle={styles.signupButton}
+                buttonStyle={[styles.signupButton, { backgroundColor: Colours.primary[theme] }]}
                 containerStyle={styles.buttonContainer}
                 titleStyle={styles.signupTitle}
               />
 
               <TouchableOpacity onPress={handleCloseModal}>
-                <Text style={styles.closeModalText}>Close</Text>
+                <Text style={[styles.closeModalText, { color: Colours.primary[theme] }]}>Close</Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -267,7 +267,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: Colours.primary,
     textAlign: 'center',
     marginBottom: 10,
     fontFamily: Fonts.condensed,
@@ -282,7 +281,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   loginButton: {
-    backgroundColor: Colours.primary,
     padding: 15,
     borderRadius: 8,
   },
@@ -296,7 +294,6 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontSize: 16,
-    color: Colours.primary,
     textAlign: 'center',
     marginTop: 10,
     fontFamily: Fonts.condensed,
@@ -318,7 +315,6 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: Colours.primary,
     textAlign: 'center',
     marginBottom: 20,
     fontFamily: Fonts.condensed,
@@ -334,7 +330,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.condensed,
   },
   signupButton: {
-    backgroundColor: Colours.primary,
     padding: 15,
     borderRadius: 8,
   },
@@ -345,7 +340,6 @@ const styles = StyleSheet.create({
   },
   closeModalText: {
     fontSize: 16,
-    color: Colours.primary,
     textAlign: 'center',
     marginTop: 10,
     fontFamily: Fonts.condensed,

@@ -104,41 +104,41 @@ export default function Screen6({ session }: { session: Session }) {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.section}>
                     <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Promotion Type:</Text>
-                    <View style={styles.miniDivider} />
+                    <View style={[styles.miniDivider, { borderBottomColor: Colours.primary[theme] }]} />
                     <Text style={styles.sectionContent}>{discountTypeText}</Text>
                 </View>
 
                 <View style={styles.section}>
                     <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Discount Amount:</Text>
-                    <View style={styles.miniDivider} />
+                    <View style={[styles.miniDivider, { borderBottomColor: Colours.primary[theme] }]} />
                     <Text style={styles.sectionContent}>{discount}%</Text>
                 </View>
 
                 {discountType === 0 && (
                     <View style={styles.section}>
                         <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Maximum Points to Redeem:</Text>
-                        <View style={styles.miniDivider} />
+                        <View style={[styles.miniDivider, { borderBottomColor: Colours.primary[theme] }]} />
                         <Text style={styles.sectionContent}>{maxPoints}</Text>
                     </View>
                 )}
 
                 <View style={styles.section}>
                     <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Availability Times:</Text>
-                    <View style={styles.miniDivider} />
+                    <View style={[styles.miniDivider, { borderBottomColor: Colours.primary[theme] }]} />
                     <Text style={styles.sectionContent}>{discountTimesText}</Text>
                 </View>
 
                 {endDate && (
                     <View style={styles.section}>
                         <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>End Date:</Text>
-                        <View style={styles.miniDivider} />
+                        <View style={[styles.miniDivider, { borderBottomColor: Colours.primary[theme] }]} />
                         <Text style={styles.sectionContent}>{new Date(endDate).toDateString()}</Text>
                     </View>
                 )}
 
                 <View style={styles.section}>
                     <Text style={[styles.sectionTitle, { color: Colours.text[theme] }]}>Description:</Text>
-                    <View style={styles.miniDivider} />
+                    <View style={[styles.miniDivider, { borderBottomColor: Colours.primary[theme] }]} />
                     <Text style={styles.sectionContent}>{description}</Text>
                 </View>
             </ScrollView>
@@ -170,13 +170,13 @@ export default function Screen6({ session }: { session: Session }) {
                     <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
                         {loading ? (
                             <>
-                                <ActivityIndicator size="large" color={Colours.primary} />
+                                <ActivityIndicator size="large" color={Colours.primary[theme]} />
                                 <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Creating deal...</Text>
                             </>
                         ) : (
                             <>
                                 <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Deal created!</Text>
-                                <Text style={styles.checkmark}>✓</Text>
+                                <Text style={[styles.checkmark, { color: Colours.primary[theme] }]}>✓</Text>
                             </>
                         )}
                     </View>
@@ -222,7 +222,6 @@ const styles = StyleSheet.create({
     },
     miniDivider: {
         borderBottomWidth: 1,
-        borderBottomColor: Colours.primary,
         width: "20%",
         marginTop: 2,
     },
@@ -246,7 +245,6 @@ const styles = StyleSheet.create({
     },
     checkmark: {
         fontSize: 50,
-        color: Colours.primary,
         marginTop: 10,
     },
 });
