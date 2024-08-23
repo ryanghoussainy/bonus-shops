@@ -19,7 +19,7 @@ export function getDiscountDescription(deal: ShopDeal_t) {
             <Text style={[styles.discountText, { color: Colours.text[theme] }]}>
               <Text style={[styles.discountAmount, { color: Colours.gold[theme] }]}>{deal.discount}%</Text>
               {" off\nwhen you come "}
-              <Text style={styles.discountTime}>{deal.maxPoints} times</Text>
+              <Text style={[styles.discountTime, { color: Colours.primary[theme] }]}>{deal.maxPoints} times</Text>
             </Text>
           </View>
         </View>
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.condensed,
   },
   discountTime: {
-    color: Colours.primary,
     fontSize: 30,
   },
   discountView: {

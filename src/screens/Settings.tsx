@@ -54,7 +54,7 @@ export default function Settings({ session }: { session: Session }) {
                     onPress={handleAccountPress}
                 >
                     <View style={styles.optionIcon}>
-                        <FontAwesome name="user-circle" size={30} color={Colours.primary} />
+                        <FontAwesome name="user-circle" size={30} color={Colours.primary[theme]} />
                     </View>
                     <Text style={[styles.optionText, { color: Colours.text[theme] }]}>Account</Text>
                     <MaterialIcons name="arrow-forward-ios" size={20} color={Colours.text[theme]} />
@@ -65,7 +65,7 @@ export default function Settings({ session }: { session: Session }) {
                     onPress={handleGeneralPress}
                 >
                     <View style={styles.optionIcon}>
-                        <FontAwesome name="gear" size={30} color={Colours.primary} />
+                        <FontAwesome name="gear" size={30} color={Colours.primary[theme]} />
                     </View>
                     <Text style={[styles.optionText, { color: Colours.text[theme] }]}> General</Text>
                     <MaterialIcons name="arrow-forward-ios" size={20} color={Colours.text[theme]} />
@@ -76,7 +76,7 @@ export default function Settings({ session }: { session: Session }) {
                     onPress={handleSignOutPress}
                 >
                     <View style={styles.optionIcon}>
-                        <Ionicons name="log-out-outline" size={30} color={Colours.primary} />
+                        <Ionicons name="log-out-outline" size={30} color={Colours.primary[theme]} />
                     </View>
                     <Text style={[styles.optionText, { color: Colours.text[theme] }]}>Sign Out</Text>
                     <MaterialIcons name="arrow-forward-ios" size={20} color={Colours.text[theme]} />
@@ -113,7 +113,7 @@ export default function Settings({ session }: { session: Session }) {
                             </>
                         ) : (
                             <View style={styles.loadingContainer}>
-                                <ActivityIndicator size="large" color={Colours.primary} />
+                                <ActivityIndicator size="large" color={Colours.primary[theme]} />
                                 <Text style={[styles.modalText, { color: Colours.text[theme], marginTop: 20 }]}>Signing out...</Text>
                             </View>
                         )}

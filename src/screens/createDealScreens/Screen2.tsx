@@ -169,9 +169,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         fontFamily: Fonts.condensed,
     },
-    button: {
-        backgroundColor: Colours.primary,
-    },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',

@@ -8,6 +8,7 @@ Represents the deals that a shop user has created.
 export type ShopDeal_t = {
     id: string;
     name: string;
+    logoUrl: string;
     location: string;
     description: string;
     discountType: number;
@@ -53,7 +54,7 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
         // Get shop name and location
         const { data: shop_data, error: shop_error } = await supabase
             .from('shop_profiles')
-            .select('name, location')
+            .select('name, location, logo_url')
             .eq('id', shop_user_id)
             .single();
 
@@ -86,6 +87,7 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
                 deals.push({
                     id: deal.id,
                     name: shop_data.name,
+                    logoUrl: shop_data.logo_url,
                     location: shop_data.location,
                     description: deal.description,
                     discountType: deal.type,
@@ -99,6 +101,7 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
 
         if (deals) {
             setDeals(deals);
+            return deals;
         }
     } catch (error) {
         if (error instanceof Error) {

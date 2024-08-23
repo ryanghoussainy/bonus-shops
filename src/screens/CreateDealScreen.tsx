@@ -51,7 +51,7 @@ export default function CreateDealScreen({ session }: { session: Session }) {
             <Text style={[styles.header, { color: Colours.text[theme] }]}>Create a New Deal</Text>
 
             <TouchableOpacity style={styles.button} onPress={handleOpenModal}>
-                <LinearGradient colors={[Colours.primary, "#90EE90"]} style={styles.buttonBackground}>
+                <LinearGradient colors={[Colours.primary[theme], Colours.lightprimary[theme]]} style={styles.buttonBackground}>
                     <FontAwesome name="plus" size={50} color="white" />
                 </LinearGradient>
             </TouchableOpacity>
@@ -78,7 +78,7 @@ export default function CreateDealScreen({ session }: { session: Session }) {
 
                                 <View style={styles.modalButtons}>
                                     <TouchableOpacity
-                                        style={[styles.modalButton, { backgroundColor: Colours.primary }]}
+                                        style={[styles.modalButton, { backgroundColor: Colours.primary[theme] }]}
                                         onPress={handleLoadPreviousPromotion}
                                     >
                                         <Text style={styles.modalButtonText}>Yes</Text>

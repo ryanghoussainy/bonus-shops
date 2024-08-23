@@ -157,7 +157,7 @@ export async function checkValidUser(
     user_id: string,
 ) {
     // Get user
-    const { data: user, error } = await supabase
+    const { error } = await supabase
         .from('profiles')
         .select('id')
         .eq('id', user_id)

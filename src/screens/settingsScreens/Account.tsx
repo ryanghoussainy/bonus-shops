@@ -48,7 +48,7 @@ export default function Account({ session }: { session: Session }) {
             {loading ? (
                 // Show loading indicator when fetching user data
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="large" color={Colours.primary} />
+                    <ActivityIndicator size="large" color={Colours.primary[theme]} />
                     <Text style={[styles.loadingText, { color: Colours.text[theme] }]}>Loading your account details...</Text>
                 </View>
             ) : (
@@ -92,7 +92,7 @@ export default function Account({ session }: { session: Session }) {
                     </View>
 
                     <TouchableOpacity style={styles.saveButton} onPress={handleSave} disabled={loadingSave}>
-                        <LinearGradient colors={[Colours.primary, "#90EE90"]} style={styles.buttonBackground}>
+                        <LinearGradient colors={[Colours.primary[theme], Colours.lightprimary[theme]]} style={styles.buttonBackground}>
                             <Text style={styles.saveButtonText}>{loadingSave ? "Saving..." : "Save changes"}</Text>
                             <Ionicons name="save-outline" size={24} color="white" />
                         </LinearGradient>

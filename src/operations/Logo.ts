@@ -29,22 +29,31 @@ export async function getLogoPath(
     }
 }
 
-export async function getLogo(path: string, setLogoUrl: (logoUrl: string) => void) {
-    try {
-      const { data, error } = await supabase.storage.from('logos').download(path)
+export async function getLogo(path: string, setLogoUrl?: (logoUrl: string) => void): Promise<string> {
+  try {
+    const { data, error } = await supabase.storage.from('logos').download(path);
 
-      if (error) {
-        throw error
-      }
-
-      const fr = new FileReader()
-      fr.readAsDataURL(data)
-      fr.onload = () => {
-        setLogoUrl(fr.result as string)
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log('Error downloading image: ', error.message)
-      }
+    if (error) {
+      Alert.alert(error.message);
+      return "";
     }
+
+    return new Promise<string>((resolve) => {
+      const fr = new FileReader();
+      fr.readAsDataURL(data);
+      fr.onload = () => {
+        const logoUrl = fr.result as string;
+        if (setLogoUrl) setLogoUrl(logoUrl);
+        resolve(logoUrl);
+      };
+      fr.onerror = () => {
+        resolve("");
+      };
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      Alert.alert(error.message);
+    }
+    return "";
   }
+}

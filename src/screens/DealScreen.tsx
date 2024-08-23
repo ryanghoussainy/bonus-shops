@@ -118,7 +118,7 @@ const DealScreen = ({ session }: { session: Session }) => {
 
     return (
         <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
-            <View style={[styles.dealContainer, { backgroundColor: Colours.dealItem[theme] }]}>
+            <View style={[styles.dealContainer, { backgroundColor: Colours.dealItem[theme], borderColor: Colours.primary[theme] }]}>
                 {/* Logo */}
                 {logoUrl &&
                     <Image
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
         marginVertical: 40,
         marginHorizontal: 30,
         borderRadius: 35,
-        borderColor: Colours.primary,
         borderWidth: 1,
         alignItems: "center",
     },

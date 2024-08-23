@@ -35,7 +35,7 @@ export default function General({ session }: { session: Session }) {
                 <View style={[styles.settingContainer, { backgroundColor: Colours.background[theme] }]}>
                     <Text style={[styles.settingText, { color: Colours.text[theme] }]}>Dark Theme</Text>
                     <Switch
-                        trackColor={{ false: "#767577", true: Colours.primary }}
+                        trackColor={{ false: "#767577", true: Colours.primary[theme] }}
                         thumbColor={theme === "dark" ? Colours.dealItem[theme] : "#f4f3f4"}
                         ios_backgroundColor="#3e3e3e"
                         onValueChange={toggleTheme}
@@ -47,7 +47,7 @@ export default function General({ session }: { session: Session }) {
                 <View style={[styles.settingContainer, { backgroundColor: Colours.background[theme] }]}>
                     <Text style={[styles.settingText, { color: Colours.text[theme] }]}>Enable Notifications</Text>
                     <Switch
-                        trackColor={{ false: "#767577", true: Colours.primary }}
+                        trackColor={{ false: "#767577", true: Colours.primary[theme] }}
                         thumbColor={notificationsEnabled ? Colours.dealItem[theme] : "#f4f3f4"}
                         ios_backgroundColor="#3e3e3e"
                         onValueChange={toggleNotifications}
