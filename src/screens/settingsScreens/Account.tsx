@@ -14,11 +14,17 @@ export default function Account({ session }: { session: Session }) {
     const { theme } = useTheme();
 
     const navigation = useNavigation();
+
+    // Account details
     const [shopName, setShopName] = useState<string>("");
     const [location, setLocation] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [mobileNumber, setMobileNumber] = useState("");
+
+    // Loading for getting user
     const [loading, setLoading] = useState(true);
+
+    // Loading for saving user
     const [loadingSave, setLoadingSave] = useState(false);
 
     // Fetch user from backend

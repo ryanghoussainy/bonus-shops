@@ -18,8 +18,12 @@ export default function Screen4() {
     // Get theme
     const { theme } = useTheme();
 
+    // Date picker visibility
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    // Selected end date
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    
     const navigation = useNavigation<Screen4NavigationProp>();
 
     // Get previous parameters

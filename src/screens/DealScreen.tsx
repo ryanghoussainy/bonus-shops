@@ -1,8 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import { useRoute, useNavigation, RouteProp } from "@react-navigation/native";
-import Colours from '../config/Colours'
-import { getDiscountDescription, getDiscountTimes } from '../components/DiscountDescription';
+import Colours from '../config/Colours';
 import { RootStackParamList } from '../navigation/StackNavigator';
 import Fonts from '../config/Fonts';
 import { Camera, CameraView } from 'expo-camera';
@@ -128,12 +127,6 @@ const DealScreen = ({ session }: { session: Session }) => {
                         resizeMode="cover"
                     />
                 }
-
-                {/* Discount */}
-                <View>{getDiscountDescription(deal)}</View>
-
-                {/* Discount Times */}
-                <View>{getDiscountTimes(deal)}</View>
 
                 {/* QR Code Scanner */}
                 <CameraView

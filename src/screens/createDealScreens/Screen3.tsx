@@ -24,10 +24,16 @@ export default function Screen3() {
     // Get theme
     const { theme } = useTheme();
 
+    // Selected days and time ranges
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const [timeRanges, setTimeRanges] = useState<{ [key: string]: { startHour: string, startMinute: string, endHour: string, endMinute: string } }>({});
+    
+    // Checkbox state for 'Same time every day' for multiple individual days
     const [sameTimeEveryDay, setSameTimeEveryDay] = useState<boolean>(false);
+
+    // Show 'next' button logic
     const [showNext, setShowNext] = useState(false);
+    
     const navigation = useNavigation<Screen3NavigationProp>();
 
     // Get previous parameters

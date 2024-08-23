@@ -115,7 +115,7 @@ const Navigator = ({ session }: { session: Session }) => {
           {() => <Account session={session} />}
         </Stack.Screen>
         <Stack.Screen name="General" options={{ headerShown: false, animation: 'slide_from_right' }}>
-          {() => <General session={session} />}
+          {() => <General />}
         </Stack.Screen>
 
       </Stack.Navigator>

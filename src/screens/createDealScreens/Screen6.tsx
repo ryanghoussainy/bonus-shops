@@ -41,7 +41,10 @@ export default function Screen6({ session }: { session: Session }) {
     const { theme } = useTheme();
 
     const [loading, setLoading] = useState(false);
+
+    // Modal for creating deal
     const [modalVisible, setModalVisible] = useState(false);
+    
     const route = useRoute();
     const navigation = useNavigation<Screen6NavigationProp>();
 

@@ -4,13 +4,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Colours from '../../config/Colours';
 import Fonts from '../../config/Fonts';
-import { Session } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../contexts/ThemeContext';
 
-export default function General({ session }: { session: Session }) {
-    const navigation = useNavigation();
+export default function General() {
+    // Get theme
     const { theme, toggleTheme } = useTheme();
+
+    const navigation = useNavigation();
+
+    // Notification settings
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
 
     const toggleNotifications = () => {
