@@ -158,24 +158,33 @@ export default function HomeScreen({ session }: { session: Session }) {
   };
 
   const renderDeal = ({ item }: { item: ShopDeal_t }) => {
-    const { availableNow, nextAvailable } = getAvailabilityStatus(item);
+    const expired = (item.endDate !== null) && isAfter(new Date(), parseISO(item.endDate));
 
-    let availabilityText = '';
+    let availableNow = false;
+    let nextAvailable: Date | null = null;
+    let availabilityText = 'Expired';
     let availabilityTextColor = Colours.outline[theme];
+    
+    if (!expired) {
+        const { availableNow: _availableNow, nextAvailable: _nextAvailable} = getAvailabilityStatus(item);
+        availableNow = _availableNow;
+        nextAvailable = _nextAvailable;
 
-    if (availableNow) {
-      availabilityText = 'Available Now';
-      availabilityTextColor = Colours.primary[theme];
-    } else {
-      availabilityText = nextAvailable
-        ? `Next available:\n${formatDateTime(nextAvailable)}`
-        : 'Not available';
+        if (availableNow) {
+          availabilityText = 'Available Now';
+          availabilityTextColor = Colours.primary[theme];
+        } else {
+          availabilityText = nextAvailable
+            ? `Next available:\n${formatDateTime(nextAvailable)}`
+            : 'Not available';
+        }
     }
 
     return (
       <TouchableOpacity
         style={[styles.dealCard, { backgroundColor: Colours.dealItem[theme] }]}
         onPress={() => navigation.navigate("Deal", { deal: item })}
+        disabled={expired}
       >
         <View style={styles.logoContainer}>
           {logos[item.id] ? (

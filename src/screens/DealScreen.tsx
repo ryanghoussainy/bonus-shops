@@ -11,6 +11,7 @@ import { checkValidUser } from '../operations/User';
 import { getLogo, getLogoPath } from '../operations/Logo';
 import { Session } from '@supabase/supabase-js';
 import { useTheme } from '../contexts/ThemeContext';
+import { isAfter } from 'date-fns';
 
 type DealScreenRouteProp = RouteProp<RootStackParamList, "Deal">;
 
@@ -74,6 +75,12 @@ const DealScreen = ({ session }: { session: Session }) => {
         const endTime = deal.discountTimes[shortToday + "_end" as keyof typeof deal.discountTimes] as string;
         if (time < startTime || time > endTime) {
             Alert.alert("Outside Deal Time", "This deal is not valid right now.");
+            return;
+        }
+
+        // Check that the deal is not expired
+        if (deal.endDate && isAfter(new Date(), new Date(deal.endDate))) {
+            Alert.alert("Deal Expired", "This deal has expired.");
             return;
         }
 
