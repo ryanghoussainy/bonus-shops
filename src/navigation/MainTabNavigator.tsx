@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import HomeScreen from "../screens/HomeScreen";
 import Colours from "../config/Colours";
 import { Session } from "@supabase/supabase-js";
-import Account from "../screens/Settings";
+import Settings from "../screens/Settings";
 import CreateDealScreen from "../screens/CreateDealScreen";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -54,7 +54,7 @@ export default function MainTabNavigator({ session }: { session: Session }) {
           tabBarActiveTintColor: Colours.primary[theme],
         })}
       >
-        {() => <Account session={session} />}
+        {() => <Settings />}
       </Tab.Screen>
     </Tab.Navigator>
   );

@@ -16,8 +16,12 @@ export default function Screen2() {
     // Get theme
     const { theme } = useTheme();
 
+    // Discount amount
     const [discount, setDiscount] = useState('');
+
+    // Cursor position for discount input to be just before the percentage sign
     const [cursorPos, setCursorPos] = useState(0);
+    
     const navigation = useNavigation<Screen2NavigationProp>();
     
     // Get previous parameters

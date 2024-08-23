@@ -16,7 +16,9 @@ export default function Screen5() {
     // Get theme
     const { theme } = useTheme();
 
+    // Promotion description
     const [description, setDescription] = useState('');
+    
     const navigation = useNavigation<Screen5NavigationProp>();
 
     // Get previous parameters

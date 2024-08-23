@@ -1,6 +1,5 @@
 import { ScrollView, StyleSheet, TouchableOpacity, View, Modal, ActivityIndicator } from 'react-native';
 import { Text } from '@rneui/themed';
-import { Session } from '@supabase/supabase-js';
 import Colours from "../config/Colours";
 import Fonts from '../config/Fonts';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -14,23 +13,15 @@ import { useState } from 'react';
 
 type SettingsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Main">;
 
-export default function Settings({ session }: { session: Session }) {
+export default function Settings() {
     // Get theme
     const { theme } = useTheme();
 
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+
+    // Sign out logic
     const [modalVisible, setModalVisible] = useState(false);
     const [signingOut, setSigningOut] = useState(false);
-
-    const handleAccountPress = () => {
-        // Navigate to Account Page
-        navigation.navigate("Account");
-    };
-
-    const handleGeneralPress = () => {
-        // Navigate to General Page
-        navigation.navigate("General");
-    };
 
     const confirmSignOut = async () => {
         setSigningOut(true); // Show loading state
@@ -51,7 +42,7 @@ export default function Settings({ session }: { session: Session }) {
 
                 <TouchableOpacity
                     style={[styles.option, { backgroundColor: Colours.background[theme] }]}
-                    onPress={handleAccountPress}
+                    onPress={() => navigation.navigate("Account")}
                 >
                     <View style={styles.optionIcon}>
                         <FontAwesome name="user-circle" size={30} color={Colours.primary[theme]} />
@@ -62,7 +53,7 @@ export default function Settings({ session }: { session: Session }) {
 
                 <TouchableOpacity
                     style={[styles.option, { backgroundColor: Colours.background[theme] }]}
-                    onPress={handleGeneralPress}
+                    onPress={() => navigation.navigate("General")}
                 >
                     <View style={styles.optionIcon}>
                         <FontAwesome name="gear" size={30} color={Colours.primary[theme]} />

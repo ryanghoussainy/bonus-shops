@@ -16,9 +16,15 @@ export default function Screen1() {
     // Get theme
     const { theme } = useTheme();
 
+    // Deal type selection
     const [selectedType, setSelectedType] = useState<string | null>(null);
+
+    // Maximum number of points if type is "points"
     const [maxPoints, setMaxPoints] = useState<string | null>(null);
+
+    // Animation for max points input
     const animatedHeight = useRef(new Animated.Value(0)).current; // Animation value for height
+    
     const navigation = useNavigation<Screen1NavigationProp>();
 
     // Get previous parameters
