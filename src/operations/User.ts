@@ -154,13 +154,13 @@ export async function updateUser(
 }
 
 export async function checkValidUser(
-    user_id: string,
+    userID: string,
 ) {
     // Get user
     const { error } = await supabase
         .from('profiles')
         .select('id')
-        .eq('id', user_id)
+        .eq('id', userID)
         .single();
 
     if (error) {

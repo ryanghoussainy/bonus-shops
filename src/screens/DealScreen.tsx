@@ -83,10 +83,10 @@ const DealScreen = ({ session }: { session: Session }) => {
         Alert.alert("Deal Redeemed", "You have successfully redeemed this deal.");
     }, [userID, redeemedDays, userDealID])
 
-    const checkQRCode = async (user_deal_id: string) => {
+    const checkQRCode = async (userDealID: string) => {
         setScanned(true);
-        setUserDealID(user_deal_id);
-        await getUserDeal(user_deal_id, setRedeemedDays, setUserID);
+        setUserDealID(userDealID);
+        await getUserDeal(userDealID, setRedeemedDays, setUserID);
     };
 
     const handleBarCodeScanned = ({ type, data }: { type: string, data: string }) => {
