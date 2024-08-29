@@ -93,10 +93,10 @@ export async function createDeal(
             .insert([
                 {
                     user_id: user.id,
-                    deal_id: dealID,
-                    points: 0,
                     updated_at: new Date(),
-                    redeemed_days: [],
+                    deal_id: dealID,
+                    points: discountType === 0 ? 0 : null,
+                    redeemed_days: discountType === 0 ? [] : null,
                 }
             ]);
 
