@@ -230,13 +230,13 @@ export default function HomeScreen({ session }: { session: Session }) {
         ListEmptyComponent={() => {
           if (loading) {
             return (
-              <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
+              <View style={[styles.container, { marginTop: 250 }]}>
                 <ActivityIndicator size="large" color={Colours.primary[theme]} />
               </View>
             );
           } else {
             return (
-              <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
+              <View style={[styles.container, { marginTop: 250 }]}>
                 <Text style={[styles.text, { color: Colours.text[theme] }]}>No deals found.</Text>
                 <Button title="Refresh" onPress={fetchDeals} color={Colours.primary[theme]} />
               </View>
