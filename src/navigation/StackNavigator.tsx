@@ -86,7 +86,7 @@ const Navigator = ({ session }: { session: Session }) => {
         <Stack.Screen name="Main" options={{ headerShown: false }}>
           {() => <MainTabNavigator key={session.user.id} session={session} />}
         </Stack.Screen>
-        <Stack.Screen name="Deal" options={{ animation: 'fade_from_bottom' }}>
+        <Stack.Screen name="Deal" options={{ headerShown: false, animation: 'fade_from_bottom' }}>
           {() => <DealScreen session={session} />}
         </Stack.Screen>
 
