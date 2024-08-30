@@ -13,8 +13,14 @@ import { Camera, CameraView } from 'expo-camera';
 import { checkValidUser } from '../operations/User';
 import { isAfter } from 'date-fns';
 import { addPoint, getUserDeal } from '../operations/UserDeal';
+import { deleteDeal } from '../operations/Deal';
+import { TouchableWithoutFeedback } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import { ActivityIndicator } from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type DealScreenRouteProp = RouteProp<RootStackParamList, 'Deal'>;
+type DealScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Deal'>;
 
 export default function DealScreen({ session }: { session: Session }) {
     const { theme } = useTheme();
@@ -23,7 +29,11 @@ export default function DealScreen({ session }: { session: Session }) {
 
     // Logo
     const [logoUrl, setLogoUrl] = useState<string | undefined>(undefined);
-    const navigation = useNavigation();
+
+    const navigation = useNavigation<DealScreenNavigationProp>();
+
+    // Loading for deleting deal
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getLogo(deal.logoUrl, setLogoUrl);
@@ -54,6 +64,19 @@ export default function DealScreen({ session }: { session: Session }) {
             .filter(Boolean)
             .join('\n');
     };
+    
+    // Delete Modal
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [deletingModalVisible, setDeletingModalVisible] = useState(false);
+
+    const handleDeleteDeal = async () => {
+        setDeleteModalVisible(false);
+        setDeletingModalVisible(true);
+        await deleteDeal(deal.id, setLoading);
+        setTimeout(() => {
+            navigation.navigate("Main", { session });
+        }, 500); // 0.5 second delay before navigating
+    }
 
     // Camera Permissions and QR Code Scanning
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -149,6 +172,14 @@ export default function DealScreen({ session }: { session: Session }) {
                 <Ionicons name="arrow-back-outline" size={28} color={Colours.text[theme]} />
             </TouchableOpacity>
 
+            {/* Delete button */}
+            <TouchableOpacity
+                style={[styles.backButton, { backgroundColor: "red", right: 5 }]}
+                onPress={() => setDeleteModalVisible(true)}
+            >
+                <Ionicons name="trash-outline" size={28} color={"white"} />
+            </TouchableOpacity>
+
             <View style={styles.headerContainer}>
                 <Image source={{ uri: logoUrl }} style={styles.logo} />
                 <Text style={[styles.shopName, { color: Colours.text[theme] }]}>{deal.name}</Text>
@@ -166,6 +197,7 @@ export default function DealScreen({ session }: { session: Session }) {
                 <Text style={[styles.dealTimes, { color: Colours.text[theme] }]}>{formatDiscountTimes(deal.discountTimes)}</Text>
             </View>
 
+            {/* Modal for QR Code Scanner */}
             <Modal
                 animationType="slide"
                 transparent={false}
@@ -192,6 +224,71 @@ export default function DealScreen({ session }: { session: Session }) {
                     </TouchableOpacity>
                 </View>
             </Modal>
+
+            {/* Modal for Delete Confirmation */}
+            <Modal
+                visible={deleteModalVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setDeleteModalVisible(false)}
+            >
+                <TouchableWithoutFeedback onPress={() => setDeleteModalVisible(false)}>
+                    <View style={styles.modalContainer}>
+                        <TouchableWithoutFeedback onPress={() => {}}>
+                            <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
+                                {/* Cancel button (X) in the top right corner */}
+                                <TouchableOpacity
+                                    style={styles.closeButton}
+                                    onPress={() => setDeleteModalVisible(false)}
+                                >
+                                    <FontAwesome name="times" size={24} color={Colours.text[theme]} />
+                                </TouchableOpacity>
+
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Are you sure you want to delete this deal?</Text>
+
+                                <View style={styles.modalButtons}>
+                                    <TouchableOpacity
+                                        style={[styles.modalButton, { backgroundColor: Colours.dealItem[theme] }]}
+                                        onPress={() => setDeleteModalVisible(false)}
+                                    >
+                                        <Text style={styles.modalButtonText}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[styles.modalButton, { backgroundColor: "red" }]}
+                                        onPress={handleDeleteDeal}
+                                    >
+                                        <Text style={styles.modalButtonText}>Delete</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
+
+            {/* Modal for deleting */}
+            <Modal
+                visible={deletingModalVisible}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setDeletingModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
+                        {loading ? (
+                            <>
+                                <ActivityIndicator size="large" color={Colours.primary[theme]} />
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Deleting promotion...</Text>
+                            </>
+                        ) : (
+                            <>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Promotion deleted</Text>
+                                <Text style={[styles.checkmark, { color: Colours.primary[theme] }]}>✓</Text>
+                            </>
+                        )}
+                    </View>
+                </View>
+            </Modal>
         </ScrollView>
     );
 }
@@ -209,11 +306,10 @@ const styles = StyleSheet.create({
     backButton: {
         position: 'absolute',
         top: 60,
-        left: 10,
         zIndex: 1,
         borderRadius: 20,
-        width: 35,
-        height: 35,
+        width: 45,
+        height: 45,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -268,6 +364,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     scanButton: {
         width: 200,
@@ -286,5 +383,44 @@ const styles = StyleSheet.create({
         zIndex: 1,
         borderRadius: 20,
         padding: 10,
+    },
+    modalButton: {
+        flex: 1,
+        padding: 10,
+        margin: 5,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    modalButtonText: {
+        fontSize: 18,
+        color: 'white',
+        fontFamily: Fonts.condensed,
+    },
+    closeButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    modalContent: {
+        width: '80%',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        fontFamily: Fonts.condensed,
+        textAlign: 'center',
+    },
+    checkmark: {
+        fontSize: 50,
+        marginTop: 10,
     },
 });
