@@ -48,7 +48,7 @@ export default function CreateDealScreen({ session }: { session: Session }) {
 
     return (
         <LinearGradient colors={[Colours.background[theme], Colours.dealItem[theme]]} style={styles.container}>
-            <Text style={[styles.header, { color: Colours.text[theme] }]}>Create a New Deal</Text>
+            <Text style={[styles.header, { color: Colours.text[theme] }]}>New Promotion</Text>
 
             <TouchableOpacity style={styles.button} onPress={handleOpenModal}>
                 <LinearGradient colors={[Colours.primary[theme], Colours.lightprimary[theme]]} style={styles.buttonBackground}>

@@ -174,11 +174,11 @@ export default function Screen6({ session }: { session: Session }) {
                         {loading ? (
                             <>
                                 <ActivityIndicator size="large" color={Colours.primary[theme]} />
-                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Creating deal...</Text>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Creating Promotion...</Text>
                             </>
                         ) : (
                             <>
-                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Deal created!</Text>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Promotion created!</Text>
                                 <Text style={[styles.checkmark, { color: Colours.primary[theme] }]}>✓</Text>
                             </>
                         )}

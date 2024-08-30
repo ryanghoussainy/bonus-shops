@@ -220,7 +220,7 @@ export default function HomeScreen({ session }: { session: Session }) {
       colors={[Colours.background[theme], Colours.dealItem[theme]]}
     >
       <View style={[styles.headerContainer, { backgroundColor: Colours.background[theme] }]}>
-        <Text style={[styles.header, { color: Colours.text[theme] }]}>Your Deals</Text>
+        <Text style={[styles.header, { color: Colours.text[theme] }]}>Your Promotions</Text>
       </View>
       <FlatList
         data={deals}
