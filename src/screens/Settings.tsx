@@ -10,6 +10,7 @@ import { RootStackParamList } from '../navigation/StackNavigator';
 import { useTheme } from '../contexts/ThemeContext';
 import { supabase } from '../lib/supabase';
 import { useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 
 type SettingsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Main">;
 
@@ -76,40 +77,43 @@ export default function Settings() {
 
             {/* Sign Out Confirmation Modal */}
             <Modal
-                animationType="fade"
-                transparent={true}
                 visible={modalVisible}
+                transparent
+                animationType="fade"
                 onRequestClose={() => setModalVisible(false)}
             >
-                <View style={styles.modalOverlay}>
-                    <View style={[styles.modalView, { backgroundColor: Colours.background[theme] }]}>
-                        {!signingOut ? (
-                            <>
-                                <Text style={[styles.modalTitle, { color: Colours.text[theme] }]}>Confirm Sign Out</Text>
+                <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                    <View style={styles.modalContainer}>
+                        <TouchableWithoutFeedback onPress={() => {}}>
+                            <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
+                                {/* Cancel button (X) in the top right corner */}
+                                <TouchableOpacity
+                                    style={styles.closeButton}
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <FontAwesome name="times" size={24} color={Colours.text[theme]} />
+                                </TouchableOpacity>
+
                                 <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Are you sure you want to sign out?</Text>
+
                                 <View style={styles.modalButtons}>
                                     <TouchableOpacity
-                                        style={[styles.button, { backgroundColor: Colours.dealItem[theme] }]}
+                                        style={[styles.modalButton, { backgroundColor: Colours.dealItem[theme] }]}
                                         onPress={() => setModalVisible(false)}
                                     >
-                                        <Text style={styles.buttonText}>Cancel</Text>
+                                        <Text style={styles.modalButtonText}>Cancel</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
-                                        style={[styles.button, styles.buttonSignOut]}
+                                        style={[styles.modalButton, { backgroundColor: "red" }]}
                                         onPress={confirmSignOut}
                                     >
-                                        <Text style={styles.buttonText}>Sign Out</Text>
+                                        <Text style={styles.modalButtonText}>Sign Out</Text>
                                     </TouchableOpacity>
                                 </View>
-                            </>
-                        ) : (
-                            <View style={styles.loadingContainer}>
-                                <ActivityIndicator size="large" color={Colours.primary[theme]} />
-                                <Text style={[styles.modalText, { color: Colours.text[theme], marginTop: 20 }]}>Signing out...</Text>
                             </View>
-                        )}
+                        </TouchableWithoutFeedback>
                     </View>
-                </View>
+                </TouchableWithoutFeedback>
             </Modal>
         </LinearGradient>
     );
@@ -149,57 +153,45 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontFamily: Fonts.condensed,
     },
-    modalOverlay: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalView: {
-        width: '80%',
-        borderRadius: 10,
-        padding: 20,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    modalTitle: {
-        fontSize: 24,
-        fontFamily: Fonts.condensed,
-        marginBottom: 20,
-    },
-    modalText: {
-        fontSize: 16,
-        fontFamily: Fonts.condensed,
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    modalButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-    },
-    button: {
-        padding: 10,
-        borderRadius: 10,
-        width: '45%',
-        alignItems: 'center',
-    },
-    buttonSignOut: {
-        backgroundColor: 'red',
-    },
-    buttonText: {
-        fontSize: 16,
-        color: 'white',
-        fontFamily: Fonts.condensed,
-    },
-    loadingContainer: {
-        alignItems: 'center',
-    },
+    modalButton: {
+      flex: 1,
+      padding: 10,
+      margin: 5,
+      borderRadius: 5,
+      alignItems: 'center',
+  },
+  modalButtonText: {
+      fontSize: 18,
+      color: 'white',
+      fontFamily: Fonts.condensed,
+  },
+  closeButton: {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+  },
+  modalButtons: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+  },
+  modalContent: {
+      width: '80%',
+      padding: 20,
+      borderRadius: 10,
+      alignItems: 'center',
+  },
+  modalText: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      fontFamily: Fonts.condensed,
+      textAlign: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+},
 });
