@@ -108,3 +108,21 @@ export async function createDeal(
 
     setLoading(false);
 }
+
+export async function deleteDeal(
+    dealID: string,
+    setLoading: (loading: boolean) => void,
+) {
+    setLoading(true);
+    // Delete deal
+    const { error: dealError } = await supabase
+        .from('deals')
+        .delete()
+        .eq('id', dealID);
+
+    if (dealError) {
+        Alert.alert(dealError.message);
+    }
+
+    setLoading(false);
+}
