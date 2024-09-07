@@ -13,11 +13,12 @@ import { Camera, CameraView } from 'expo-camera';
 import { checkValidUser } from '../operations/User';
 import { isAfter } from 'date-fns';
 import { addPoint, getUserDeal } from '../operations/UserDeal';
-import { deleteDeal } from '../operations/Deal';
+import { deleteDeal, disableDeal, enableDeal } from '../operations/Deal';
 import { TouchableWithoutFeedback } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { ActivityIndicator } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Divider, IconButton, Menu } from 'react-native-paper';
 
 type DealScreenRouteProp = RouteProp<RootStackParamList, 'Deal'>;
 type DealScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Deal'>;
@@ -32,7 +33,7 @@ export default function DealScreen({ session }: { session: Session }) {
 
     const navigation = useNavigation<DealScreenNavigationProp>();
 
-    // Loading for deleting deal
+    // Loading for deleting/disabling deal
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -72,7 +73,40 @@ export default function DealScreen({ session }: { session: Session }) {
     const handleDeleteDeal = async () => {
         setDeleteModalVisible(false);
         setDeletingModalVisible(true);
+        
+        // Delete/disable deal
         await deleteDeal(deal.id, setLoading);
+        
+        setTimeout(() => {
+            navigation.navigate("Main", { session });
+        }, 500); // 0.5 second delay before navigating
+    }
+
+    // Disable Modal
+    const [disableModalVisible, setDisableModalVisible] = useState(false);
+    const [disablingModalVisible, setDisablingModalVisible] = useState(false);
+
+    const handleDisableDeal = async () => {
+        setDisableModalVisible(false);
+        setDisablingModalVisible(true);
+        
+        // Disable deal
+        await disableDeal(deal.id, setLoading);
+        
+        setTimeout(() => {
+            navigation.navigate("Main", { session });
+        }, 500); // 0.5 second delay before navigating
+    }
+    
+    // Enable Deal
+    const [enablingModalVisible, setEnablingModalVisible] = useState(false);
+
+    const handleEnableDeal = async () => {
+        setEnablingModalVisible(true);
+        
+        // Enable deal
+        await enableDeal(deal.id, setLoading);
+        
         setTimeout(() => {
             navigation.navigate("Main", { session });
         }, 500); // 0.5 second delay before navigating
@@ -162,6 +196,60 @@ export default function DealScreen({ session }: { session: Session }) {
         return <Text>No access to camera</Text>;
     }
 
+    // Three Dots Menu
+    const ThreeDotsMenu = () => {
+        const [visible, setVisible] = useState(false);
+
+        const openMenu = () => setVisible(true);
+        const closeMenu = () => setVisible(false);
+
+        return (
+            <View style={{
+                position: "absolute",
+                top: 60,
+                right: 5,
+                width: 45,
+                height: 45,
+                alignItems: "center",
+                justifyContent: "center",
+            }}>
+                <Menu
+                    visible={visible}
+                    onDismiss={closeMenu}
+                    anchor={
+                        <IconButton
+                            icon={() => (
+                                <Ionicons name="ellipsis-vertical" size={24} color={Colours.text[theme]} />
+                            )}
+                            onPress={openMenu}
+                        />
+                    }
+                    contentStyle={{
+                        backgroundColor: Colours.background[theme],
+                        padding: 5,
+                        borderRadius: 15,
+                        borderColor: Colours.dealItem[theme],
+                        borderWidth: 1,
+                    }}
+                >
+                    <Menu.Item
+                        onPress={() => {
+                            if (!deal.disabled) {
+                                setDisableModalVisible(true);
+                            } else {
+                                handleEnableDeal();
+                            }
+                        }}
+                        title={deal.disabled ? "Enable" : "Disable"}
+                        titleStyle={{ color: Colours.text[theme] }}
+                    />
+                    <Divider />
+                    <Menu.Item onPress={() => setDeleteModalVisible(true)} title="Delete" titleStyle={{ color: Colours.text[theme] }} />
+                </Menu>
+            </View>
+        )
+    }
+
     return (
         <ScrollView style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             {/* Back Button */}
@@ -172,13 +260,8 @@ export default function DealScreen({ session }: { session: Session }) {
                 <Ionicons name="arrow-back-outline" size={28} color={Colours.text[theme]} />
             </TouchableOpacity>
 
-            {/* Delete button */}
-            <TouchableOpacity
-                style={[styles.backButton, { backgroundColor: "red", right: 5 }]}
-                onPress={() => setDeleteModalVisible(true)}
-            >
-                <Ionicons name="trash-outline" size={28} color={"white"} />
-            </TouchableOpacity>
+            {/* Three Dots Menu */}
+            <ThreeDotsMenu />
 
             <View style={styles.headerContainer}>
                 <Image source={{ uri: logoUrl }} style={styles.logo} />
@@ -244,7 +327,9 @@ export default function DealScreen({ session }: { session: Session }) {
                                     <FontAwesome name="times" size={24} color={Colours.text[theme]} />
                                 </TouchableOpacity>
 
-                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Are you sure you want to delete this deal?</Text>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    Are you sure you want to delete this promotion?
+                                </Text>
 
                                 <View style={styles.modalButtons}>
                                     <TouchableOpacity
@@ -266,7 +351,50 @@ export default function DealScreen({ session }: { session: Session }) {
                 </TouchableWithoutFeedback>
             </Modal>
 
-            {/* Modal for deleting */}
+            {/* Modal for Disable Confirmation */}
+            <Modal
+                visible={disableModalVisible}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setDisableModalVisible(false)}
+            >
+                <TouchableWithoutFeedback onPress={() => setDisableModalVisible(false)}>
+                    <View style={styles.modalContainer}>
+                        <TouchableWithoutFeedback onPress={() => {}}>
+                            <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
+                                {/* Cancel button (X) in the top right corner */}
+                                <TouchableOpacity
+                                    style={styles.closeButton}
+                                    onPress={() => setDisableModalVisible(false)}
+                                >
+                                    <FontAwesome name="times" size={24} color={Colours.text[theme]} />
+                                </TouchableOpacity>
+
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    Are you sure you want to disable this promotion?
+                                </Text>
+
+                                <View style={styles.modalButtons}>
+                                    <TouchableOpacity
+                                        style={[styles.modalButton, { backgroundColor: Colours.dealItem[theme] }]}
+                                        onPress={() => setDisableModalVisible(false)}
+                                    >
+                                        <Text style={styles.modalButtonText}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[styles.modalButton, { backgroundColor: Colours.primary[theme] }]}
+                                        onPress={handleDisableDeal}
+                                    >
+                                        <Text style={styles.modalButtonText}>Disable</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
+
+            {/* Modal for deleting modal */}
             <Modal
                 visible={deletingModalVisible}
                 transparent={true}
@@ -278,11 +406,71 @@ export default function DealScreen({ session }: { session: Session }) {
                         {loading ? (
                             <>
                                 <ActivityIndicator size="large" color={Colours.primary[theme]} />
-                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Deleting promotion...</Text>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    Deleting promotion...
+                                </Text>
                             </>
                         ) : (
                             <>
-                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Promotion deleted</Text>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    Promotion deleted successfully!
+                                </Text>
+                                <Text style={[styles.checkmark, { color: Colours.primary[theme] }]}>✓</Text>
+                            </>
+                        )}
+                    </View>
+                </View>
+            </Modal>
+            
+            {/* Modal for disabling modal */}
+            <Modal
+                visible={disablingModalVisible}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setDisablingModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
+                        {loading ? (
+                            <>
+                                <ActivityIndicator size="large" color={Colours.primary[theme]} />
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    Disabling promotion...
+                                </Text>
+                            </>
+                        ) : (
+                            <>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    Promotion disabled successfully!
+                                </Text>
+                                <Text style={[styles.checkmark, { color: Colours.primary[theme] }]}>✓</Text>
+                            </>
+                        )}
+                    </View>
+                </View>
+            </Modal>
+
+            {/* Modal for enabling modal */}
+            <Modal
+                visible={enablingModalVisible}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setEnablingModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
+                        {loading ? (
+                            <>
+                                <ActivityIndicator size="large" color={Colours.primary[theme]} />
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    Enabling promotion...
+                                </Text>
+                            </>
+                        ) : (
+                            <>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    Promotion Enabled successfully!
+                                </Text>
                                 <Text style={[styles.checkmark, { color: Colours.primary[theme] }]}>✓</Text>
                             </>
                         )}

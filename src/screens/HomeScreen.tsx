@@ -28,18 +28,24 @@ export default function HomeScreen({ session }: { session: Session }) {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const [loading, setLoading] = useState<boolean>(true);
-  
+
   // Store deals
-  const [deals, setDeals] = useState<ShopDeal_t[]>([]);
-  
+  const [enabledDeals, setEnabledDeals] = useState<ShopDeal_t[]>([]);
+  const [disabledDeals, setDisabledDeals] = useState<ShopDeal_t[]>([]);
+
   // Store logos using deal ID as key
   const [logos, setLogos] = useState<{ [key: string]: string }>({});
+
+  // Selected tab
+  const [selectedTab, setSelectedTab] = useState<"Active" | "Disabled">("Active");
 
   const fetchDeals = async () => {
     try {
       setLoading(true);
-      const fetchedDeals = await getShopDeals(session, setDeals);
-      
+      const fetchedDeals = await getShopDeals(session);
+      setEnabledDeals(fetchedDeals?.filter((deal) => !deal.disabled) || []);
+      setDisabledDeals(fetchedDeals?.filter((deal) => deal.disabled) || []);
+
       // Fetch logos
       const logoUrls = await Promise.all(
         fetchedDeals?.map(async (deal) => {
@@ -117,20 +123,20 @@ export default function HomeScreen({ session }: { session: Session }) {
 
       const checkDate = addDays(now, i);
       const checkDay = format(checkDate, 'EEE', { locale: enGB }).toLowerCase();
-      
+
       const checkStartTimeString = deal.discountTimes[`${checkDay}_start` as keyof typeof deal.discountTimes];
       const checkEndTimeString = deal.discountTimes[`${checkDay}_end` as keyof typeof deal.discountTimes];
-      
+
       if (checkStartTimeString && checkEndTimeString) {
         const checkStartTime = parseISO(checkStartTimeString);
-        
+
         const nextAvailableDate = set(checkDate, {
           hours: checkStartTime.getHours(),
           minutes: checkStartTime.getMinutes(),
           seconds: 0,
           milliseconds: 0,
         });
-        
+
         // Get end time of deal
         const checkEndTime = parseISO(checkEndTimeString);
         const checkEnd = set(checkDate, {
@@ -143,7 +149,7 @@ export default function HomeScreen({ session }: { session: Session }) {
         if (isAfter(now, checkEnd)) {
           continue;
         }
-        
+
         nextAvailable = nextAvailableDate;
         break;
       }
@@ -164,20 +170,20 @@ export default function HomeScreen({ session }: { session: Session }) {
     let nextAvailable: Date | null = null;
     let availabilityText = 'Expired';
     let availabilityTextColor = Colours.outline[theme];
-    
-    if (!expired) {
-        const { availableNow: _availableNow, nextAvailable: _nextAvailable} = getAvailabilityStatus(item);
-        availableNow = _availableNow;
-        nextAvailable = _nextAvailable;
 
-        if (availableNow) {
-          availabilityText = 'Available Now';
-          availabilityTextColor = Colours.primary[theme];
-        } else {
-          availabilityText = nextAvailable
-            ? `Next available:\n${formatDateTime(nextAvailable)}`
-            : 'Not available';
-        }
+    if (!expired) {
+      const { availableNow: _availableNow, nextAvailable: _nextAvailable } = getAvailabilityStatus(item);
+      availableNow = _availableNow;
+      nextAvailable = _nextAvailable;
+
+      if (availableNow) {
+        availabilityText = 'Available Now';
+        availabilityTextColor = Colours.primary[theme];
+      } else {
+        availabilityText = nextAvailable
+          ? `Next available:\n${formatDateTime(nextAvailable)}`
+          : 'Not available';
+      }
     }
 
     return (
@@ -214,36 +220,88 @@ export default function HomeScreen({ session }: { session: Session }) {
     );
   };
 
+  const filteredDeals = selectedTab === 'Active' ? enabledDeals : disabledDeals;
+
   return (
     <LinearGradient
       style={{ flex: 1 }}
       colors={[Colours.background[theme], Colours.dealItem[theme]]}
     >
+      {/* Header */}
       <View style={[styles.headerContainer, { backgroundColor: Colours.background[theme] }]}>
         <Text style={[styles.header, { color: Colours.text[theme] }]}>Your Promotions</Text>
       </View>
-      <FlatList
-        data={deals}
-        renderItem={renderDeal}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-        ListEmptyComponent={() => {
-          if (loading) {
-            return (
-              <View style={[styles.container, { marginTop: 250 }]}>
-                <ActivityIndicator size="large" color={Colours.primary[theme]} />
-              </View>
-            );
-          } else {
-            return (
-              <View style={[styles.container, { marginTop: 250 }]}>
-                <Text style={[styles.text, { color: Colours.text[theme] }]}>No deals found.</Text>
-                <Button title="Refresh" onPress={fetchDeals} color={Colours.primary[theme]} />
-              </View>
-            );
+
+      {/* Loading */}
+      {loading && (
+        <View style={[styles.container]}>
+          <ActivityIndicator size="large" color={Colours.primary[theme]} />
+        </View>
+      )}
+
+      {!loading && (
+        <FlatList
+          data={filteredDeals}
+          renderItem={renderDeal}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.listContainer}
+          ListHeaderComponent={
+            <View style={styles.tabContainer}>
+              {/* Active and Disabled tabs */}
+              <TouchableOpacity
+                style={[
+                  styles.tabButton,
+                  { borderColor: Colours.dealItem[theme] },
+                  { backgroundColor: Colours.dealItem[theme] },
+                  selectedTab === 'Active' && { backgroundColor: Colours.primary[theme] + '40' },
+                ]}
+                onPress={() => setSelectedTab('Active')}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    { color: Colours.text[theme] },
+                    selectedTab === 'Active' && { color: Colours.primary[theme] },
+                  ]}
+                >
+                  Active
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.tabButton,
+                  { borderColor: Colours.dealItem[theme] },
+                  { backgroundColor: Colours.dealItem[theme] },
+                  selectedTab === 'Disabled' && { backgroundColor: Colours.primary[theme] + '40' },
+                ]}
+                onPress={() => setSelectedTab('Disabled')}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    { color: Colours.text[theme] },
+                    selectedTab === 'Disabled' && { color: Colours.primary[theme] },
+                  ]}
+                >
+                  Disabled
+                </Text>
+              </TouchableOpacity>
+            </View>
           }
-        }}
-      />
+          ListEmptyComponent={
+            <View style={[styles.container, { marginTop: 250 }]}>
+              <Text style={[styles.text, { color: Colours.text[theme] }]}>
+                No {selectedTab.toLowerCase()} deals found.
+              </Text>
+              <Button
+                title="Refresh"
+                onPress={fetchDeals}
+                color={Colours.primary[theme]}
+              />
+            </View>
+          }
+        />
+      )}
     </LinearGradient>
   );
 }
@@ -321,5 +379,28 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '500',
     fontFamily: Fonts.condensed,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    marginHorizontal: 40,
+    marginVertical: 15,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  tabButton: {
+    flex: 1,
+    marginHorizontal: 5,
+    paddingVertical: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+  },
+  tabText: {
+    fontSize: 16,
+    fontFamily: Fonts.condensed,
+  },
+  tabTextActive: {
+    fontWeight: 'bold',
   },
 });

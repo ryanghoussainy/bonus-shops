@@ -15,6 +15,7 @@ export type ShopDeal_t = {
     discount: number;
     endDate: string | null;
     maxPoints: number | null;
+    disabled: boolean;
     discountTimes: {
         mon_start: string;
         mon_end: string;
@@ -33,7 +34,7 @@ export type ShopDeal_t = {
     };
 }
 
-export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_t[]) => void) {
+export async function getShopDeals(session: Session, setDeals?: (deals: ShopDeal_t[]) => void) {
     try {
         // Get user id
         const shopUserID = session.user?.id;
@@ -43,7 +44,7 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
         const deals: ShopDeal_t[] = [];
         const { data: shopDeals, error } = await supabase
             .from('deals')
-            .select('description, type, percentage, end_date, max_pts, id, deal_times_id')
+            .select('description, type, percentage, end_date, max_pts, id, deal_times_id, disabled')
             .eq('shop_user_id', shopUserID);
 
         if (error) {
@@ -94,13 +95,14 @@ export async function getShopDeals(session: Session, setDeals: (deals: ShopDeal_
                     discount: deal.percentage,
                     endDate: deal.end_date,
                     maxPoints: deal.max_pts,
+                    disabled: deal.disabled,
                     discountTimes: times[0],
                 });
             }
         }
 
         if (deals) {
-            setDeals(deals);
+            if (setDeals) setDeals(deals);
             return deals;
         }
     } catch (error) {
