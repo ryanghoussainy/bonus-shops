@@ -126,3 +126,39 @@ export async function deleteDeal(
 
     setLoading(false);
 }
+
+export async function disableDeal(
+    dealID: string,
+    setLoading: (loading: boolean) => void,
+) {
+    setLoading(true);
+    // Disable deal
+    const { error: dealError } = await supabase
+        .from('deals')
+        .update({ disabled: true })
+        .eq('id', dealID);
+
+    if (dealError) {
+        Alert.alert(dealError.message);
+    }
+
+    setLoading(false);
+}
+
+export async function enableDeal(
+    dealID: string,
+    setLoading: (loading: boolean) => void,
+) {
+    setLoading(true);
+    // Enable deal
+    const { error: dealError } = await supabase
+        .from('deals')
+        .update({ disabled: false })
+        .eq('id', dealID);
+
+    if (dealError) {
+        Alert.alert(dealError.message);
+    }
+
+    setLoading(false);
+}

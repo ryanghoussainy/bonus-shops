@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar'
 import Colours from './src/config/Colours'
 import Navigator from './src/navigation/StackNavigator'
 import { ThemeProvider, useTheme } from './src/contexts/ThemeContext'
+import { PaperProvider } from 'react-native-paper'
 
 export default function App() {
   // Get theme
@@ -25,11 +26,13 @@ export default function App() {
   }, [])
 
   return (
-    <ThemeProvider session={session}>
-      <View style={{ flex: 1 }}>
-        <StatusBar style={theme === "dark" ? "light" : "dark"} backgroundColor={Colours.background[theme]} />
-        {session && session.user ? <Navigator session={session} /> : <Auth />}
-      </View>
-    </ThemeProvider>
+    <PaperProvider>
+      <ThemeProvider session={session}>
+        <View style={{ flex: 1 }}>
+          <StatusBar style={theme === "dark" ? "light" : "dark"} backgroundColor={Colours.background[theme]} />
+          {session && session.user ? <Navigator session={session} /> : <Auth />}
+        </View>
+      </ThemeProvider>
+    </PaperProvider>
   )
 }
