@@ -124,88 +124,88 @@ export default function DealScreen({ session }: { session: Session }) {
     }
 
     // Camera Permissions and QR Code Scanning
-    const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-    const [scanned, setScanned] = useState(false);
-    const [redeemedDays, setRedeemedDays] = useState<string[]>([]);
-    const [userID, setUserID] = useState<string | null>(null);
-    const [userDealID, setUserDealID] = useState<string | null>(null);
-    const [modalVisible, setModalVisible] = useState(false);
+    // const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+    // const [scanned, setScanned] = useState(false);
+    // const [redeemedDays, setRedeemedDays] = useState<string[]>([]);
+    // const [userID, setUserID] = useState<string | null>(null);
+    // const [userDealID, setUserDealID] = useState<string | null>(null);
+    // const [modalVisible, setModalVisible] = useState(false);
 
-    useEffect(() => {
-        const requestCameraPermission = async () => {
-            const { status } = await Camera.requestCameraPermissionsAsync();
-            setHasPermission(status === 'granted');
-            if (status !== 'granted') {
-                Alert.alert('Permission Denied', 'Camera permission is required to scan the QR code.');
-            }
-        };
-        requestCameraPermission();
-    }, []);
+    // useEffect(() => {
+    //     const requestCameraPermission = async () => {
+    //         const { status } = await Camera.requestCameraPermissionsAsync();
+    //         setHasPermission(status === 'granted');
+    //         if (status !== 'granted') {
+    //             Alert.alert('Permission Denied', 'Camera permission is required to scan the QR code.');
+    //         }
+    //     };
+    //     requestCameraPermission();
+    // }, []);
 
-    useEffect(() => {
-        if (userID === null || userDealID === null) return;
+    // useEffect(() => {
+    //     if (userID === null || userDealID === null) return;
 
-        // Check if the user is valid
-        if (!checkValidUser(userID)) {
-            Alert.alert('Invalid User', 'You are not a valid user for this deal.');
-            return;
-        }
+    //     // Check if the user is valid
+    //     if (!checkValidUser(userID)) {
+    //         Alert.alert('Invalid User', 'You are not a valid user for this deal.');
+    //         return;
+    //     }
 
-        // Check if already redeemed today
-        if (redeemedDays.includes(new Date().toISOString().split('T')[0])) {
-            Alert.alert('Already Redeemed', 'You have already redeemed this deal today.');
-            return;
-        }
+    //     // Check if already redeemed today
+    //     if (redeemedDays.includes(new Date().toISOString().split('T')[0])) {
+    //         Alert.alert('Already Redeemed', 'You have already redeemed this deal today.');
+    //         return;
+    //     }
 
-        // Check if the day of the week is valid in london time
-        let shortToday = new Date().toLocaleString('en-GB', { timeZone: 'Europe/London', weekday: 'short' }).toLowerCase();
-        if (!deal.discountTimes[`${shortToday}_start` as keyof typeof deal.discountTimes] ||
-            !deal.discountTimes[`${shortToday}_end` as keyof typeof deal.discountTimes]
-        ) {
-            Alert.alert('Outside Deal Time', 'This deal is not valid today.');
-            return;
-        }
+    //     // Check if the day of the week is valid in london time
+    //     let shortToday = new Date().toLocaleString('en-GB', { timeZone: 'Europe/London', weekday: 'short' }).toLowerCase();
+    //     if (!deal.discountTimes[`${shortToday}_start` as keyof typeof deal.discountTimes] ||
+    //         !deal.discountTimes[`${shortToday}_end` as keyof typeof deal.discountTimes]
+    //     ) {
+    //         Alert.alert('Outside Deal Time', 'This deal is not valid today.');
+    //         return;
+    //     }
 
-        // Check if time is within deal time
-        const time = new Date().toISOString().split('T')[1];
-        const startTime = deal.discountTimes[`${shortToday}_start` as keyof typeof deal.discountTimes];
-        const endTime = deal.discountTimes[`${shortToday}_end` as keyof typeof deal.discountTimes];
-        if (time < startTime || time > endTime) {
-            Alert.alert('Outside Deal Time', 'This deal is not valid right now.');
-            return;
-        }
+    //     // Check if time is within deal time
+    //     const time = new Date().toISOString().split('T')[1];
+    //     const startTime = deal.discountTimes[`${shortToday}_start` as keyof typeof deal.discountTimes];
+    //     const endTime = deal.discountTimes[`${shortToday}_end` as keyof typeof deal.discountTimes];
+    //     if (time < startTime || time > endTime) {
+    //         Alert.alert('Outside Deal Time', 'This deal is not valid right now.');
+    //         return;
+    //     }
 
-        // Check that the deal is not expired
-        if (deal.endDate && isAfter(new Date(), new Date(deal.endDate))) {
-            Alert.alert('Deal Expired', 'This deal has expired.');
-            return;
-        }
+    //     // Check that the deal is not expired
+    //     if (deal.endDate && isAfter(new Date(), new Date(deal.endDate))) {
+    //         Alert.alert('Deal Expired', 'This deal has expired.');
+    //         return;
+    //     }
 
-        // Add 1 point
-        addPoint(userDealID);
+    //     // Add 1 point
+    //     addPoint(userDealID);
 
-        Alert.alert('Deal Redeemed', 'You have successfully redeemed this deal.');
-    }, [userID, redeemedDays, userDealID]);
+    //     Alert.alert('Deal Redeemed', 'You have successfully redeemed this deal.');
+    // }, [userID, redeemedDays, userDealID]);
 
-    const checkQRCode = async (userDealID: string) => {
-        setScanned(true);
-        setUserDealID(userDealID);
-        await getUserDeal(userDealID, setRedeemedDays, setUserID);
-    };
+    // const checkQRCode = async (userDealID: string) => {
+    //     setScanned(true);
+    //     setUserDealID(userDealID);
+    //     await getUserDeal(userDealID, setRedeemedDays, setUserID);
+    // };
 
-    const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
-        if (!scanned) {
-            checkQRCode(data);
-        }
-    };
+    // const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
+    //     if (!scanned) {
+    //         checkQRCode(data);
+    //     }
+    // };
 
-    // Check camera permissions
-    if (hasPermission === null) {
-        return <Text>Requesting for camera permission</Text>;
-    }
-    if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
-    }
+    // // Check camera permissions
+    // if (hasPermission === null) {
+    //     return <Text>Requesting for camera permission</Text>;
+    // }
+    // if (hasPermission === false) {
+    //     return <Text>No access to camera</Text>;
+    // }
 
     // Three Dots Menu
     const ThreeDotsMenu = () => {
@@ -296,9 +296,9 @@ export default function DealScreen({ session }: { session: Session }) {
                 <Text style={[styles.shopLocation, { color: Colours.text[theme] }]}>{deal.location}</Text>
             </View>
 
-            <View style={styles.qrContainer}>
+            {/* <View style={styles.qrContainer}>
                 <Button buttonStyle={styles.scanButton} onPress={() => setModalVisible(true)}>Scan QR Code</Button>
-            </View>
+            </View> */}
 
             <View style={styles.dealInfoContainer}>
                 <Text style={[styles.sectionTitle, { color: Colours.primary[theme] }]}>Description</Text>
@@ -309,7 +309,7 @@ export default function DealScreen({ session }: { session: Session }) {
             </View>
 
             {/* Modal for QR Code Scanner */}
-            <Modal
+            {/* <Modal
                 animationType="slide"
                 transparent={false}
                 visible={modalVisible}
@@ -334,7 +334,7 @@ export default function DealScreen({ session }: { session: Session }) {
                         <Ionicons name="close" size={28} color={Colours.text[theme]} />
                     </TouchableOpacity>
                 </View>
-            </Modal>
+            </Modal> */}
 
             {/* Modal for Delete Confirmation */}
             <Modal
