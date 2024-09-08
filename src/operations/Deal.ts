@@ -127,6 +127,78 @@ export async function deleteDeal(
     setLoading(false);
 }
 
+export async function updateDeal(
+    dealID: string,
+    description: string,
+    endDate: string | null,
+    discountTimes: { [key: string]: string | null },
+    discount: number,
+    discountType: number,
+    maxPoints: number,
+    setLoading: (loading: boolean) => void,
+) {
+    setLoading(true);
+    // Get deal times id
+    const { data: dealTimes, error: dealTimesError } = await supabase
+        .from('deals')
+        .select('deal_times_id')
+        .eq('id', dealID);
+
+    if (dealTimesError) {
+        Alert.alert(dealTimesError.message);
+        setLoading(false);
+        return;
+    }
+
+    // Update deal times
+    const { error: updateDealTimesError } = await supabase
+        .from('deal_times')
+        .update({
+            mon_start: discountTimes.mon_start,
+            mon_end: discountTimes.mon_end,
+            tue_start: discountTimes.tue_start,
+            tue_end: discountTimes.tue_end,
+            wed_start: discountTimes.wed_start,
+            wed_end: discountTimes.wed_end,
+            thu_start: discountTimes.thu_start,
+            thu_end: discountTimes.thu_end,
+            fri_start: discountTimes.fri_start,
+            fri_end: discountTimes.fri_end,
+            sat_start: discountTimes.sat_start,
+            sat_end: discountTimes.sat_end,
+            sun_start: discountTimes.sun_start,
+            sun_end: discountTimes.sun_end,
+        })
+        .eq('id', dealTimes[0].deal_times_id);
+
+    if (updateDealTimesError) {
+        Alert.alert(updateDealTimesError.message);
+        setLoading(false);
+        return;
+    }
+
+    // Update deal
+    const { error: updateDealError } = await supabase
+        .from('deals')
+        .update({
+            updated_at: new Date(),
+            description,
+            type: discountType,
+            percentage: discount,
+            end_date: endDate,
+            max_pts: maxPoints,
+        })
+        .eq('id', dealID);
+
+    if (updateDealError) {
+        Alert.alert(updateDealError.message);
+        setLoading(false);
+        return;
+    }
+
+    setLoading(false);
+}
+
 export async function disableDeal(
     dealID: string,
     setLoading: (loading: boolean) => void,

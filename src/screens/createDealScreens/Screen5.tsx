@@ -18,12 +18,14 @@ export default function Screen5() {
 
     // Promotion description
     const [description, setDescription] = useState('');
-    
+
     const navigation = useNavigation<Screen5NavigationProp>();
 
     // Get previous parameters
     const route = useRoute();
     const {
+        edit,
+        dealID,
         previousDeal,
         endDate,
         discountTimes,
@@ -31,6 +33,8 @@ export default function Screen5() {
         discountType,
         maxPoints,
     } = route.params as {
+        edit: boolean,
+        dealID: string | null,
         previousDeal: ShopDeal_t | null,
         endDate: string | null,
         discountTimes: { [key: string]: string | null },
@@ -60,6 +64,8 @@ export default function Screen5() {
 
     const handleNext = () => {
         navigation.navigate('Screen6', {
+            edit,
+            dealID,
             description,
             endDate,
             discountTimes,
@@ -74,7 +80,7 @@ export default function Screen5() {
             <View style={styles.contentContainer}>
                 <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 5: Promotion Description</Text>
                 <Text style={styles.description}>Add a description or any extra information about the promotion.</Text>
-                
+
                 <TextInput
                     style={[styles.textInput, { color: Colours.text[theme] }]}
                     placeholder="Write your description here..."

@@ -34,7 +34,7 @@ export default function CreateDealScreen({ session }: { session: Session }) {
 
     const handleDealSelection = (deal: ShopDeal_t) => {
         setModalVisible(false);
-        navigation.navigate("Screen1", { previousDeal: deal });
+        navigation.navigate("Screen1", { edit: false, dealID: null, previousDeal: deal });
     };
 
     const handleOpenModal = () => {
@@ -64,7 +64,7 @@ export default function CreateDealScreen({ session }: { session: Session }) {
             >
                 <TouchableWithoutFeedback onPress={handleCloseModal}>
                     <View style={styles.modalContainer}>
-                        <TouchableWithoutFeedback onPress={() => {}}>
+                        <TouchableWithoutFeedback onPress={() => { }}>
                             <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
                                 {/* Cancel button (X) in the top right corner */}
                                 <TouchableOpacity
@@ -87,7 +87,7 @@ export default function CreateDealScreen({ session }: { session: Session }) {
                                         style={[styles.modalButton, { backgroundColor: Colours.dealItem[theme] }]}
                                         onPress={() => {
                                             setModalVisible(false);
-                                            navigation.navigate("Screen1", { previousDeal: null }); // Navigate to the next screen without loading previous deals
+                                            navigation.navigate("Screen1", { edit: false, dealID: null, previousDeal: null }); // Navigate to the next screen without loading previous deals
                                         }}
                                     >
                                         <Text style={styles.modalButtonText}>No</Text>

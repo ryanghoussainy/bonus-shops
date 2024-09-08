@@ -23,18 +23,22 @@ export default function Screen4() {
 
     // Selected end date
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    
+
     const navigation = useNavigation<Screen4NavigationProp>();
 
     // Get previous parameters
     const route = useRoute();
     const {
+        edit,
+        dealID,
         previousDeal,
         discountTimes,
         discount,
         discountType,
         maxPoints,
     } = route.params as {
+        edit: boolean,
+        dealID: string | null,
         previousDeal: ShopDeal_t | null,
         discountTimes: { [key: string]: string | null },
         discount: number,
@@ -65,6 +69,8 @@ export default function Screen4() {
     const handleNext = () => {
         // Proceed to the next step, passing the selectedDate if chosen
         navigation.navigate('Screen5', {
+            edit,
+            dealID,
             previousDeal,
             endDate: selectedDate?.toISOString() || null,
             discountTimes,

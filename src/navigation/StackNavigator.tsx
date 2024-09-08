@@ -21,12 +21,12 @@ import General from "../screens/settingsScreens/General";
 export type RootStackParamList = {
   "Main": { session: Session };
   "Deal": { deal: ShopDeal_t };
-  "Screen1": { previousDeal: ShopDeal_t | null };
-  "Screen2": { previousDeal: ShopDeal_t | null, discountType: number, maxPoints: number | null };
-  "Screen3": { previousDeal: ShopDeal_t | null, discount: number, discountType: number, maxPoints: number | null };
-  "Screen4": { previousDeal: ShopDeal_t | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
-  "Screen5": { previousDeal: ShopDeal_t | null, endDate: string | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
-  "Screen6": { description: string; endDate: string | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
+  "Screen1": { edit: boolean, dealID: string | null, previousDeal: ShopDeal_t | null };
+  "Screen2": { edit: boolean, dealID: string | null, previousDeal: ShopDeal_t | null, discountType: number, maxPoints: number | null };
+  "Screen3": { edit: boolean, dealID: string | null, previousDeal: ShopDeal_t | null, discount: number, discountType: number, maxPoints: number | null };
+  "Screen4": { edit: boolean, dealID: string | null, previousDeal: ShopDeal_t | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
+  "Screen5": { edit: boolean, dealID: string | null, previousDeal: ShopDeal_t | null, endDate: string | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
+  "Screen6": { edit: boolean, dealID: string | null, description: string; endDate: string | null, discountTimes: { [key: string]: string | null }, discount: number, discountType: number, maxPoints: number | null };
   "Account": undefined;
   "General": undefined;
 };

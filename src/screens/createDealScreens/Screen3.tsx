@@ -27,7 +27,7 @@ export default function Screen3() {
     // Selected days and time ranges
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const [timeRanges, setTimeRanges] = useState<{ [key: string]: { startHour: string, startMinute: string, endHour: string, endMinute: string } }>({});
-    
+
     // Checkbox state for 'Same time every day' for multiple individual days
     const [sameTimeEveryDay, setSameTimeEveryDay] = useState<boolean>(false);
 
@@ -39,17 +39,21 @@ export default function Screen3() {
     // Get previous parameters
     const route = useRoute();
     const {
+        edit,
+        dealID,
         previousDeal,
         discount,
         discountType,
         maxPoints,
     } = route.params as {
+        edit: boolean,
+        dealID: string | null,
         previousDeal: ShopDeal_t | null,
         discount: number,
         discountType: number,
         maxPoints: number,
     };
-    
+
     // Load previous deal values if they exist
     useEffect(() => {
         if (previousDeal) {
@@ -58,26 +62,26 @@ export default function Screen3() {
                 const dayLower = day.toLowerCase();
                 return discountTimes[`${dayLower}_start` as keyof typeof discountTimes] !== null;
             });
-    
+
             const timeRanges = selectedDays.reduce((acc, day) => {
                 const dayLower = day.toLowerCase();
-    
+
                 const startTimestamp = discountTimes[`${dayLower}_start` as keyof typeof discountTimes];
                 const endTimestamp = discountTimes[`${dayLower}_end` as keyof typeof discountTimes];
-    
+
                 const startDate = new Date(startTimestamp);
                 const endDate = new Date(endTimestamp);
-    
+
                 acc[day] = {
                     startHour: String(startDate.getHours()).padStart(2, '0'),
                     startMinute: String(startDate.getMinutes()).padStart(2, '0'),
                     endHour: String(endDate.getHours()).padStart(2, '0'),
                     endMinute: String(endDate.getMinutes()).padStart(2, '0'),
                 };
-    
+
                 return acc;
             }, {} as { [key: string]: { startHour: string; startMinute: string; endHour: string; endMinute: string } });
-    
+
             setSelectedDays(selectedDays);
             setTimeRanges(timeRanges);
             setShowNext(selectedDays.length > 0);
@@ -87,17 +91,17 @@ export default function Screen3() {
                 range.startMinute === allTimeRanges[0].startMinute &&
                 range.endHour === allTimeRanges[0].endHour &&
                 range.endMinute === allTimeRanges[0].endMinute)) {
-                    if (selectedDays.length === 7) {
-                        handleEverydayPress();
-                        // Set the time range for 'Mon-Sun' to the same time range
-                        setTimeRanges({ 'Mon-Sun': allTimeRanges[0] });
-                    } else if (weekDays.every(day => selectedDays.includes(day))) {
-                        handleEveryWorkingDayPress();
-                        // Set the time range for 'Mon-Fri' to the same time range
-                        setTimeRanges({ 'Mon-Fri': allTimeRanges[0] });
-                    } else {
-                        setSameTimeEveryDay(true);
-                    }
+                if (selectedDays.length === 7) {
+                    handleEverydayPress();
+                    // Set the time range for 'Mon-Sun' to the same time range
+                    setTimeRanges({ 'Mon-Sun': allTimeRanges[0] });
+                } else if (weekDays.every(day => selectedDays.includes(day))) {
+                    handleEveryWorkingDayPress();
+                    // Set the time range for 'Mon-Fri' to the same time range
+                    setTimeRanges({ 'Mon-Fri': allTimeRanges[0] });
+                } else {
+                    setSameTimeEveryDay(true);
+                }
             } else {
                 setSameTimeEveryDay(false);
             }
@@ -269,7 +273,7 @@ export default function Screen3() {
             width: 55,
         },
     });
-    
+
     const renderTimePickers = () => {
         if (sameTimeEveryDay) {
             const groupedDays = selectedDays.filter(day => day !== 'Mon-Fri' && day !== 'Mon-Sun');
@@ -373,7 +377,7 @@ export default function Screen3() {
                 return;
             }
         }
-        
+
         if (selectedDays.length === 0) {
             Alert.alert('Please select at least one day.');
             return;
@@ -429,6 +433,8 @@ export default function Screen3() {
         }, {} as { [key: string]: string | null });
 
         navigation.navigate('Screen4', {
+            edit,
+            dealID,
             previousDeal,
             discount,
             discountType,
@@ -471,8 +477,8 @@ export default function Screen3() {
                 </View>
 
                 { // Only show the checkbox if more than one day is selected
-                    !selectedDays.includes('Mon-Fri') && 
-                    !selectedDays.includes('Mon-Sun') && 
+                    !selectedDays.includes('Mon-Fri') &&
+                    !selectedDays.includes('Mon-Sun') &&
                     selectedDays.length >= 2 &&
                     <Checkbox
                         label="Same time each day"
@@ -486,21 +492,21 @@ export default function Screen3() {
                 </ScrollView>
             </View>
 
-                <View style={styles.buttonContainer}>
-                    <BackNextButton
-                        onPress={() => navigation.goBack()}
-                        title="Back"
-                        icon="arrow-back"
-                        direction="back"
-                    />
-                    <BackNextButton
-                        onPress={handleNext}
-                        title="Next"
-                        icon="arrow-forward"
-                        direction="next"
-                        disabled={!showNext}
-                    />
-                </View>
+            <View style={styles.buttonContainer}>
+                <BackNextButton
+                    onPress={() => navigation.goBack()}
+                    title="Back"
+                    icon="arrow-back"
+                    direction="back"
+                />
+                <BackNextButton
+                    onPress={handleNext}
+                    title="Next"
+                    icon="arrow-forward"
+                    direction="next"
+                    disabled={!showNext}
+                />
+            </View>
         </View>
     );
 }

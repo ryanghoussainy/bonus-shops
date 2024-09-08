@@ -24,13 +24,17 @@ export default function Screen1() {
 
     // Animation for max points input
     const animatedHeight = useRef(new Animated.Value(0)).current; // Animation value for height
-    
+
     const navigation = useNavigation<Screen1NavigationProp>();
 
     // Get previous parameters
     const route = useRoute();
-    const { previousDeal } = route.params as { previousDeal: ShopDeal_t | null };
-    
+    const { edit, dealID, previousDeal } = route.params as {
+        edit: boolean,
+        dealID: string | null,
+        previousDeal: ShopDeal_t | null
+    };
+
     // Load previous deal values if they exist
     useEffect(() => {
         if (previousDeal) {
@@ -80,6 +84,8 @@ export default function Screen1() {
 
         if (selectedType) {
             navigation.navigate("Screen2", {
+                edit,
+                dealID,
                 previousDeal,
                 discountType: selectedType === 'points' ? 0 : 1,
                 maxPoints: parseMaxPoints(),
