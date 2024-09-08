@@ -278,6 +278,7 @@ export default function DealScreen({ session }: { session: Session }) {
                 <Text style={[styles.dealDescription, { color: Colours.text[theme] }]}>{deal.description}</Text>
                 <Text style={[styles.sectionTitle, { color: Colours.primary[theme] }]}>This deal is available on:</Text>
                 <Text style={[styles.dealTimes, { color: Colours.text[theme] }]}>{formatDiscountTimes(deal.discountTimes)}</Text>
+                <Text style={[styles.sectionTitle, { color: Colours.primary[theme] }]}>Analytics</Text>
             </View>
 
             {/* Modal for QR Code Scanner */}
