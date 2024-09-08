@@ -329,6 +329,14 @@ export default function DealScreen({ session }: { session: Session }) {
                                 </TouchableOpacity>
 
                                 <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    Watch out!
+                                </Text>
+                                <Text style={[styles.modalText, { 
+                                    color: Colours.text[theme],
+                                    fontWeight: "normal",
+                                    marginTop: -10,
+                                    }]}>
+                                    This action is irreversible.
                                     Are you sure you want to delete this promotion?
                                 </Text>
 
