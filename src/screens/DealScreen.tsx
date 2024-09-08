@@ -65,7 +65,7 @@ export default function DealScreen({ session }: { session: Session }) {
             .filter(Boolean)
             .join('\n');
     };
-    
+
     // Delete Modal
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [deletingModalVisible, setDeletingModalVisible] = useState(false);
@@ -73,10 +73,10 @@ export default function DealScreen({ session }: { session: Session }) {
     const handleDeleteDeal = async () => {
         setDeleteModalVisible(false);
         setDeletingModalVisible(true);
-        
+
         // Delete/disable deal
         await deleteDeal(deal.id, setLoading);
-        
+
         setTimeout(() => {
             navigation.navigate("Main", { session });
         }, 500); // 0.5 second delay before navigating
@@ -89,27 +89,32 @@ export default function DealScreen({ session }: { session: Session }) {
     const handleDisableDeal = async () => {
         setDisableModalVisible(false);
         setDisablingModalVisible(true);
-        
+
         // Disable deal
         await disableDeal(deal.id, setLoading);
-        
+
         setTimeout(() => {
             navigation.navigate("Main", { session });
         }, 500); // 0.5 second delay before navigating
     }
-    
+
     // Enable Deal
     const [enablingModalVisible, setEnablingModalVisible] = useState(false);
 
     const handleEnableDeal = async () => {
         setEnablingModalVisible(true);
-        
+
         // Enable deal
         await enableDeal(deal.id, setLoading);
-        
+
         setTimeout(() => {
             navigation.navigate("Main", { session });
         }, 500); // 0.5 second delay before navigating
+    }
+
+    // Edit deal
+    const handleEdit = () => {
+        navigation.navigate("Screen1", { edit: true, dealID: deal.id, previousDeal: deal });
     }
 
     // Camera Permissions and QR Code Scanning
@@ -148,7 +153,7 @@ export default function DealScreen({ session }: { session: Session }) {
 
         // Check if the day of the week is valid in london time
         let shortToday = new Date().toLocaleString('en-GB', { timeZone: 'Europe/London', weekday: 'short' }).toLowerCase();
-        if (!deal.discountTimes[`${shortToday}_start` as keyof typeof deal.discountTimes] || 
+        if (!deal.discountTimes[`${shortToday}_start` as keyof typeof deal.discountTimes] ||
             !deal.discountTimes[`${shortToday}_end` as keyof typeof deal.discountTimes]
         ) {
             Alert.alert('Outside Deal Time', 'This deal is not valid today.');
@@ -234,17 +239,33 @@ export default function DealScreen({ session }: { session: Session }) {
                 >
                     <Menu.Item
                         onPress={() => {
-                            if (!deal.disabled) {
-                                setDisableModalVisible(true);
-                            } else {
-                                handleEnableDeal();
-                            }
+                            closeMenu();
+                            handleEdit();
                         }}
-                        title={deal.disabled ? "Enable" : "Disable"}
+                        title="Edit"
                         titleStyle={{ color: Colours.text[theme] }}
                     />
                     <Divider />
-                    <Menu.Item onPress={() => setDeleteModalVisible(true)} title="Delete" titleStyle={{ color: Colours.text[theme] }} />
+                    <Menu.Item
+                        onPress={() => {
+                            if (deal.disabled) {
+                                handleEnableDeal();
+                            } else {
+                                setDisableModalVisible(true)
+                            }
+                        }}
+                        title={deal.disabled ? "Enable" : "Disable"}
+                        titleStyle={{ color: Colours.text[theme] }} />
+                    {deal.disabled &&
+                        <>
+                            <Divider />
+                            <Menu.Item
+                                onPress={() => setDeleteModalVisible(true)}
+                                title="Delete"
+                                titleStyle={{ color: "red" }}
+                            />
+                        </>
+                    }
                 </Menu>
             </View>
         )
@@ -318,7 +339,7 @@ export default function DealScreen({ session }: { session: Session }) {
             >
                 <TouchableWithoutFeedback onPress={() => setDeleteModalVisible(false)}>
                     <View style={styles.modalContainer}>
-                        <TouchableWithoutFeedback onPress={() => {}}>
+                        <TouchableWithoutFeedback onPress={() => { }}>
                             <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
                                 {/* Cancel button (X) in the top right corner */}
                                 <TouchableOpacity
@@ -331,11 +352,11 @@ export default function DealScreen({ session }: { session: Session }) {
                                 <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
                                     Watch out!
                                 </Text>
-                                <Text style={[styles.modalText, { 
+                                <Text style={[styles.modalText, {
                                     color: Colours.text[theme],
                                     fontWeight: "normal",
                                     marginTop: -10,
-                                    }]}>
+                                }]}>
                                     This action is irreversible.
                                     Are you sure you want to delete this promotion?
                                 </Text>
@@ -369,7 +390,7 @@ export default function DealScreen({ session }: { session: Session }) {
             >
                 <TouchableWithoutFeedback onPress={() => setDisableModalVisible(false)}>
                     <View style={styles.modalContainer}>
-                        <TouchableWithoutFeedback onPress={() => {}}>
+                        <TouchableWithoutFeedback onPress={() => { }}>
                             <View style={[styles.modalContent, { backgroundColor: Colours.background[theme] }]}>
                                 {/* Cancel button (X) in the top right corner */}
                                 <TouchableOpacity
@@ -430,7 +451,7 @@ export default function DealScreen({ session }: { session: Session }) {
                     </View>
                 </View>
             </Modal>
-            
+
             {/* Modal for disabling modal */}
             <Modal
                 visible={disablingModalVisible}

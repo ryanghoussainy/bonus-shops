@@ -21,16 +21,20 @@ export default function Screen2() {
 
     // Cursor position for discount input to be just before the percentage sign
     const [cursorPos, setCursorPos] = useState(0);
-    
+
     const navigation = useNavigation<Screen2NavigationProp>();
-    
+
     // Get previous parameters
     const route = useRoute();
     const {
+        edit,
+        dealID,
         previousDeal,
         discountType,
         maxPoints,
     } = route.params as {
+        edit: boolean,
+        dealID: string | null,
         previousDeal: ShopDeal_t | null,
         discountType: number,
         maxPoints: number,
@@ -44,7 +48,7 @@ export default function Screen2() {
             setCursorPos(discountValue.length - 2); // Set cursor position just before the '%' sign
         }
     }, [previousDeal]);
-    
+
 
     const formatDiscount = (input: string) => {
         // Remove any non-numeric characters except for the decimal point
@@ -100,6 +104,8 @@ export default function Screen2() {
     const handleNext = () => {
         if (checkValidDiscount()) {
             navigation.navigate("Screen3", {
+                edit,
+                dealID,
                 previousDeal,
                 discount: parseInt(discount.replace(' %', '')),
                 discountType,
@@ -186,5 +192,5 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    
+
 })

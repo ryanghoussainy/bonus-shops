@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Modal, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Modal, ActivityIndicator, Alert } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import BackNextButton from '../../components/BackNextButton';
 import Colours from '../../config/Colours';
 import Fonts from '../../config/Fonts';
-import { createDeal } from '../../operations/Deal';
+import { createDeal, updateDeal } from '../../operations/Deal';
 import { Session } from '@supabase/supabase-js';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/StackNavigator';
@@ -49,6 +49,8 @@ export default function Screen6({ session }: { session: Session }) {
     const navigation = useNavigation<Screen6NavigationProp>();
 
     const {
+        edit,
+        dealID,
         description,
         endDate,
         discountTimes,
@@ -56,6 +58,8 @@ export default function Screen6({ session }: { session: Session }) {
         discountType,
         maxPoints,
     } = route.params as {
+        edit: boolean,
+        dealID: string | null,
         description: string,
         endDate: string | null,
         discountTimes: { [key: string]: string | null },
@@ -78,6 +82,7 @@ export default function Screen6({ session }: { session: Session }) {
     const discountTypeText = formatDiscountType(discountType);
     const discountTimesText = formatDiscountTimes(discountTimes);
 
+    // When creating a new deal (edit = false)
     const handleCreateDeal = async () => {
         setLoading(true);
         setModalVisible(true);
@@ -93,6 +98,33 @@ export default function Screen6({ session }: { session: Session }) {
         );
         setLoading(false);
         // Show "Deal created!" message
+        setTimeout(() => {
+            navigation.navigate("Main", { session });
+        }, 500); // 0.5 second delay before navigating
+    };
+
+    // Save changes made to existing deal (when edit = true)
+    const handleSaveDeal = async () => {
+        setLoading(true);
+        setModalVisible(true);
+        // Save deal
+        if (!dealID) {
+            Alert.alert('Error', 'Null dealID value');
+            setLoading(false);
+            return;
+        }
+        await updateDeal(
+            dealID,
+            description,
+            endDate,
+            discountTimes,
+            discount,
+            discountType,
+            maxPoints,
+            setLoading,
+        );
+        setLoading(false);
+        // Show "Deal saved!" message
         setTimeout(() => {
             navigation.navigate("Main", { session });
         }, 500); // 0.5 second delay before navigating
@@ -155,8 +187,8 @@ export default function Screen6({ session }: { session: Session }) {
                     disabled={loading}
                 />
                 <BackNextButton
-                    onPress={handleCreateDeal}
-                    title="Create"
+                    onPress={edit ? handleSaveDeal : handleCreateDeal}
+                    title={edit ? "Save" : "Create"}
                     icon="checkmark-sharp"
                     direction="next"
                     disabled={loading}
@@ -174,11 +206,15 @@ export default function Screen6({ session }: { session: Session }) {
                         {loading ? (
                             <>
                                 <ActivityIndicator size="large" color={Colours.primary[theme]} />
-                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Creating Promotion...</Text>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    {edit ? "Saving changes..." : "Creating promotion..."}
+                                </Text>
                             </>
                         ) : (
                             <>
-                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>Promotion created!</Text>
+                                <Text style={[styles.modalText, { color: Colours.text[theme] }]}>
+                                    {edit ? "Changes saved!" : "Promotion created!"}
+                                </Text>
                                 <Text style={[styles.checkmark, { color: Colours.primary[theme] }]}>✓</Text>
                             </>
                         )}
