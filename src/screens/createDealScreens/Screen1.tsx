@@ -114,7 +114,7 @@ export default function Screen1() {
     return (
         <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             <View style={styles.contentContainer}>
-                <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 1: Select Promotion Type</Text>
+                <Text style={[styles.title, { color: Colours.text[theme] }]}>Select Promotion Type</Text>
                 <Text style={styles.description}>Choose the type of offer you would like to create.</Text>
 
                 <TouchableOpacity

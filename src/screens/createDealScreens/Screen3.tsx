@@ -446,7 +446,7 @@ export default function Screen3() {
     return (
         <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             <View style={styles.contentContainer}>
-                <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 3: Select Availability Times</Text>
+                <Text style={[styles.title, { color: Colours.text[theme] }]}>Select Availability Times</Text>
                 <Text style={styles.description}>Choose the days and times the promotion will be available.</Text>
 
                 <View style={styles.daysContainer}>

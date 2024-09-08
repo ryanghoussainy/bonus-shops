@@ -67,7 +67,6 @@ export default function Screen4() {
     };
 
     const handleNext = () => {
-        // Proceed to the next step, passing the selectedDate if chosen
         navigation.navigate('Screen5', {
             edit,
             dealID,
@@ -83,7 +82,7 @@ export default function Screen4() {
     return (
         <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             <View style={styles.contentContainer}>
-                <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 4: End Date (Optional)</Text>
+                <Text style={[styles.title, { color: Colours.text[theme] }]}>End Date (Optional)</Text>
                 <Text style={styles.description}>
                     If applicable, please set your offer end date.
                 </Text>

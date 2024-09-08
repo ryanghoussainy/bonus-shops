@@ -78,7 +78,7 @@ export default function Screen5() {
     return (
         <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             <View style={styles.contentContainer}>
-                <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 5: Promotion Description</Text>
+                <Text style={[styles.title, { color: Colours.text[theme] }]}> Promotion Description</Text>
                 <Text style={styles.description}>Add a description or any extra information about the promotion.</Text>
 
                 <TextInput

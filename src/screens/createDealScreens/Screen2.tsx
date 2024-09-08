@@ -126,7 +126,7 @@ export default function Screen2() {
     return (
         <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
             <View style={styles.contentContainer}>
-                <Text style={[styles.title, { color: Colours.text[theme] }]}>Step 2: Set Discount Amount</Text>
+                <Text style={[styles.title, { color: Colours.text[theme] }]}>Set Discount Amount</Text>
                 <TextInput
                     style={[styles.input, { color: Colours.text[theme] }]}
                     placeholderTextColor={Colours.bluegrey}
