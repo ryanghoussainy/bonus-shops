@@ -142,6 +142,16 @@ export async function disableDeal(
         Alert.alert(dealError.message);
     }
 
+    // Disable all user deals
+    const { error: userDealError } = await supabase
+        .from('user_deals')
+        .update({ disabled: true })
+        .eq('deal_id', dealID);
+
+    if (userDealError) {
+        Alert.alert(userDealError.message);
+    }
+
     setLoading(false);
 }
 
@@ -158,6 +168,16 @@ export async function enableDeal(
 
     if (dealError) {
         Alert.alert(dealError.message);
+    }
+
+    // Enable all user deals
+    const { error: userDealError } = await supabase
+        .from('user_deals')
+        .update({ disabled: false })
+        .eq('deal_id', dealID);
+
+    if (userDealError) {
+        Alert.alert(userDealError.message);
     }
 
     setLoading(false);
