@@ -114,7 +114,13 @@ export default function DealScreen({ session }: { session: Session }) {
 
     // Edit deal
     const handleEdit = () => {
-        navigation.navigate("Screen1", { edit: true, dealID: deal.id, previousDeal: deal });
+        navigation.navigate("Screen2", {
+            edit: true,
+            dealID: deal.id,
+            previousDeal: deal,
+            discountType: deal.discountType,
+            maxPoints: deal.maxPoints,
+        });
     }
 
     // Camera Permissions and QR Code Scanning
