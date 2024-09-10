@@ -89,7 +89,7 @@ export default function Logo({ url, size = 150, onUpload }: Props) {
 
 const styles = StyleSheet.create({
   logo: {
-    borderRadius: 5,
+    borderRadius: 100,
     overflow: 'hidden',
     maxWidth: '100%',
   },
@@ -98,10 +98,10 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   noImage: {
-    backgroundColor: '#333',
-    borderWidth: 1,
+    backgroundColor: '#666',
+    borderWidth: 5,
     borderStyle: 'solid',
-    borderColor: 'rgb(200, 200, 200)',
-    borderRadius: 5,
+    borderColor: '#777',
+    borderRadius: 100,
   },
 })
