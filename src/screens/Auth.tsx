@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { Input, Button, Icon, Switch } from '@rneui/themed';
 import { useTheme } from '../contexts/ThemeContext';
@@ -72,6 +72,28 @@ export default function ShopAuth() {
       setEmail('');
       setPassword('');
   }
+
+  // Get names of all shops
+  const [shopNames, setShopNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchShopNames = async () => {
+      const shops = await getShopNames();
+      setShopNames(shops.map(shop => shop.name));
+    }
+    fetchShopNames();
+  }, [])
+
+  // Compare entered name to existing names
+  const [nameAvailable, setNameAvailable] = useState(true);
+  
+  useEffect(() => {
+    if (shopNames.includes(shopName)) {
+      setNameAvailable(false);
+    } else {
+      setNameAvailable(true);
+    }
+  }, [shopName])
 
   return (
     <View style={[styles.container, { backgroundColor: Colours.background[theme] }]}>
@@ -203,6 +225,7 @@ export default function ShopAuth() {
                 inputStyle={{ color: Colours.text[theme], fontFamily: Fonts.condensed }}
                 containerStyle={styles.inputContainer}
                 disabled={loading}
+                errorMessage={!nameAvailable ? "This name is already taken" : ""}
               />
 
               <Input
